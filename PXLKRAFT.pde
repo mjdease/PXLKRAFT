@@ -1,0 +1,8 @@
+import processing.opengl.*;
+
+/*PXLKRAFT*/
+
+void setup()
+{
+  size(1024, 768, OPENGL);
+}
