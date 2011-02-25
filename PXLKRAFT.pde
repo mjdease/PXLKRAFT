@@ -10,9 +10,6 @@ import processing.opengl.*;
 //another test...
 //master test...
 //remote repository pull request...
-//lalalalalla
-
-Particle p1 = new Particle();
 
 void setup()
 {
