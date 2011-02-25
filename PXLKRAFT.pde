@@ -6,6 +6,7 @@ import processing.opengl.*;
   -Matt Dease--Kyle Thompson--Graeme Rombough-
   ---------Paul Young--Sunmock Yang-----------
 */
+//tester adding test comment....
 
 void setup()
 {
@@ -14,5 +15,5 @@ void setup()
 }
 void draw()
 {
-  //println(frameRate);
+  println(frameRate);
 }
