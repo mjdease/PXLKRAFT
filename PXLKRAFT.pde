@@ -1,6 +1,11 @@
 import processing.opengl.*;
 
-/*PXLKRAFT*/
+/**
+  ------IMD2900 Interactive Video System------
+  --------------------By:---------------------
+  -Matt Dease--Kyle Thompson--Graeme Rombough-
+  ---------Paul Young--Sunmock Yang-----------
+*/
 
 void setup()
 {
@@ -9,5 +14,5 @@ void setup()
 }
 void draw()
 {
-  println(frameRate);
+  //println(frameRate);
 }
