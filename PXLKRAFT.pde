@@ -12,6 +12,8 @@ import processing.opengl.*;
 //remote repository pull request...
 //lalalalalla
 
+Particle p1 = new Particle();
+
 void setup()
 {
   size(1024, 768, OPENGL);
