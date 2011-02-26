@@ -1,0 +1,6 @@
+class Collider
+{
+  void create()
+  {
+  }
+}
