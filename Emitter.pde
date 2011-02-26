@@ -95,7 +95,7 @@ class Emitter
         //accelerate based on gravity
         p[i].vel.y += environment.gravity;
         p[i].vel.y += random(-environment.turbulence, environment.turbulence) + environment.wind.y;
-        p[i].vel.x += random(-environment.turbulence, envorinment.turbulence) + environment.wind.x;
+        p[i].vel.x += random(-environment.turbulence, environment.turbulence) + environment.wind.x;
         p[i].vel.mult(environment.resistance);
         //fade particle
         p[i].createFade(p[i].initAlpha/(frameRate*(p[i].lifeSpan/1000)));
@@ -107,7 +107,7 @@ class Emitter
           //keep emitter going
           p[i].loc.mult(0.0);
           init(i);
-          bithTime[i] = millis();
+          birthTime[i] = millis();
           p[i].resetFade();
         }
       }

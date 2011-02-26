@@ -3,7 +3,7 @@ class Engine
   //properties
   Emitter emitter;
   Emitter[] emitters;
-  Collider[] collider;
+  Collider[] colliders;
   
   //create default environment
   Environment environment = new Environment();

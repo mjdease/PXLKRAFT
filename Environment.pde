@@ -4,7 +4,7 @@ class Environment
   float friction = 0.875;
   PVector wind = new PVector(0, 0);
   float resistance = 0.985;
-  float turbulence 0.04;
+  float turbulence = 0.04;
   
   //default constructor
   Environment()

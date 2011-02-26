@@ -19,7 +19,7 @@ class Particle extends Sprite
   Particle(float radius, color col, float lifeSpan, float damping)
   {
     super(radius, col);
-    this.lifespan = lifeSpan;
+    this.lifeSpan = lifeSpan;
     this.damping = damping;
     setColComponents();
   }
@@ -66,7 +66,7 @@ class Particle extends Sprite
   //resets alpha component
   void resetFade()
   {
-    colA = initalpha;
+    colA = initAlpha;
     col = color(colR, colG, colB, colA);
   }
   

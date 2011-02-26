@@ -1,6 +1,6 @@
 class Arrow extends Particle
 {
-  int tailFinCound = 4;
+  int tailFinCount = 4;
   float len = 20.0;
   
   //default constructor
@@ -41,9 +41,9 @@ class Arrow extends Particle
       {
         //top
         vertex(-len/2 + gap*1, 0);
-        vertex(-len/2 - len/10.0 + gap *i, -len/10.0;
+        vertex(-len/2 - len/10.0 + gap *i, -len/10.0);
         //bottom
-        vertex(-len/2 + gap*i, 0;
+        vertex(-len/2 + gap*i, 0);
         vertex(-len/2 - len/10.0 + gap*1, len/10.0);
       }
       endShape();
@@ -59,26 +59,27 @@ class Arrow extends Particle
       }
       endShape(CLOSE);
     }
-    
-    //overrides Particle move()
-    // arrow rotation alignment
-    void move()
-    {
-      loc.add(vel);
-      translate(loc.x, loc.y);
-      rotate(atan(vel.y, vel.x));
-    }
-    
-    //setters
-    void setTailFinCount(int tailFinCount)
-    {
-      this.tailFinCount = tailFinCount;
-    }
-    
-    void setLen(float len)
-    {
-      this.len = len;
-      radius = len/2;
-    }
   }
+    
+  //overrides Particle move()
+  // arrow rotation alignment
+  void move()
+  {
+    loc.add(vel);
+    translate(loc.x, loc.y);
+    rotate(atan2(vel.y, vel.x));
+  }
+  
+  //setters
+  void setTailFinCount(int tailFinCount)
+  {
+    this.tailFinCount = tailFinCount;
+  }
+  
+  void setLen(float len)
+  {
+    this.len = len;
+    radius = len/2;
+  }
+}
         
