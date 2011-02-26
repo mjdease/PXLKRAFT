@@ -1,4 +1,4 @@
-class Engine
+class Engine implements Runnable
 {
   //properties
   Emitter emitter;

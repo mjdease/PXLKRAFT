@@ -8,7 +8,7 @@ import processing.opengl.*;
 */
 
 //create particle population
-int particleCount = 5000;
+int particleCount = 2000;
 //instantiate particle array
 Particle[] particles = new Particle[particleCount];
 //Arrow[] arrows = new Arrow[particleCount];
@@ -28,7 +28,7 @@ float myFrameRate = 60.0;
 
 void setup()
 {
-  size(800, 600, OPENGL);
+  size(1024, 768, OPENGL);
   background(0);
   smooth();
   frameRate(myFrameRate);
@@ -36,18 +36,21 @@ void setup()
   for(int i=0; i<particleCount; i++)
   {
     //Particle(float radius, color col, float lifeSpan, float damping)
-    particles[i] = new Particle(random(1, 2), color(255, random(80, 150), 10, random(255)), 8000, 0.85);
+    particles[i] = new Particle(random(1, 9), color(255, random(80, 150), 10, random(255)), 20000, 0.85);
   }
   //instantiate colliders
   for(int i=0; i<colliderCount; i++)
   {
-    colliders[i] = new Collider(new PVector(width/2, height/2), 200, #323332, false);
+    colliders[i] = new Collider(new PVector(width/2, height/1.1), 100, #323332, true);
   }
   //instantiate emitters
-  emitters[0] = new Emitter(new PVector(width/2, height/2), new PVector(0,0), particles.length, 5, particles);
+  //inf:Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, Particle[] p)
+  //non:Emitter(PVector loc, PVector birthPath, float birthRate, float sprayWidth, Particle[] p)
+  emitters[0] = new Emitter(new PVector(width/2, 0), myFrameRate, new PVector(0,10), 2, particles);
   
   //instantiate Environment
-  environment = new Environment(0.01, 0.785, new PVector(0,0), 0.995, 0.01);
+  //Environment(float gravity, float friction, PVector wind, float resistance, float turbulence)
+  environment = new Environment(0.09, 0.785, new PVector(0,0), 0.995, 0.01);
   
   //instantiate engine
   engine = new Engine(emitters, colliders, environment);
