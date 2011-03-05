@@ -13,6 +13,8 @@ int particleCount = 2000;
 Particle[] particles = new Particle[particleCount];
 //Arrow[] arrows = new Arrow[particleCount];
 
+PVector mouse = new PVector(0,0);
+
 //instantiate collider arrays
 int colliderCount = 1;
 Collider[] colliders = new Collider[colliderCount];
@@ -36,7 +38,7 @@ void setup()
   for(int i=0; i<particleCount; i++)
   {
     //Particle(float radius, color col, float lifeSpan, float damping)
-    particles[i] = new Particle(random(1, 9), color(255, random(80, 150), 10, random(255)), 20000, 0.85);
+    particles[i] = new Particle(random(1, 9), color(255, random(80, 150), 10, random(255)), 5000, 0.85);
   }
   //instantiate colliders
   for(int i=0; i<colliderCount; i++)
@@ -46,7 +48,7 @@ void setup()
   //instantiate emitters
   //inf:Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, Particle[] p)
   //non:Emitter(PVector loc, PVector birthPath, float birthRate, float sprayWidth, Particle[] p)
-  emitters[0] = new Emitter(new PVector(width/2, 0), myFrameRate, new PVector(0,10), 2, particles);
+  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,0), 2, particles);
   
   //instantiate Environment
   //Environment(float gravity, float friction, PVector wind, float resistance, float turbulence)
@@ -68,6 +70,11 @@ void setup()
 void draw()
 {
   background(0, 255);
+  mouse.x = mouseX;
+  mouse.y = mouseY;
+  emitters[0].setLoc(mouse);
   engine.run();
-  println(frameRate);
+  //println(frameRate);
+  //println(particles[0].loc);
+  println(colliders[0].loc);
 }

@@ -1,4 +1,4 @@
-class Engine implements Runnable
+class Engine
 {
   //properties
   Emitter emitter;
@@ -128,30 +128,30 @@ class Engine implements Runnable
           Particle part = emitters[i].p[j];
           
           // right bounds collision
-          if(boundsSet[0] && part.loc.x > width - emitters[i].loc.x - part.radius)
+          if(boundsSet[0] && part.loc.x > width - part.radius)
           {
-            part.loc.x = width - emitters[i].loc.x - part.radius;
+            part.loc.x = width - part.radius;
             part.vel.x *= -1;
           }
           //left bounds collision
-          else if(boundsSet[1] && part.loc.x < -emitters[i].loc.x + part.radius)
+          else if(boundsSet[1] && part.loc.x < part.radius)
           {
-            part.loc.x = -emitters[i].loc.x + part.radius;
+            part.loc.x = part.radius;
             part.vel.x *= -1;
           }
           
           //bottom bounds collision
-          if(boundsSet[2] && part.loc.y > height-emitters[i].loc.y - part.radius)
+          if(boundsSet[2] && part.loc.y > height - part.radius)
           {
-            part.loc.y = height-emitters[i].loc.y - part.radius;
+            part.loc.y = height - part.radius;
             part.vel.y *= -1;
             part.vel.y *= part.damping;
             part.vel.x *= environment.friction;
           }
           //top bounds collision
-          else if(boundsSet[3] && part.loc.y < -emitters[i].loc.y + part.radius)
+          else if(boundsSet[3] && part.loc.y < part.radius)
           {
-            part.loc.y = -emitters[i].loc.y + part.radius;
+            part.loc.y = part.radius;
             part.vel.y *= -1;
           }
         }
@@ -167,7 +167,7 @@ class Engine implements Runnable
           //get shallow clone of current particle
           Particle part = emitters[i].p[j].getClone();
           //add emitter offset
-          part.loc.add(emitters[i].loc);
+          //part.loc.add(emitters[i].loc);
           
           //check each particle against colliders
           for(int k=0; k<colliders.length; k++)
@@ -193,7 +193,7 @@ class Engine implements Runnable
   void correctEdgeOverlap(Particle part, Collider collider, PVector emitterOffset)
   {
     //temporarily add emitter location to particle
-    part.loc.add(emitterOffset);
+    //part.loc.add(emitterOffset);
     //get vector between object centers
     PVector collisionNormal = PVector.sub(part.loc, collider.loc);
     //convert vecotr to unit length (0-1)
@@ -203,7 +203,7 @@ class Engine implements Runnable
     //put particle precisely on collider edge
     part.loc.set(PVector.add(collider.loc, collisionNormal));
     //subtract emitter location
-    part.loc.sub(emitterOffset);
+    //part.loc.sub(emitterOffset);
   }
   
   //non-orthogonal reflection, using rotation of coordinate system

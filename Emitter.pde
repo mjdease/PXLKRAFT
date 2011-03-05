@@ -66,6 +66,7 @@ class Emitter
     float theta = random(TWO_PI);
     float r = random(sprayWidth);
     p[i].vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
+    p[i].loc = new PVector(mouseX, mouseY);
   }
   
   void setEnvironment(Environment environment)
@@ -80,8 +81,13 @@ class Emitter
     {
       pushMatrix();
       //move each particle to emitter location
-      translate(loc.x, loc.y);
+      //translate(loc.x, loc.y);
       //draw/move particle
+      if(p[i].isFirstEmission)
+      {
+        p[i].loc = new PVector(mouseX, mouseY);
+        p[i].isFirstEmission = false;
+      }
       p[i].move();
       p[i].create();
       popMatrix();

@@ -8,12 +8,14 @@ class Particle extends Sprite
   float lifeSpan = 1000;
   float damping = 0.825;
   PVector vel = new PVector();
+  boolean isFirstEmission = true;
   
   //default constructor
   Particle()
   {
     super();
     setColComponents();
+    //birthLoc = new PVector(mouseX, mouseY);
   }
   //constructor
   Particle(float radius, color col, float lifeSpan, float damping)
@@ -22,6 +24,7 @@ class Particle extends Sprite
     this.lifeSpan = lifeSpan;
     this.damping = damping;
     setColComponents();
+    //birthLoc = new PVector(mouseX, mouseY);
   }
   
   Particle(color col, float lifeSpan, float damping)
@@ -31,6 +34,7 @@ class Particle extends Sprite
     this.lifeSpan = lifeSpan;
     this.damping = damping;
     setColComponents();
+    //birthLoc = new PVector(mouseX, mouseY);
   }
   
   //instance methods
