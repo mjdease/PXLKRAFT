@@ -14,6 +14,11 @@ class Particle extends Sprite implements Cloneable
   boolean isDead = false;
   boolean isEmitted = false;
   
+  final static float MOMENTUM = 0.5;
+  final static float FLUID_FORCE = 0.6;
+
+  float mass = 0.5;
+  
   //default constructor
   Particle()
   {
@@ -60,6 +65,10 @@ class Particle extends Sprite implements Cloneable
   
   void move()
   {
+    //int fluidIndex = fluidSolver.getIndexForNormalizedPosition(x * invWidth, y * invHeight);
+    //vel.x = fluidSolver.u[fluidIndex] * width * mass * FLUID_FORCE + vel.x * MOMENTUM;
+    //vel.y = fluidSolver.v[fluidIndex] * height * mass * FLUID_FORCE + vel.y * MOMENTUM;
+    
     loc.add(vel);
     translate(loc.x, loc.y);
   }
