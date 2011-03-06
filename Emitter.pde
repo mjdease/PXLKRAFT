@@ -28,6 +28,8 @@ class Emitter
   int birthNum = 0;
   float birthRemainder = 0.0;
   Particle temp;
+  final static float MOMENTUM = 0.5;
+  final static float FLUID_FORCE = 0.6;
   
   boolean isOn = false;
   //boolean isOnPrev = false;
@@ -118,6 +120,9 @@ class Emitter
 
       if(part.lifeTime < part.lifeSpan)
       {
+        int fluidIndex = engine.fluidSolver.getIndexForNormalizedPosition(part.loc.x * invWidth, part.loc.y * invHeight);
+        part.vel.x = engine.fluidSolver.u[fluidIndex] * width * part.mass * FLUID_FORCE + part.vel.x * MOMENTUM;
+        part.vel.y = engine.fluidSolver.v[fluidIndex] * height * part.mass * FLUID_FORCE + part.vel.y * MOMENTUM;
         //accelerate based on gravity
         part.vel.y += environment.gravity;
         part.vel.y += random(-environment.turbulence, environment.turbulence) + environment.wind.y;
