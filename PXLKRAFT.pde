@@ -7,22 +7,15 @@ import processing.opengl.*;
  ---------Paul Young--Sunmock Yang-----------
  */
 
-//create particle population
-int particleCount = 1000;
-//instantiate particle array
-//Particle particle = new Particle();
-//Arrow arrow = new Arrow();
-
 PVector wand1 = new PVector(0,0);
 PVector trail = new PVector(0,0);
 PVector wand2 = new PVector(0,0);
 
-
 //instantiate collider arrays
-int colliderCount = 1;
+int colliderCount = 20;
 Collider[] colliders = new Collider[colliderCount];
 //instantiate emitter arrays
-int emitterCount = 1;
+int emitterCount = 2;
 Emitter[] emitters = new Emitter[emitterCount];
 //declare rest of globals
 Environment environment;
@@ -48,13 +41,13 @@ void setup()
   //instantiate colliders
   for(int i=0; i<colliderCount; i++)
   {
-    colliders[i] = new Collider(new PVector(width/2, height/1.1), 100, #323332, true);
+    colliders[i] = new Collider(new PVector(random(1024), random(468)+300), 40, #666666, true);
   }
   //instantiate emitters
   //inf:Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, Particle[] p)
   //non:Emitter(PVector loc, PVector birthPath, float birthRate, float sprayWidth, Particle[] p)
-  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(10,10), 2, "particle", 1000, 5000);
-  //emitters[1] = new Emitter(new PVector(0, 0), myFrameRate, new PVector(0,0), 2, arrow, 600);
+  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,0), 2, "particle", 1000, 5000);
+  emitters[1] = new Emitter(new PVector(0, 0), myFrameRate, new PVector(0,0), 2, "arrow", 600, 7000);
 
   //instantiate Environment
   //Environment(float gravity, float friction, PVector wind, float resistance, float turbulence)
@@ -78,7 +71,9 @@ void setup()
 void draw()
 {
   background(0, 255);
-  trail.set(mouseX-pmouseX, mouseY-pmouseY, 0);
+  trail.set(pmouseX-mouseX, pmouseY-mouseY, 0);
+  trail.normalize();
+  trail.mult(6);
   emitters[0].setBirthPath(trail);
   wand1.set(mouseX, mouseY, 0);
   emitters[0].setLoc(wand1);
@@ -107,12 +102,10 @@ void keyPressed()
   {
     if(key == 'o')
     {
-      //emitters[1].toggleBirthRate();
-      emitters[0].isOn = false;
-    }
-    if(key == 'p')
-    {
-      emitters[0].isOn = true;
+      if(emitters[0].isOn)
+        emitters[0].isOn = false;
+      else
+        emitters[0].isOn = true;
     }
   }
 }

@@ -71,26 +71,25 @@ class Emitter
   //general methods
   void emit()
   {
-    //println(birthRate + ":" + p.size());
-    //delay(500);
-    if(p.size() < maxParticles)
+    println(frameRate + " - " + birthRate + " - " + birthNum + " - " + birthRemainder + " - " + p.size());
+    if(p.size() < maxParticles && isOn)
     {
       birthRemainder = birthRate + birthRemainder;
       birthNum = floor(birthRemainder);
       birthRemainder %= 1;
-      println(frameRate + " - " + birthRate + " - " + birthNum + " - " + birthRemainder + " - " + p.size());
       for(int i = 0; i < min(birthNum,maxParticles-p.size()); i++)
       {
         float theta = random(TWO_PI);
         float r = random(sprayWidth);
-        if(type == "particle")
+        switch(type)
         {
-          Particle temp = new Particle(random(10, 30), color(255, random(80, 150), 10, random(255)), lifeSpan, 0.85);
-          temp.loc.set(loc.x, loc.y, 0);
-          temp.birthTime = millis();
-          temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
-          temp.loc = new PVector(loc.x, loc.y);
-          p.add(temp);
+          case "particle":
+            Particle temp = new Particle(random(10, 30), color(255, random(80, 150), 10, random(255)), lifeSpan, 0.85);
+            temp.loc.set(loc.x, loc.y, 0);
+            temp.birthTime = millis();
+            temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
+            temp.loc = new PVector(loc.x, loc.y);
+            p.add(temp);
         }
       }
     }
