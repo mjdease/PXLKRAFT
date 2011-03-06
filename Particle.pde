@@ -1,14 +1,18 @@
 //this calss should me extended by other perticle types
-class Particle extends Sprite
+class Particle extends Sprite implements Cloneable
 {
   //color components to calculate fade
   float colR, colG, colB, colA;
   float initAlpha;
   //particle dynamics
   float lifeSpan = 1000;
+  float birthTime = 0;
+  float lifeTime = 0;
   float damping = 0.825;
   PVector vel = new PVector();
-  boolean isFirstEmission = true;
+  //boolean isFirstEmission = true;
+  boolean isDead = false;
+  boolean isEmitted = false;
   
   //default constructor
   Particle()

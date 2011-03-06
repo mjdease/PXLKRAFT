@@ -123,10 +123,10 @@ class Engine
     {
       for(int i = 0; i<emitters.length; i++)
       {
-        for(int j=0; j<emitters[i].p.length; j++)
+        for(int j=0; j<emitters[i].p.size(); j++)
         {
-          Particle part = emitters[i].p[j];
-          
+          Particle part = (Particle) emitters[i].p.get(j);
+
           // right bounds collision
           if(boundsSet[0] && part.loc.x > width - part.radius)
           {
@@ -162,10 +162,13 @@ class Engine
     {
       for(int i=0; i<emitters.length; i++)
       {
-        for(int j=0; j<emitters[i].p.length; j++)
+        for(int j=0; j<emitters[i].p.size(); j++)
         {
           //get shallow clone of current particle
-          Particle part = emitters[i].p[j].getClone();
+          //Particle part = (Particle) emitters[i].p.get(j).clone();
+          //emitters[i].p.get(j).hiTest();
+          Particle part = (Particle) emitters[i].p.get(j);
+          part = part.getClone();
           //add emitter offset
           //part.loc.add(emitters[i].loc);
           
@@ -175,13 +178,14 @@ class Engine
             Collider cldr = colliders[k];
             if(dist(part.loc.x, part.loc.y, cldr.loc.x, cldr.loc.y) < part.radius + cldr.radius)
             {
+              Particle realPart = (Particle) emitters[i].p.get(j);
               //set particle to collider bounds to avoid overlap
-              correctEdgeOverlap(emitters[i].p[j], cldr, emitters[i].loc);
+              correctEdgeOverlap((Particle) emitters[i].p.get(j), cldr, emitters[i].loc);
               //get reflection vector
               PVector rv = getReflection(part, cldr);
-              emitters[i].p[j].setVel(rv);
+              realPart.setVel(rv);
               //damping slows particles on collisions
-              emitters[i].p[j].vel.y *= emitters[i].p[j].damping;
+              realPart.vel.y *= realPart.damping;
             }
           }
         }
