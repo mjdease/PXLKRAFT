@@ -25,6 +25,8 @@ class Emitter
   ArrayList p = new ArrayList();
   String type;
   int lifeSpan;
+  int birthNum = 0;
+  float birthRemainder = 0.0;
   
   boolean isOn = false;
   //boolean isOnPrev = false;
@@ -43,6 +45,7 @@ class Emitter
     this.maxParticles = maxParticles;
     this.type = type;
     birthRate = maxParticles/((lifeSpan/1000.0) * (sketchFrameRate));
+    //birthRate = 0.5;
     this.birthPath = birthPath;
     this.sprayWidth = sprayWidth;
   }
@@ -67,13 +70,18 @@ class Emitter
   //general methods
   void emit()
   {
-    println(birthRate);
+    //println(birthRate + ":" + p.size());
+    //delay(500);
     if(p.size() < maxParticles)
     {
-      for(int i = 0; i<=min(birthRate,maxParticles-p.size()); i++)
+      birthRemainder = birthRate + birthRemainder;
+      birthNum = floor(birthRemainder);
+      birthRemainder %= 1;
+      println(birthNum + " - " + birthRemainder + " - " + p.size());
+      for(int i = 0; i < min(birthNum,maxParticles-p.size()); i++)
       {
         float theta = random(TWO_PI);
-          float r = random(sprayWidth);
+        float r = random(sprayWidth);
         if(type == "particle")
         {
           Particle temp = new Particle(random(1, 9), color(255, random(80, 150), 10, random(255)), 5000, 0.85);
@@ -85,7 +93,7 @@ class Emitter
         }
       }
     }
-    //for (int i=stopIndex; i<(particleCounter+stopIndex); i++)
+
     for (int i = p.size() - 1 ; i >= 0; i--)
     {
       Particle part = (Particle) p.get(i);
@@ -94,11 +102,7 @@ class Emitter
       part.move();
       part.create();
       popMatrix();
-      //capture time at particle birth
-      //if(birthTime[i] ==0.0)
-      //{
-      //  birthTime[i] = millis();
-      //}
+
       if(part.lifeTime < part.lifeSpan)
       {
         //accelerate based on gravity
@@ -116,22 +120,6 @@ class Emitter
       }
       part.lifeTime = millis() - part.birthTime;
     }
-    
-    //controls rate of emission
-    //if(particleCounter < p.length - birthRate && isOn)
-    //{
-      //particleCounter += birthRate;
-      //for(int i = 0; i<particleCounter; i++)
-      //{
-      //  p[i].isDead = false;
-      //}
-    //}
-    //if(!isOn)
-    //{
-    //  particleCounter -= birthRate;
-    //  if(particleCounter<0)
-    //   particleCounter=0;
-    //}
     drawCursor();
   }
   void drawCursor()
