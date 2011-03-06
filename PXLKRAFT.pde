@@ -14,7 +14,9 @@ int particleCount = 1000;
 //Arrow arrow = new Arrow();
 
 PVector wand1 = new PVector(0,0);
+PVector trail = new PVector(0,0);
 PVector wand2 = new PVector(0,0);
+
 
 //instantiate collider arrays
 int colliderCount = 1;
@@ -51,7 +53,7 @@ void setup()
   //instantiate emitters
   //inf:Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, Particle[] p)
   //non:Emitter(PVector loc, PVector birthPath, float birthRate, float sprayWidth, Particle[] p)
-  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,0), 2, "particle", 500, 5000);
+  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(10,10), 2, "particle", 1000, 5000);
   //emitters[1] = new Emitter(new PVector(0, 0), myFrameRate, new PVector(0,0), 2, arrow, 600);
 
   //instantiate Environment
@@ -76,6 +78,8 @@ void setup()
 void draw()
 {
   background(0, 255);
+  trail.set(mouseX-pmouseX, mouseY-pmouseY, 0);
+  emitters[0].setBirthPath(trail);
   wand1.set(mouseX, mouseY, 0);
   emitters[0].setLoc(wand1);
   //wand2.set(mouseX + 100, mouseY, 0);
