@@ -43,7 +43,7 @@ void setup()
   //instantiate emitters
   //inf:Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, Particle[] p)
   //non:Emitter(PVector loc, PVector birthPath, float birthRate, float sprayWidth, Particle[] p)
-  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,0), 2, 'p', 1000, 5000);
+  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,0), 1, 'p', 500, 10000);
   //emitters[1] = new Emitter(new PVector(0, 0), myFrameRate, new PVector(0,0), 2, 'a', 600, 7000);
 
   //instantiate Environment
@@ -56,7 +56,7 @@ void setup()
   invWidth = 1.0f/width;
   invHeight = 1.0f/height;
   //set boundary collisions
-  boolean[] bounds = {true, true, true, false};
+  boolean[] bounds = {true, true, true, true};
   engine.setBoundaryCollision(true, bounds);
 
 }
@@ -65,7 +65,7 @@ void draw()
   //background(0, 255);
   trail.set(pmouseX-mouseX, pmouseY-mouseY, 0);
   trail.normalize();
-  trail.mult(6);
+  trail.mult(-2);
   emitters[0].setBirthPath(trail);
   wand1.set(mouseX, mouseY, 0);
   emitters[0].setLoc(wand1);

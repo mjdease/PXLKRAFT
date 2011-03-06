@@ -54,9 +54,11 @@ class Particle extends Sprite
   //overrides method in Sprite class
   void create()
   {
+    println(hex(col));
     fill(col);
     noStroke();
-    ellipse(0, 0, radius*2, radius*2);
+    //ellipse(0, 0, radius*2, radius*2);
+    rect(0, 0, radius, radius);
   }
   
   void move()

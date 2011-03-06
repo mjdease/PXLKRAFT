@@ -28,8 +28,8 @@ class Emitter
   int birthNum = 0;
   float birthRemainder = 0.0;
   Particle temp;
-  final static float MOMENTUM = 0.5;
-  final static float FLUID_FORCE = 0.6;
+  final static float MOMENTUM = 0.1;
+  final static float FLUID_FORCE = 0.4;
   
   boolean isOn = false;
   //boolean isOnPrev = false;
@@ -74,7 +74,7 @@ class Emitter
   //general methods
   void emit()
   {
-    println(frameRate + " - " + birthRate + " - " + birthNum + " - " + birthRemainder + " - " + p.size());
+    //println(frameRate + " - " + birthRate + " - " + birthNum + " - " + birthRemainder + " - " + p.size());
     if(p.size() < maxParticles && isOn)
     {
       birthRemainder = birthRate + birthRemainder;
@@ -87,7 +87,7 @@ class Emitter
         switch(type)
         {
           case 'p':
-            temp = new Particle(random(10, 30), color(255, random(80, 150), 10, random(255)), lifeSpan, 0.85);
+            temp = new Particle(random(2, 15), color(255, random(80, 150), 10, random(255)), lifeSpan, 0.85);
             temp.loc.set(loc.x, loc.y, 0);
             temp.birthTime = millis();
             temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
@@ -121,8 +121,8 @@ class Emitter
       if(part.lifeTime < part.lifeSpan)
       {
         int fluidIndex = engine.fluidSolver.getIndexForNormalizedPosition(part.loc.x * invWidth, part.loc.y * invHeight);
-        part.vel.x = engine.fluidSolver.u[fluidIndex] * width * part.mass * FLUID_FORCE + part.vel.x * MOMENTUM;
-        part.vel.y = engine.fluidSolver.v[fluidIndex] * height * part.mass * FLUID_FORCE + part.vel.y * MOMENTUM;
+        part.vel.x += engine.fluidSolver.u[fluidIndex] * (width/24);
+        part.vel.y += engine.fluidSolver.v[fluidIndex] * (height/24);
         //accelerate based on gravity
         part.vel.y += environment.gravity;
         part.vel.y += random(-environment.turbulence, environment.turbulence) + environment.wind.y;
@@ -138,10 +138,6 @@ class Emitter
       }
       part.lifeTime = millis() - part.birthTime;
     }
-    drawCursor();
-  }
-  void drawCursor()
-  {
   }
   //set methods
   void setLoc(PVector loc)

@@ -59,7 +59,7 @@ class Engine
     aspectRatio2 = aspectRatio * aspectRatio;
     
     fluidSolver = new MSAFluidSolver2D((int)(FLUID_WIDTH), (int)(FLUID_WIDTH * height/width));
-    fluidSolver.enableRGB(true).setFadeSpeed(0.006).setDeltaT(0.9).setVisc(0.00005).setSolverIterations(5);
+    fluidSolver.enableRGB(true).setFadeSpeed(0.006).setDeltaT(0.8).setVisc(0.00005).setSolverIterations(8);
   
     // create image to hold fluid picture
     imgFluid = createImage(fluidSolver.getWidth(), fluidSolver.getHeight(), RGB);
@@ -274,7 +274,7 @@ class Engine
         colorMode(HSB, 360, 1, 1);
         float hue = ((x + y) * 180 + frameCount) % 360;
         drawColor = color(hue, 1, 1);
-        colorMode(RGB, 1);  
+        colorMode(RGB);  
 
         fluidSolver.rOld[index]  += red(drawColor) * colorMult;
         fluidSolver.gOld[index]  += green(drawColor) * colorMult;
