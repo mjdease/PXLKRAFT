@@ -23,10 +23,11 @@ class Emitter
   //used to control particle birth rate
   float particleCounter = 0.0;
   ArrayList p = new ArrayList();
-  String type;
+  char type;
   int lifeSpan;
   int birthNum = 0;
   float birthRemainder = 0.0;
+  Particle temp;
   
   boolean isOn = false;
   //boolean isOnPrev = false;
@@ -38,7 +39,7 @@ class Emitter
   {
   }
   //constructor for infinite emission
-  Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, String type, int maxParticles, int lifeSpan)
+  Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, char type, int maxParticles, int lifeSpan)
   {
     this.loc = loc;
     this.sketchFrameRate = sketchFrameRate;
@@ -83,13 +84,25 @@ class Emitter
         float r = random(sprayWidth);
         switch(type)
         {
-          case "particle":
-            Particle temp = new Particle(random(10, 30), color(255, random(80, 150), 10, random(255)), lifeSpan, 0.85);
+          case 'p':
+            temp = new Particle(random(10, 30), color(255, random(80, 150), 10, random(255)), lifeSpan, 0.85);
             temp.loc.set(loc.x, loc.y, 0);
             temp.birthTime = millis();
             temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
             temp.loc = new PVector(loc.x, loc.y);
             p.add(temp);
+            break;
+          case 'a':
+            temp = new Arrow(random(5, 40), color(255, random(80, 150), 10, random(255)), 5000, 0.85, 6);
+            temp.loc.set(loc.x, loc.y, 0);
+            temp.birthTime = millis();
+            temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
+            temp.loc = new PVector(loc.x, loc.y);
+            p.add(temp);
+            break;
+          default:
+            println("unknown particle type...");
+            break;
         }
       }
     }

@@ -12,7 +12,7 @@ PVector trail = new PVector(0,0);
 PVector wand2 = new PVector(0,0);
 
 //instantiate collider arrays
-int colliderCount = 20;
+int colliderCount = 3;
 Collider[] colliders = new Collider[colliderCount];
 //instantiate emitter arrays
 int emitterCount = 2;
@@ -41,13 +41,13 @@ void setup()
   //instantiate colliders
   for(int i=0; i<colliderCount; i++)
   {
-    colliders[i] = new Collider(new PVector(random(1024), random(468)+300), 40, #666666, true);
+    colliders[i] = new Collider(new PVector(random(1024), random(468)+300), 70, #666666, true);
   }
   //instantiate emitters
   //inf:Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, Particle[] p)
   //non:Emitter(PVector loc, PVector birthPath, float birthRate, float sprayWidth, Particle[] p)
-  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,0), 2, "particle", 1000, 5000);
-  emitters[1] = new Emitter(new PVector(0, 0), myFrameRate, new PVector(0,0), 2, "arrow", 600, 7000);
+  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,0), 2, 'p', 1000, 5000);
+  emitters[1] = new Emitter(new PVector(0, 0), myFrameRate, new PVector(0,0), 2, 'a', 600, 7000);
 
   //instantiate Environment
   //Environment(float gravity, float friction, PVector wind, float resistance, float turbulence)
@@ -78,7 +78,7 @@ void draw()
   wand1.set(mouseX, mouseY, 0);
   emitters[0].setLoc(wand1);
   //wand2.set(mouseX + 100, mouseY, 0);
-  //emitters[1].setLoc(wand2);
+  emitters[1].setLoc(wand2);
   engine.run();
   //println(frameRate);
 }
@@ -106,6 +106,13 @@ void keyPressed()
         emitters[0].isOn = false;
       else
         emitters[0].isOn = true;
+    }
+    if(key == 'p')
+    {
+      if(emitters[1].isOn)
+        emitters[1].isOn = false;
+      else
+        emitters[1].isOn = true;
     }
   }
 }
