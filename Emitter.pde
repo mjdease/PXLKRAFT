@@ -59,15 +59,6 @@ class Emitter
     isInfinite = false;
   }
   
-  //called at beginning of each emission cycle (and initially by constructors)
-  //void init(int i)
-  //{
-  //  float theta = random(TWO_PI);
-  //  float r = random(sprayWidth);
-  //  p[i].vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
-  //  p[i].loc = new PVector(loc.x, loc.y);
-  //}
-  
   void setEnvironment(Environment environment)
   {
     this.environment = environment;
@@ -76,15 +67,20 @@ class Emitter
   //general methods
   void emit()
   {
+    println(birthRate);
     if(p.size() < maxParticles)
     {
-      for(int i = 0; i<min(birthRate,maxParticles-p.size()); i++)
+      for(int i = 0; i<=min(birthRate,maxParticles-p.size()); i++)
       {
+        float theta = random(TWO_PI);
+          float r = random(sprayWidth);
         if(type == "particle")
         {
           Particle temp = new Particle(random(1, 9), color(255, random(80, 150), 10, random(255)), 5000, 0.85);
           temp.loc.set(loc.x, loc.y, 0);
           temp.birthTime = millis();
+          temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
+          temp.loc = new PVector(loc.x, loc.y);
           p.add(temp);
         }
       }
@@ -93,12 +89,7 @@ class Emitter
     for (int i = p.size() - 1 ; i >= 0; i--)
     {
       Particle part = (Particle) p.get(i);
-      //if(part.isDead == false)
-      //{
-      //println(p[i].isDead);
       pushMatrix();
-      //move each particle to emitter location
-      //translate(loc.x, loc.y);
       //draw/move particle
       part.move();
       part.create();
@@ -121,9 +112,9 @@ class Emitter
       else
       {
         p.remove(i);
+        continue;
       }
       part.lifeTime = millis() - part.birthTime;
-      //}
     }
     
     //controls rate of emission

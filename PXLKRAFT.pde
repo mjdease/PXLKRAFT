@@ -81,9 +81,7 @@ void draw()
   //wand2.set(mouseX + 100, mouseY, 0);
   //emitters[1].setLoc(wand2);
   engine.run();
-  println(frameRate);
-  //println(particles[0].loc);
-  //println(wand1);
+  //println(frameRate);
 }
 void keyPressed() 
 {
