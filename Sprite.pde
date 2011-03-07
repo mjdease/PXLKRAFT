@@ -52,6 +52,7 @@ class Sprite
   //instance methods (will likely be overridden in child classes)
   void create()
   {
+    colorMode(RGB);
     fill(col);
     rectMode(CENTER);
     rect(0,0, radius*2, radius*2);

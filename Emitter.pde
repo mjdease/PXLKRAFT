@@ -80,6 +80,8 @@ class Emitter
       birthRemainder = birthRate + birthRemainder;
       birthNum = floor(birthRemainder);
       birthRemainder %= 1;
+      pushMatrix();
+      colorMode(RGB,255);
       for(int i = 0; i < min(birthNum,maxParticles-p.size()); i++)
       {
         float theta = random(TWO_PI);
@@ -87,7 +89,7 @@ class Emitter
         switch(type)
         {
           case 'p':
-            temp = new Particle(random(2, 15), color(255, random(80, 150), 10, random(255)), lifeSpan, 0.85);
+            temp = new Particle(random(2, 15), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.85);
             temp.loc.set(loc.x, loc.y, 0);
             temp.birthTime = millis();
             temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
@@ -95,7 +97,7 @@ class Emitter
             p.add(temp);
             break;
           case 'a':
-            temp = new Arrow(random(5, 40), color(255, random(80, 150), 10, random(255)), 5000, 0.85, 6);
+            temp = new Arrow(random(5, 40), color(255, random(80, 150), 10, 255), 5000, 0.85, 6);
             temp.loc.set(loc.x, loc.y, 0);
             temp.birthTime = millis();
             temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
@@ -107,6 +109,7 @@ class Emitter
             break;
         }
       }
+      popMatrix();
     }
 
     for (int i = p.size() - 1 ; i >= 0; i--)

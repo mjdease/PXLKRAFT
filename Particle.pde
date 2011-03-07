@@ -45,6 +45,7 @@ class Particle extends Sprite
   //instance methods
   void setColComponents()
   {
+    colorMode(RGB);
     colR = red(col);
     colG = green(col);
     colB = blue(col);

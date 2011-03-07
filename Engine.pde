@@ -4,23 +4,26 @@ class Engine
   Emitter emitter;
   Emitter[] emitters;
   Collider[] colliders;
-  
+
   MSAFluidSolver2D fluidSolver;
-  final float FLUID_WIDTH = 120;
   PImage imgFluid;
-  float aspectRatio, aspectRatio2;
   boolean drawFluid = true;
   
+  float aspectRatio = width * invHeight;
+  float aspectRatio2 = aspectRatio * aspectRatio;
+
   //create default environment
   Environment environment = new Environment();
-  
+
   //engine states
   boolean isColliderCollision;
   boolean isBoundaryCollision;
-  
+
   //for individual boundary collisions
-  boolean[] boundsSet = {false, false, false, false};
-  
+  boolean[] boundsSet = {
+    false, false, false, false
+  };
+
   //default constructor
   Engine()
   {
@@ -54,26 +57,23 @@ class Engine
     this.emitters = emitters;
     this.colliders = colliders;
     this.environment = environment;
-    
-    aspectRatio = width * invHeight;
-    aspectRatio2 = aspectRatio * aspectRatio;
-    
-    fluidSolver = new MSAFluidSolver2D((int)(FLUID_WIDTH), (int)(FLUID_WIDTH * height/width));
+
+    fluidSolver = new MSAFluidSolver2D(128, 96);
     fluidSolver.enableRGB(true).setFadeSpeed(0.006).setDeltaT(0.8).setVisc(0.00005).setSolverIterations(8);
-  
+
     // create image to hold fluid picture
     imgFluid = createImage(fluidSolver.getWidth(), fluidSolver.getHeight(), RGB);
-  
+
     pushEnvironment();
   }
-  
+
   // if only one emitter added to engin, add to emitters array
   void init()
   {
     emitters = new Emitter[1];
     emitters[0] = emitter;
   }
-  
+
   //pass through environment object to emitter objects (emitters handle controlling particles, not engine)
   void pushEnvironment()
   {
@@ -82,19 +82,23 @@ class Engine
       emitters[i].setEnvironment(environment);
     }
   }
-  
+
   //called in draw function to run engine
   void run()
   {
-    fluidSolver.update();
+    //colorMode(HSB, 360, 1, 1);
+    pushMatrix();
+    colorMode(RGB, 1);
     if(drawFluid) {
       for(int i=0; i<fluidSolver.getNumCells(); i++) {
-          int d = 2;
-          imgFluid.pixels[i] = color(fluidSolver.r[i] * d, fluidSolver.g[i] * d, fluidSolver.b[i] * d);
+        int d = 3;
+        imgFluid.pixels[i] = color(fluidSolver.r[i] * d, fluidSolver.g[i] * d, fluidSolver.b[i] * d);
       }  
       imgFluid.updatePixels();//  fastblur(imgFluid, 2);
       image(imgFluid, 0, 0, width, height);
     }
+    fluidSolver.update();
+    popMatrix();
     if(emitters != null && emitters.length >0)
     {
       for(int i=0; i<emitters.length; i++)
@@ -103,7 +107,7 @@ class Engine
       }
       checkCollisions();
     }
-    
+
     if(colliders != null && colliders.length>0)
     {
       for(int i=0; i<colliders.length; i++)
@@ -111,13 +115,14 @@ class Engine
         colliders[i].create();
       }
     }
+
   }
-  
+
   void setColliderCollision(boolean isColliderCollision)
   {
     this.isColliderCollision = isColliderCollision;
   }
-  
+
   //overloaded setBoundaryCollision method - individual boundaries set
   void setBoundaryCollision(boolean isBoundaryCollision, boolean[] boundsSet)
   {
@@ -133,13 +138,13 @@ class Engine
       boundsSet[i] = true;
     }
   }
-  
+
   //set individual boundary collisions to true
   void setBounds(boolean[] boundsSet)
   {
     this.boundsSet = boundsSet;
   }
-  
+
   //collision detection
   void checkCollisions()
   {
@@ -164,7 +169,7 @@ class Engine
             part.loc.x = part.radius;
             part.vel.x *= -1;
           }
-          
+
           //bottom bounds collision
           if(boundsSet[2] && part.loc.y > height - part.radius)
           {
@@ -196,7 +201,7 @@ class Engine
           part = part.getClone();
           //add emitter offset
           //part.loc.add(emitters[i].loc);
-          
+
           //check each particle against colliders
           for(int k=0; k<colliders.length; k++)
           {
@@ -217,12 +222,10 @@ class Engine
       }
     }
   }
-  
+
   //reset to boundary edges
   void correctEdgeOverlap(Particle part, Collider collider, PVector emitterOffset)
   {
-    //temporarily add emitter location to particle
-    //part.loc.add(emitterOffset);
     //get vector between object centers
     PVector collisionNormal = PVector.sub(part.loc, collider.loc);
     //convert vecotr to unit length (0-1)
@@ -231,10 +234,8 @@ class Engine
     collisionNormal.mult(collider.radius + part.radius);
     //put particle precisely on collider edge
     part.loc.set(PVector.add(collider.loc, collisionNormal));
-    //subtract emitter location
-    //part.loc.sub(emitterOffset);
   }
-  
+
   //non-orthogonal reflection, using rotation of coordinate system
   PVector getReflection(Particle particle, Collider collider)
   {
@@ -243,11 +244,11 @@ class Engine
     //calculate reflection of angle by rotating vectors to 0 on unic circle
     //initial theta of collisionNormal
     float theta = atan2(collisionNormal.y, collisionNormal.x);
-    
+
     //rotate particle velocity vector by -theta ( to bring 0 on unit circle)
     float vx = cos(-theta)*particle.vel.x - sin(-theta)*particle.vel.y;
     float vy = sin(-theta)*particle.vel.x + cos(-theta)*particle.vel.y;
-    
+
     //reverse x component and rotate velocity vector back to original position
     PVector temp = new PVector(vx, vy);
     vx = cos(theta) * -temp.x - sin(theta)*temp.y;
@@ -256,36 +257,35 @@ class Engine
   }
   void addForce(float x, float y, float dx, float dy) 
   {
-    float speed = dx * dx  + dy * dy * aspectRatio2;    // balance the x and y components of speed with the screen aspect ratio
+    float speed = dx * dx  + dy * dy;
 
     if(speed > 0) {
-        if(x<0) x = 0; 
-        else if(x>1) x = 1;
-        if(y<0) y = 0; 
-        else if(y>1) y = 1;
+      if(x<0) x = 0; 
+      else if(x>1) x = 1;
+      if(y<0) y = 0; 
+      else if(y>1) y = 1;
 
-        float colorMult = 5;
-        float velocityMult = 30.0f;
+      float colorMult = 5;
+      float velocityMult = 30.0f;
 
-        int index = fluidSolver.getIndexForNormalizedPosition(x, y);
+      int index = fluidSolver.getIndexForNormalizedPosition(x, y);
+      color drawColor;
+      colorMode(HSB, 360, 1, 1);
+      float hue = ((x + y) * 180 + frameCount) % 360;
+      drawColor = color(hue, 1, 1);
+      colorMode(RGB,1);  
+      //println( fluidSolver.rOld[index] +" : "+fluidSolver.gOld[index]+" : "+fluidSolver.bOld[index]);
+      
+      fluidSolver.rOld[index]  += red(drawColor) * colorMult;
+      fluidSolver.gOld[index]  += green(drawColor) * colorMult;
+      fluidSolver.bOld[index]  += blue(drawColor) * colorMult;
 
-        color drawColor;
-
-        colorMode(HSB, 360, 1, 1);
-        float hue = ((x + y) * 180 + frameCount) % 360;
-        drawColor = color(hue, 1, 1);
-        colorMode(RGB);  
-
-        fluidSolver.rOld[index]  += red(drawColor) * colorMult;
-        fluidSolver.gOld[index]  += green(drawColor) * colorMult;
-        fluidSolver.bOld[index]  += blue(drawColor) * colorMult;
-
-        fluidSolver.uOld[index] += dx * velocityMult;
-        fluidSolver.vOld[index] += dy * velocityMult;
+      fluidSolver.uOld[index] += dx * velocityMult;
+      fluidSolver.vOld[index] += dy * velocityMult;
     }
   }
-  
-  
+
+
   //setters
   void setEmitter(Emitter emitter)
   {
@@ -295,19 +295,19 @@ class Engine
     //pass envirnoment to emitters
     pushEnvironment();
   }
-  
+
   void setEmitter(Emitter[] emitters)
   {
     this.emitters = emitters;
     //pass environment to emitters
     pushEnvironment();
   }
-  
+
   void setColliders(Collider[] colliders)
   {
     this.colliders = colliders;
   }
-  
+
   void setEnvironment(Environment environment)
   {
     this.environment = environment;
@@ -318,3 +318,4 @@ class Engine
     }
   }
 }
+
