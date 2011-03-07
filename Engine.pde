@@ -13,7 +13,7 @@ class Engine
   float aspectRatio2 = aspectRatio * aspectRatio;
 
   //create default environment
-  Environment environment = new Environment();
+  Environment[] environment;
 
   //engine states
   boolean isColliderCollision;
@@ -29,7 +29,7 @@ class Engine
   {
   }
   //constructor
-  Engine(Emitter emitter, Environment environment)
+  Engine(Emitter emitter, Environment[] environment)
   {
     this.emitter = emitter;
     this.environment = environment;
@@ -37,13 +37,13 @@ class Engine
     pushEnvironment();
   }
   //constructor
-  Engine(Emitter[] emitters, Environment environment)
+  Engine(Emitter[] emitters, Environment[] environment)
   {
     this.emitters = emitters;
     this.environment = environment;
     pushEnvironment();
   }
-  Engine(Emitter emitter, Collider[] colliders, Environment environment)
+  Engine(Emitter emitter, Collider[] colliders, Environment[] environment)
   {
     this.emitter = emitter;
     this.colliders = colliders;
@@ -52,7 +52,7 @@ class Engine
     pushEnvironment();
   }
   //constructor
-  Engine(Emitter[] emitters, Collider[] colliders, Environment environment)
+  Engine(Emitter[] emitters, Collider[] colliders, Environment[] environment)
   {
     this.emitters = emitters;
     this.colliders = colliders;
@@ -79,7 +79,7 @@ class Engine
   {
     for(int i=0; i<emitters.length; i++)
     {
-      emitters[i].setEnvironment(environment);
+      emitters[i].setEnvironment(environment[emitters[i].envIndex]);
     }
   }
 
@@ -177,7 +177,7 @@ class Engine
             part.loc.y = height - part.radius;
             part.vel.y *= -1;
             part.vel.y *= part.damping;
-            part.vel.x *= environment.friction;
+            part.vel.x *= environment[emitters[i].envIndex].friction;
           }
           //top bounds collision
           else if(boundsSet[3] && part.loc.y < part.radius)
@@ -308,7 +308,7 @@ class Engine
     this.colliders = colliders;
   }
 
-  void setEnvironment(Environment environment)
+  void setEnvironment(Environment[] environment)
   {
     this.environment = environment;
     //ensures particles have been added to teh engine before calling pushEnvironment()

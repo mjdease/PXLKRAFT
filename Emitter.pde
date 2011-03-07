@@ -30,6 +30,7 @@ class Emitter
   Particle temp;
   final static float MOMENTUM = 0.1;
   final static float FLUID_FORCE = 0.4;
+  int envIndex = 0;
   
   boolean isOn = false;
   //boolean isOnPrev = false;
@@ -41,7 +42,7 @@ class Emitter
   {
   }
   //constructor for infinite emission
-  Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, char type, int maxParticles, int lifeSpan)
+  Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, char type, int maxParticles, int lifeSpan, int envIndex)
   {
     this.loc = loc;
     this.sketchFrameRate = sketchFrameRate;
@@ -52,6 +53,7 @@ class Emitter
     //birthRate = 0.5;
     this.birthPath = birthPath;
     this.sprayWidth = sprayWidth;
+    this.envIndex = envIndex;
   }
   //constructor for single emission with birthRate param (explosions etc)
   Emitter(PVector loc, PVector birthPath, float birthRate, float sprayWidth, Particle p, int maxParticles)

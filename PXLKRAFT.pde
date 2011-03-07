@@ -12,6 +12,8 @@ PVector wand1 = new PVector(0,0);
 PVector trail = new PVector(0,0);
 PVector wand2 = new PVector(0,0);
 
+char w1Type = 'p';
+
 //instantiate collider arrays
 int colliderCount = 3;
 Collider[] colliders = new Collider[colliderCount];
@@ -19,7 +21,8 @@ Collider[] colliders = new Collider[colliderCount];
 int emitterCount = 2;
 Emitter[] emitters = new Emitter[emitterCount];
 //declare rest of globals
-Environment environment;
+int environmentCount = 2;
+Environment[] environments = new Environment[environmentCount];
 Engine engine;
 
 float invWidth, invHeight;    // inverse of screen dimensions
@@ -43,15 +46,16 @@ void setup()
   //instantiate emitters
   //inf:Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, Particle[] p)
   //non:Emitter(PVector loc, PVector birthPath, float birthRate, float sprayWidth, Particle[] p)
-  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,20), 1, 'p', 500, 10000);
-  emitters[1] = new Emitter(new PVector(0, 0), myFrameRate, new PVector(0,0), 2, 'a', 600, 7000);
+  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,20), 1, 'p', 500, 10000, 0);
+  emitters[1] = new Emitter(new PVector(0, 0), myFrameRate, new PVector(0,0), 2, 'a', 600, 7000, 1);
 
   //instantiate Environment
   //Environment(float gravity, float friction, PVector wind, float resistance, float turbulence)
-  environment = new Environment(0.09, 0.785, new PVector(0,0), 0.995, 0.01);
+  environments[0] = new Environment(0.09, 0.785, new PVector(0,0), 0.995, 0.01);
+  environments[1] = new Environment(-0.09, 0.5, new PVector(0.05,0), 0.995, 0.04);
 
   //instantiate engine
-  engine = new Engine(emitters, colliders, environment);
+  engine = new Engine(emitters, colliders, environments);
 
   invWidth = 1.0f/width;
   invHeight = 1.0f/height;
@@ -74,7 +78,7 @@ void draw()
   }
   trail.set(pmouseX-mouseX, pmouseY-mouseY, 0);
   trail.normalize();
-  trail.mult(-2);
+  trail.mult(-3);
   emitters[0].setBirthPath(trail);
   wand1.set(mouseX, mouseY, 0);
   emitters[0].setLoc(wand1);
