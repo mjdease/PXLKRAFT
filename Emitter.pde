@@ -72,7 +72,7 @@ class Emitter
   }
   
   //general methods
-  void emit()
+  void create()
   {
     //println(frameRate + " - " + birthRate + " - " + birthNum + " - " + birthRemainder + " - " + p.size());
     if(p.size() < maxParticles && isOn)
@@ -80,7 +80,7 @@ class Emitter
       birthRemainder = birthRate + birthRemainder;
       birthNum = floor(birthRemainder);
       birthRemainder %= 1;
-      pushMatrix();
+      //pushMatrix();
       colorMode(RGB,255);
       for(int i = 0; i < min(birthNum,maxParticles-p.size()); i++)
       {
@@ -109,9 +109,13 @@ class Emitter
             break;
         }
       }
-      popMatrix();
+      //popMatrix();
     }
-
+  }
+  
+  void emit()
+  {
+    colorMode(RGB,255);
     for (int i = p.size() - 1 ; i >= 0; i--)
     {
       Particle part = (Particle) p.get(i);

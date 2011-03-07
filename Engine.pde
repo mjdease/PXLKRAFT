@@ -87,7 +87,7 @@ class Engine
   void run()
   {
     //colorMode(HSB, 360, 1, 1);
-    pushMatrix();
+    //pushMatrix();
     colorMode(RGB, 1);
     if(drawFluid) {
       for(int i=0; i<fluidSolver.getNumCells(); i++) {
@@ -98,11 +98,12 @@ class Engine
       image(imgFluid, 0, 0, width, height);
     }
     fluidSolver.update();
-    popMatrix();
+    //popMatrix();
     if(emitters != null && emitters.length >0)
     {
       for(int i=0; i<emitters.length; i++)
       {
+        emitters[i].create();
         emitters[i].emit();
       }
       checkCollisions();
@@ -273,7 +274,6 @@ class Engine
       colorMode(HSB, 360, 1, 1);
       float hue = ((x + y) * 180 + frameCount) % 360;
       drawColor = color(hue, 1, 1);
-      colorMode(RGB,1);  
       //println( fluidSolver.rOld[index] +" : "+fluidSolver.gOld[index]+" : "+fluidSolver.bOld[index]);
       
       fluidSolver.rOld[index]  += red(drawColor) * colorMult;
