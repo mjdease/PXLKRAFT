@@ -82,7 +82,7 @@ class Emitter
       birthRemainder = birthRate + birthRemainder;
       birthNum = floor(birthRemainder);
       birthRemainder %= 1;
-      //pushMatrix();
+
       colorMode(RGB,255);
       for(int i = 0; i < min(birthNum,maxParticles-p.size()); i++)
       {
@@ -111,7 +111,6 @@ class Emitter
             break;
         }
       }
-      //popMatrix();
     }
   }
   
@@ -160,5 +159,9 @@ class Emitter
   void setBirthPath(PVector birthPath)
   {
     this.birthPath = birthPath;
+  }
+  void setType(char type)
+  {
+    this.type = type;
   }
 }
