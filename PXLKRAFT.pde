@@ -1,3 +1,5 @@
+import pbox2d.*;
+
 import msafluid.*;
 import processing.opengl.*;
 

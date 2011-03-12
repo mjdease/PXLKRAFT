@@ -18,7 +18,7 @@ class Engine
   //engine states
   boolean isColliderCollision;
   boolean isBoundaryCollision;
-
+  
   //for individual boundary collisions
   boolean[] boundsSet = {
     false, false, false, false
