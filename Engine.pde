@@ -5,10 +5,15 @@ class Engine
   Emitter[] emitters;
   Collider[] colliders;
 
+  //ArrayList<Particle> allObjs = new ArrayList<Particle>();
+
+  HashGrid allObjs;
+  static final int RADIUS = 20;
+
   MSAFluidSolver2D fluidSolver;
   PImage imgFluid;
   boolean drawFluid = true;
-  
+
   float aspectRatio = width * invHeight;
   float aspectRatio2 = aspectRatio * aspectRatio;
 
@@ -18,7 +23,7 @@ class Engine
   //engine states
   boolean isColliderCollision;
   boolean isBoundaryCollision;
-  
+
   //for individual boundary collisions
   boolean[] boundsSet = {
     false, false, false, false
@@ -62,7 +67,10 @@ class Engine
     fluidSolver.enableRGB(true).setFadeSpeed(0.006).setDeltaT(0.8).setVisc(0.00005).setSolverIterations(8);
 
     // create image to hold fluid picture
-    imgFluid = createImage(fluidSolver.getWidth(), fluidSolver.getHeight(), RGB);
+    imgFluid = createImage(fluidSolver.getWidth(), fluidSolver.getHeight(), ARGB);
+
+    //hash grid
+    allObjs = new HashGrid(1024, 768, RADIUS+1);
 
     pushEnvironment();
   }
@@ -92,7 +100,7 @@ class Engine
     if(drawFluid) {
       for(int i=0; i<fluidSolver.getNumCells(); i++) {
         int d = 3;
-        imgFluid.pixels[i] = color(fluidSolver.r[i] * d, fluidSolver.g[i] * d, fluidSolver.b[i] * d);
+        imgFluid.pixels[i] = color(fluidSolver.r[i] * d, fluidSolver.g[i] * d, fluidSolver.b[i] * d, .4);
       }  
       imgFluid.updatePixels();//  fastblur(imgFluid, 2);
       image(imgFluid, 0, 0, width, height);
@@ -101,14 +109,13 @@ class Engine
     //popMatrix();
     if(emitters != null && emitters.length >0)
     {
+      checkCollisions();
       for(int i=0; i<emitters.length; i++)
       {
         emitters[i].create();
         emitters[i].emit();
       }
-      checkCollisions();
     }
-
     if(colliders != null && colliders.length>0)
     {
       for(int i=0; i<colliders.length; i++)
@@ -116,7 +123,24 @@ class Engine
         colliders[i].create();
       }
     }
-
+    if(frameCount%30 == 0)
+    {
+      //updateAllObjs();
+    }
+    //println(allObjs.size());
+    allObjs.updateAll();
+  }
+  
+  void updateAllObjs()
+  {
+    for (Iterator i=allObjs.iterator(); i.hasNext();)
+    {
+      Particle part = (Particle) i.next();
+      if(part.isDead)
+      {
+        allObjs.remove(part);
+      }
+    }
   }
 
   void setColliderCollision(boolean isColliderCollision)
@@ -222,6 +246,16 @@ class Engine
         }
       }
     }
+    for (Iterator i=allObjs.iterator(); i.hasNext();)
+    {
+      Particle part = (Particle) i.next();
+      Collection neighbours = allObjs.get(part.getLocation());
+      for(Iterator j=neighbours.iterator(); j.hasNext();)
+      {
+        Particle otherParticle = (Particle) j.next();
+        part.checkBounce(otherParticle);
+      }
+    }
   }
 
   //reset to boundary edges
@@ -275,7 +309,7 @@ class Engine
       float hue = ((x + y) * 180 + frameCount) % 360;
       drawColor = color(hue, 1, 1);
       //println( fluidSolver.rOld[index] +" : "+fluidSolver.gOld[index]+" : "+fluidSolver.bOld[index]);
-      
+
       fluidSolver.rOld[index]  += red(drawColor) * colorMult;
       fluidSolver.gOld[index]  += green(drawColor) * colorMult;
       fluidSolver.bOld[index]  += blue(drawColor) * colorMult;

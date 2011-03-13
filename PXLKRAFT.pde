@@ -1,4 +1,4 @@
-import pbox2d.*;
+import org.gicentre.utils.geom.*;
 
 import msafluid.*;
 import processing.opengl.*;
@@ -22,7 +22,7 @@ char w2Type = 'a';
 boolean wandIsInput = false;
 char page = 'v'; //v=visualization, c=calibration, m=music, u=mainmenu
 
-int colliderCount = 3;
+int colliderCount = 0;
 Collider[] colliders = new Collider[colliderCount];
 int emitterCount = 2;
 Emitter[] emitters = new Emitter[emitterCount];
@@ -47,10 +47,14 @@ void setup()
   background(0);
   frameRate(myFrameRate);
   
+  
+  //box2d = new PBox2D(this);
+  //box2d.createWorld();
+    
   //tracking thread
-  glob = new Glob(width, height);
-  wrapper = new Thread(glob);
-  wrapper.start();
+  //glob = new Glob(width, height);
+  //wrapper = new Thread(glob);
+  //wrapper.start();
   
   //instantiate colliders
   for(int i=0; i<colliderCount; i++)
@@ -60,7 +64,7 @@ void setup()
   //instantiate emitters
   //inf:Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, Particle[] p)
   //non:Emitter(PVector loc, PVector birthPath, float birthRate, float sprayWidth, Particle[] p)
-  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,20), 1, w1Type, 500, 10000, 0);
+  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,20), 1, w1Type, 500, 20000, 0);
   emitters[1] = new Emitter(new PVector(0, 0), myFrameRate, new PVector(0,0), 2, w2Type, 600, 7000, 1);
 
   //instantiate Environments
@@ -78,6 +82,7 @@ void setup()
   //set boundary collisions
   boolean[] bounds = {true, true, true, true};
   engine.setBoundaryCollision(true, bounds);
+  
 
 }
 void draw()

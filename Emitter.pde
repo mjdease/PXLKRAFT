@@ -23,6 +23,7 @@ class Emitter
   //used to control particle birth rate
   float particleCounter = 0.0;
   ArrayList p = new ArrayList();
+  float theta, r;
   char type;
   int lifeSpan;
   int birthNum = 0;
@@ -86,25 +87,15 @@ class Emitter
       colorMode(RGB,255);
       for(int i = 0; i < min(birthNum,maxParticles-p.size()); i++)
       {
-        float theta = random(TWO_PI);
-        float r = random(sprayWidth);
         switch(type)
         {
           case 'p':
-            temp = new Particle(random(2, 15), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.85);
-            temp.loc.set(loc.x, loc.y, 0);
-            temp.birthTime = millis();
-            temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
-            temp.loc = new PVector(loc.x, loc.y);
-            p.add(temp);
+            temp = new Particle(random(4, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.85);
+            initParticle(temp);
             break;
           case 'a':
             temp = new Arrow(random(5, 40), color(255, random(80, 150), 10, 255), 5000, 0.85, 6);
-            temp.loc.set(loc.x, loc.y, 0);
-            temp.birthTime = millis();
-            temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
-            temp.loc = new PVector(loc.x, loc.y);
-            p.add(temp);
+            initParticle(temp);
             break;
           default:
             println("unknown particle type...");
@@ -112,6 +103,19 @@ class Emitter
         }
       }
     }
+  }
+  
+  void initParticle(Particle particle)
+  {
+    theta = random(TWO_PI);
+    r = random(sprayWidth);
+    
+    temp.loc.set(loc.x, loc.y, 0);
+    temp.birthTime = millis();
+    temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
+    temp.loc = new PVector(loc.x, loc.y);
+    p.add(temp);
+    engine.allObjs.add(temp);
   }
   
   void emit()
@@ -141,6 +145,7 @@ class Emitter
       }
       else
       {
+        part.kill();
         p.remove(i);
         continue;
       }
