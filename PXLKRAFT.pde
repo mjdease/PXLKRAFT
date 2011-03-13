@@ -69,7 +69,7 @@ void setup()
 
   //instantiate Environments
   //Environment(float gravity, float friction, PVector wind, float resistance, float turbulence)
-  environments[0] = new Environment(0.09, 0.785, new PVector(0,0), 0.995, 0.01);
+  environments[0] = new Environment(0.09, 0.785, new PVector(0,0), 0.995, 0);
   environments[1] = new Environment(-0.09, 0.5, new PVector(0.05,0), 0.995, 0.04);
 
   //instantiate engine

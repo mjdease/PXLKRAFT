@@ -8,7 +8,7 @@ class Engine
   //ArrayList<Particle> allObjs = new ArrayList<Particle>();
 
   HashGrid allObjs;
-  static final int RADIUS = 20;
+  static final int RADIUS = 40;
 
   MSAFluidSolver2D fluidSolver;
   PImage imgFluid;
@@ -253,7 +253,10 @@ class Engine
       for(Iterator j=neighbours.iterator(); j.hasNext();)
       {
         Particle otherParticle = (Particle) j.next();
-        part.checkBounce(otherParticle);
+        if(!otherParticle.isDead)
+        {
+          part.checkBounce(otherParticle);
+        }
       }
     }
   }

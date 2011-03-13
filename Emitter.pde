@@ -90,7 +90,7 @@ class Emitter
         switch(type)
         {
           case 'p':
-            temp = new Particle(random(4, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.85);
+            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), 30000, 0.95);
             initParticle(temp);
             break;
           case 'a':
@@ -125,11 +125,10 @@ class Emitter
     {
       Particle part = (Particle) p.get(i);
       pushMatrix();
-      //draw/move particle
       part.move();
       part.create();
       popMatrix();
-
+      
       if(part.lifeTime < part.lifeSpan)
       {
         int fluidIndex = engine.fluidSolver.getIndexForNormalizedPosition(part.loc.x * invWidth, part.loc.y * invHeight);
@@ -150,6 +149,8 @@ class Emitter
         continue;
       }
       part.lifeTime = millis() - part.birthTime;
+      //println(part.vel);
+      //println(part.loc);
     }
   }
   //set methods
