@@ -20,7 +20,7 @@ char w1Type = 'p';
 char w2Type = 'a';
 
 boolean wandIsInput = false;
-char page = 'v'; //v=visualization, c=calibration, m=music, u=mainmenu
+char page = 'c'; //v=visualization, c=calibration, m=music, u=mainmenu
 
 int colliderCount = 0;
 Collider[] colliders = new Collider[colliderCount];
@@ -52,9 +52,9 @@ void setup()
   //box2d.createWorld();
     
   //tracking thread
-  //glob = new Glob(width, height);
-  //wrapper = new Thread(glob);
-  //wrapper.start();
+  glob = new Glob(width, height);
+  wrapper = new Thread(glob);
+  wrapper.start();
   
   //instantiate colliders
   for(int i=0; i<colliderCount; i++)
@@ -122,6 +122,7 @@ void readMouse()
       wand1.set(mouseX, mouseY, 0);
       break; 
     case 'c':
+      glob.calibrate();
       break;
     case 'm':
       break;
@@ -178,6 +179,7 @@ void readWands()
       wand2.set(glob.getPos2().x, glob.getPos2().y, 0);
       break;
     case 'c':
+      glob.calibrate();
       break;
     case 'm':
       break;

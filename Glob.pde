@@ -36,12 +36,21 @@ class Glob implements Runnable
   float wr;
   float hr;
   
+  int w;
+  int h;
+  
+  int[] img;
+  
+  boolean calibOne,calibTwo,calibOneC, calibTwoC;
+  
   Glob (int wid , int hei)
   {
+    calibOne=calibTwo=calibOneC=calibTwoC = false;
+    
     running = false;
     
-    int w = 320;
-    int h = 240;
+    w = 320;
+    h = 240;
     
     wr = wid / w;
     hr = hei / h;
@@ -208,49 +217,72 @@ class Glob implements Runnable
         
    }
   
-  void mousePressed()
+  void calibrate()
   {
+    m.update();
+    img = m.cameraImage();
+    loadPixels();
+    for(int i =0;i<w*h;i++)
+    {
+      pixels[i%320+1024*(i/320)] = img[i];
+    }
+    updatePixels();
     int c = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);
     
-    if (mouseButton == LEFT)
+    //println(int(red(c))+"," + int(green(c)) + "," + int(blue(c)) + ":" + mouseX +";"+mouseY);
+    if(mousePressed)
     {
-      if(wand==0)
+      if (mouseButton == LEFT)
       {
         r1 = int(red(c));
         g1 = int(green(c));
         b1 = int(blue(c));
         wand =1;
-        println(wand +":"+ r1+"," + g1+"," + b1);
+        calibOne=true;
+        println("Wand "+wand +":"+ r1+"," + g1+"," + b1);
       }
-      else
-      {
-        r2 = int(red(c));
-        g2 = int(green(c));
-        b2 = int(blue(c));
-        wand = 2;
-        println(wand +":"+ r2+"," + g2 + "," + b2);
-      }
-    }
-    
-    if (mouseButton == RIGHT)
-    {
-      if(wandClick==0)
+      
+      else if(mouseButton == RIGHT)
       {
         r1c = int(red(c));
         g1c = int(green(c));
         b1c = int(blue(c));
         wandClick =1;
-        println(wandClick +":"+ r1c+"," + g1c + "," + b1c);
+        calibOneC=true;
+        println("Wand Click "+wandClick +":"+ r1c+"," + g1c + "," + b1c);
       }
-      else
+    }
+    if(keyPressed)
+    {
+      if(key == 'x')
       {
         r2c = int(red(c));
         g2c = int(green(c));
         b2c = int(blue(c));
         wandClick = 2;
-        println(wandClick +":"+ r2c+"," + g2c + "," + b2c);
+        calibTwo=true;
+        println("Wand Click "+wandClick +":"+ r2c+"," + g2c + "," + b2c);
       }
+      else if(key == 'z')
+      {
+        r2 = int(red(c));
+        g2 = int(green(c));
+        b2 = int(blue(c));
+        wand = 2;
+        calibTwoC=true;
+        println("Wand "+wand +":"+ r2+"," + g2 + "," + b2);
+      }
+      
     }
+    if(calibOne&&calibTwo&&calibOneC&&calibTwoC)
+    {
+      page = 'v';
+      wandIsInput = true;
+      background(0);
+      
+      //println("CALIBRATION COMPLETE YOU FAGS");
+    }
+    //return m.cameraImage();
   }
   void quit()
   {
