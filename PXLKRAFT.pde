@@ -20,7 +20,7 @@ char w1Type = 'p';
 char w2Type = 'a';
 
 boolean wandIsInput = false;
-char page = 'c'; //v=visualization, c=calibration, m=music, u=mainmenu
+char page = 'v'; //v=visualization, c=calibration, m=music, u=mainmenu
 
 int colliderCount = 0;
 Collider[] colliders = new Collider[colliderCount];
@@ -40,6 +40,8 @@ Thread wrapper;
 
 float myFrameRate = 60.0;
 
+PVector tempVector;
+
 void setup()
 {
   size(1024, 768, OPENGL);
@@ -52,7 +54,9 @@ void setup()
   //box2d.createWorld();
     
   //tracking thread
-  glob = new Glob(width, height);
+  glob = new Glob(width, height, this);
+  glob.start();
+  //glob.start();
   wrapper = new Thread(glob);
   wrapper.start();
   
@@ -138,13 +142,16 @@ void readWands()
   switch(page)
   {
     case 'v':
+      //glob.run();
       if(glob.getPos1().x != glob.getPPos1().x || glob.getPos1().y != glob.getPPos1().y)
       {
-        cursorNormX = glob.getPos1().x * invWidth;
-        cursorNormY = glob.getPos1().y * invHeight;
-        cursorVelX = (glob.getPos1().x - glob.getPPos1().x) * invWidth;
-        cursorVelY = (glob.getPos1().y - glob.getPPos1().y) * invHeight;
+        tempVector = glob.getPos1();
+        cursorNormX = tempVector.x * invWidth;
+        cursorNormY = tempVector.y * invHeight;
+        cursorVelX = (tempVector.x - tempVector.x) * invWidth;
+        cursorVelY = (tempVector.y - tempVector.y) * invHeight;
         engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY);
+        //println(glob.isDown1());
       }
       if(glob.isDown1() && !emitters[0].isOn)
       {
@@ -157,10 +164,11 @@ void readWands()
       
       if(glob.getPos2().x != glob.getPPos2().x || glob.getPos2().y != glob.getPPos2().y)
       {
-        cursorNormX = glob.getPos2().x * invWidth;
-        cursorNormY = glob.getPos2().y * invHeight;
-        cursorVelX = (glob.getPos2().x - glob.getPPos2().x) * invWidth;
-        cursorVelY = (glob.getPos2().y - glob.getPPos2().y) * invHeight;
+        tempVector = glob.getPos2();
+        cursorNormX = tempVector.x * invWidth;
+        cursorNormY = tempVector.y * invHeight;
+        cursorVelX = (tempVector.x - tempVector.x) * invWidth;
+        cursorVelY = (tempVector.y - tempVector.y) * invHeight;
         engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY);
       }
       if(glob.isDown2() && !emitters[1].isOn)
@@ -179,7 +187,6 @@ void readWands()
       wand2.set(glob.getPos2().x, glob.getPos2().y, 0);
       break;
     case 'c':
-      glob.calibrate();
       break;
     case 'm':
       break;

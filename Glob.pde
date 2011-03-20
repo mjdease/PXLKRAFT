@@ -4,7 +4,9 @@ class Glob implements Runnable
   import JMyron.*;
   JMyron m;
   
-  boolean running;
+  Thread thread;
+  
+  //boolean running;
   
   //background colour
   int rB,gB,bB;
@@ -43,11 +45,12 @@ class Glob implements Runnable
   
   boolean calibOne,calibTwo,calibOneC, calibTwoC;
   
-  Glob (int wid , int hei)
+  Glob (int wid , int hei, PApplet parent)
   {
+    parent.registerDispose(this);
     calibOne=calibTwo=calibOneC=calibTwoC = false;
     
-    running = false;
+    //running = false;
     
     w = 320;
     h = 240;
@@ -79,23 +82,25 @@ class Glob implements Runnable
   
   void start()
   {
-    running = true;
-    
+    //running = true;
+    //println(running);
     //super.start();
+    thread = new Thread(this);
+    thread.start();
   }
   
   void run()
   {
-     while(running)
-     {
+     //while(running)
+     //{
         track(); 
-        //delay(30);
-     }
+        println("run");
+     //oooo}
   }
   
   void track()
   {
-    
+    //println("traCKING IS RUNNING");
     archive();
     m.update();
     m.trackNotColor(rB,gB,bB,100);
@@ -280,15 +285,20 @@ class Glob implements Runnable
       wandIsInput = true;
       background(0);
       
-      //println("CALIBRATION COMPLETE YOU FAGS");
+      println("CALIBRATION COMPLETE YOU FAGS");
     }
     //return m.cameraImage();
   }
-  void quit()
+  void stop()
   {
     println("quitting");
-    running = false;
+    thread = null;
+    //running = false;
     //interrupt();
+  }
+  void dispose()
+  {
+    stop();
   }
   
 }

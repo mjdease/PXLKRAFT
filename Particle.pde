@@ -63,7 +63,7 @@ class Particle extends Sprite implements Locatable
   
   void move()
   {
-    println(vel);
+    //println(vel);
     loc.add(vel);
     translate(loc.x, loc.y);
   }
