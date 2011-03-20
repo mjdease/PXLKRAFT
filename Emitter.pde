@@ -90,7 +90,7 @@ class Emitter
         switch(type)
         {
           case 'p':
-            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), 30000, 0.95);
+            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), 30000, 0.98);
             initParticle(temp);
             break;
           case 'a':

@@ -94,19 +94,17 @@ class Engine
   //called in draw function to run engine
   void run()
   {
-    //colorMode(HSB, 360, 1, 1);
-    //pushMatrix();
     colorMode(RGB, 1);
     if(drawFluid) {
       for(int i=0; i<fluidSolver.getNumCells(); i++) {
         int d = 3;
-        imgFluid.pixels[i] = color(fluidSolver.r[i] * d, fluidSolver.g[i] * d, fluidSolver.b[i] * d, .4);
+        imgFluid.pixels[i] = color(fluidSolver.r[i] * d, fluidSolver.g[i] * d, fluidSolver.b[i] * d, .3);
       }  
       imgFluid.updatePixels();//  fastblur(imgFluid, 2);
       image(imgFluid, 0, 0, width, height);
     }
     fluidSolver.update();
-    //popMatrix();
+
     if(emitters != null && emitters.length >0)
     {
       checkCollisions();
@@ -176,12 +174,12 @@ class Engine
     //boundary collisions
     if(isBoundaryCollision)
     {
+      
       for(int i = 0; i<emitters.length; i++)
       {
         for(int j=0; j<emitters[i].p.size(); j++)
         {
           Particle part = (Particle) emitters[i].p.get(j);
-
           // right bounds collision
           if(boundsSet[0] && part.loc.x > width - part.radius)
           {
@@ -198,6 +196,7 @@ class Engine
           //bottom bounds collision
           if(boundsSet[2] && part.loc.y > height - part.radius)
           {
+            println(part.loc.y);
             part.loc.y = height - part.radius;
             part.vel.y *= -1;
             part.vel.y *= part.damping;

@@ -118,10 +118,11 @@ class Particle extends Sprite implements Locatable
       
       float dx = otherNewX - newX; 
       float dy = otherNewY - newY;
-      float distSq = dx*dx + dy*dy; 
-   
+      float distSq = dx*dx + dy*dy;
+
       if(dist(this.loc.x, this.loc.y, otherParticle.loc.x, otherParticle.loc.y) < this.radius + otherParticle.radius)
       //if(distSq <= this.radius * otherParticle.radius)
+      //if(xCollision || yCollision)
       {
         // The two balls are within a radius of each other so they are about to bounce.
         float collisionAngle = atan2(dy, dx); 
@@ -147,11 +148,11 @@ class Particle extends Sprite implements Locatable
         float v2x = v2*cos(d2-collisionAngle);
         float v2y = v2*sin(d2-collisionAngle);
         
-        vel.x = 0.95*(collisionX*v2x + collisionXTangent*v1y);
-        vel.y = 0.95*(collisionY*v2x + collisionYTangent*v1y);
+        vel.x = damping*(collisionX*v2x + collisionXTangent*v1y);
+        vel.y = damping*(collisionY*v2x + collisionYTangent*v1y);
         
-        otherParticle.vel.x = 0.95*(collisionX*v1x + collisionXTangent*v2y);
-        otherParticle.vel.y = 0.95*(collisionY*v1x + collisionYTangent*v2y);
+        otherParticle.vel.x = damping*(collisionX*v1x + collisionXTangent*v2y);
+        otherParticle.vel.y = damping*(collisionY*v1x + collisionYTangent*v2y);
         
         return true;
       } 

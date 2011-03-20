@@ -31,6 +31,7 @@ class Glob implements Runnable
   // threshold
   int threshold;
   
+  
   //wand selector counter
   int wand;
   int wandClick;

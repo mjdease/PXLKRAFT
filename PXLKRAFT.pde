@@ -48,17 +48,18 @@ void setup()
   colorMode(RGB);
   background(0);
   frameRate(myFrameRate);
+  rectMode(CENTER);
   
   
   //box2d = new PBox2D(this);
   //box2d.createWorld();
     
   //tracking thread
-  glob = new Glob(width, height, this);
-  glob.start();
+ // glob = new Glob(width, height, this);
   //glob.start();
-  wrapper = new Thread(glob);
-  wrapper.start();
+  //glob.start();
+  //wrapper = new Thread(glob);
+  //wrapper.start();
   
   //instantiate colliders
   for(int i=0; i<colliderCount; i++)
