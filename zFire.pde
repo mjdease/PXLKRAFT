@@ -38,8 +38,7 @@ class Fire extends Particle
         bounce(otherParticle);
         break;
       case 'w': //collided with a water particle
-        otherParticle.kill();
-        waterCount--;
+        otherParticle.toKill = true;
         break;
       case 'o': //collided with a oil particle
         bounce(otherParticle);

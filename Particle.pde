@@ -11,6 +11,7 @@ class Particle extends Sprite implements Locatable
   float damping = 0.825;
   PVector vel = new PVector();
   boolean isDead = false;
+  boolean toKill = false;
   char type = 'p';
 
   //default constructor

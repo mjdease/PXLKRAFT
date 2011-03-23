@@ -186,21 +186,7 @@ class Emitter
       part.create();
       popMatrix();
       
-      if(part.lifeTime < part.lifeSpan || part.lifeSpan == -1)
-      {
-        int fluidIndex = engine.fluidSolver.getIndexForNormalizedPosition(part.loc.x * invWidth, part.loc.y * invHeight);
-        part.vel.x += engine.fluidSolver.u[fluidIndex] * (width/24);
-        part.vel.y += engine.fluidSolver.v[fluidIndex] * (height/24);
-        //accelerate based on gravity
-        part.vel.y += environment.gravity;
-        part.vel.y += random(-environment.turbulence, environment.turbulence) + environment.wind.y;
-        part.vel.x += random(-environment.turbulence, environment.turbulence) + environment.wind.x;
-        part.vel.mult(environment.resistance);
-        //fade particle
-        if(part.lifeSpan > -1)
-          part.createFade(part.initAlpha/(frameRate*(part.lifeSpan/1000)));
-      }
-      else
+      if((part.lifeTime >= part.lifeSpan && part.lifeSpan != -1) || part.toKill)
       {
         part.kill();
         p.remove(i);
@@ -237,6 +223,20 @@ class Emitter
             break;
         }
         continue;
+      }
+      else
+      {
+        int fluidIndex = engine.fluidSolver.getIndexForNormalizedPosition(part.loc.x * invWidth, part.loc.y * invHeight);
+        part.vel.x += engine.fluidSolver.u[fluidIndex] * (width/24);
+        part.vel.y += engine.fluidSolver.v[fluidIndex] * (height/24);
+        //accelerate based on gravity
+        part.vel.y += environment.gravity;
+        part.vel.y += random(-environment.turbulence, environment.turbulence) + environment.wind.y;
+        part.vel.x += random(-environment.turbulence, environment.turbulence) + environment.wind.x;
+        part.vel.mult(environment.resistance);
+        //fade particle
+        if(part.lifeSpan > -1)
+          part.createFade(part.initAlpha/(frameRate*(part.lifeSpan/1000)));
       }
       part.lifeTime = millis() - part.birthTime;
       //println(part.vel);
