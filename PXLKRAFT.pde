@@ -34,8 +34,6 @@ char w2Type = 'p';
 boolean wandIsInput = false;
 char page = 'v'; //v=visualization, c=calibration, m=music, u=mainmenu
 
-int colliderCount = 0;
-Collider[] colliders = new Collider[colliderCount];
 int emitterCount = 2;
 Emitter[] emitters = new Emitter[emitterCount];
 int environmentCount = 2;
@@ -72,12 +70,7 @@ void setup()
   //glob.start();
   //wrapper = new Thread(glob);
   //wrapper.start();
-  
-  //instantiate colliders
-  for(int i=0; i<colliderCount; i++)
-  {
-    colliders[i] = new Collider(new PVector(random(1024), random(468)+300), 70, #666666, true);
-  }
+
   //instantiate emitters
   //Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, char type, int maxParticles, int lifeSpan, int envIndex)
   emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,20), 1, w1Type, 100, 10000, 0);
@@ -89,7 +82,7 @@ void setup()
   environments[1] = new Environment(-0.09, 0.5, new PVector(0.05,0), 0.995, 0.04);
 
   //instantiate engine
-  engine = new Engine(emitters, colliders, environments);
+  engine = new Engine(emitters, environments);
 
   //for fluids
   invWidth = 1.0f/width;

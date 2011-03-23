@@ -110,32 +110,33 @@ class Emitter
             initParticle(temp);
             break;
           case 'o':
-            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            temp = new Oil(random(13, 17), color(random(170, 190), random(110,125), random(20,40), 255), lifeSpan, 0.98, type);
             initParticle(temp);
             break;
           case 's':
-            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            temp = new Seed(random(2, 4), color(random(220,240), random(160,180), random(55,75), 255), lifeSpan, 0.98, type);
             initParticle(temp);
             break;
           case 'f':
-            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            temp = new Fire(random(3, 7), color(random(225,255), random(0,30), random(0,30), 255), lifeSpan, 0.98, type);
             initParticle(temp);
             break;
           case 'c':
-            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            temp = new Concrete(random(12, 15), color(random(150,200), 255), lifeSpan, 0.98, type);
             initParticle(temp);
             break;
           case 'i':
-            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            temp = new Ice(random(3, 7), color(random(120,130), random(225,235), random(230,240), 255), lifeSpan, 0.98, type);
             initParticle(temp);
             break;
           case 'k':
-            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            temp = new Firework(random(3, 5), color(random(190,210), random(65,80), random(220,230), 255), lifeSpan, 0.98, type);
             initParticle(temp);
             break;
           case 'l':
-            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
-            initParticle(temp);
+            //plants dont get emitted ><
+            //temp = new Plant(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            //initParticle(temp);
             break;
           default:
             println("unknown particle type...");

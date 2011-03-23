@@ -3,7 +3,6 @@ class Engine
   //properties
   Emitter emitter;
   Emitter[] emitters;
-  Collider[] colliders;
 
   //ArrayList<Particle> allObjs = new ArrayList<Particle>();
 
@@ -31,13 +30,12 @@ class Engine
   Engine()
   {
   }
-  Engine(Emitter[] emitters, Collider[] colliders, Environment[] environment)
+  Engine(Emitter[] emitters, Environment[] environment)
   {
     this.emitters = emitters;
-    this.colliders = colliders;
     this.environment = environment;
     fluidSolver = new MSAFluidSolver2D(128, 96);
-    fluidSolver.enableRGB(true).setFadeSpeed(0.0005).setDeltaT(0.8).setVisc(0.00004).setSolverIterations(7);
+    fluidSolver.enableRGB(true).setFadeSpeed(0.001).setDeltaT(0.8).setVisc(0.00004).setSolverIterations(7);
 
     // create image to hold fluid picture
     imgFluid = createImage(fluidSolver.getWidth(), fluidSolver.getHeight(), ARGB);
@@ -77,13 +75,6 @@ class Engine
       {
         emitters[i].create();
         emitters[i].emit();
-      }
-    }
-    if(colliders != null && colliders.length>0)
-    {
-      for(int i=0; i<colliders.length; i++)
-      {
-        colliders[i].create();
       }
     }
     if(frameCount%30 == 0)
@@ -220,11 +211,6 @@ class Engine
     this.emitters = emitters;
     //pass environment to emitters
     pushEnvironment();
-  }
-
-  void setColliders(Collider[] colliders)
-  {
-    this.colliders = colliders;
   }
 
   void setEnvironment(Environment[] environment)
