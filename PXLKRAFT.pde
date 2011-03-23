@@ -1,5 +1,4 @@
 import org.gicentre.utils.geom.*;
-
 import msafluid.*;
 import processing.opengl.*;
 
@@ -16,8 +15,21 @@ PVector force1 = new PVector(0,0);
 PVector wand2 = new PVector(0,0);
 PVector force2 = new PVector(0,0);
 
-char w1Type = 'p';
-char w2Type = 'a';
+/*particle Types:
+  p - base particle
+  a - arrow (don't use)
+  
+  w - water
+  o - oil
+  s - seeds
+  f - fire
+  c - concrete
+  i - ice
+  k - fireworks
+  l - plants
+*/
+char w1Type = 'w';
+char w2Type = 'p';
 
 boolean wandIsInput = false;
 char page = 'v'; //v=visualization, c=calibration, m=music, u=mainmenu
@@ -67,9 +79,8 @@ void setup()
     colliders[i] = new Collider(new PVector(random(1024), random(468)+300), 70, #666666, true);
   }
   //instantiate emitters
-  //inf:Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, Particle[] p)
-  //non:Emitter(PVector loc, PVector birthPath, float birthRate, float sprayWidth, Particle[] p)
-  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,20), 1, w1Type, 500, 20000, 0);
+  //Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, char type, int maxParticles, int lifeSpan, int envIndex)
+  emitters[0] = new Emitter(new PVector(mouseX, mouseY), myFrameRate, new PVector(0,20), 1, w1Type, 100, 10000, 0);
   emitters[1] = new Emitter(new PVector(0, 0), myFrameRate, new PVector(0,0), 2, w2Type, 600, 7000, 1);
 
   //instantiate Environments

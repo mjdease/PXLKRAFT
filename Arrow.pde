@@ -11,9 +11,9 @@ class Arrow extends Particle
     radius = len/2;
   }
   //constructor
-  Arrow(float w, color col, float lifeSpan, float damping, int tailFinCount)
+  Arrow(float w, color col, float lifeSpan, float damping, int tailFinCount, char type)
   {
-    super(w, col, lifeSpan, damping);
+    super(w, col, lifeSpan, damping, type);
     len = w;
     this.tailFinCount = tailFinCount;
     radius = len/2;

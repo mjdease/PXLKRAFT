@@ -25,46 +25,19 @@ class Engine
   boolean isBoundaryCollision;
 
   //for individual boundary collisions
-  boolean[] boundsSet = {
-    false, false, false, false
-  };
+  boolean[] boundsSet = {false, false, false, false};
 
   //default constructor
   Engine()
   {
   }
-  //constructor
-  Engine(Emitter emitter, Environment[] environment)
-  {
-    this.emitter = emitter;
-    this.environment = environment;
-    init();
-    pushEnvironment();
-  }
-  //constructor
-  Engine(Emitter[] emitters, Environment[] environment)
-  {
-    this.emitters = emitters;
-    this.environment = environment;
-    pushEnvironment();
-  }
-  Engine(Emitter emitter, Collider[] colliders, Environment[] environment)
-  {
-    this.emitter = emitter;
-    this.colliders = colliders;
-    this.environment = environment;
-    init();
-    pushEnvironment();
-  }
-  //constructor
   Engine(Emitter[] emitters, Collider[] colliders, Environment[] environment)
   {
     this.emitters = emitters;
     this.colliders = colliders;
     this.environment = environment;
-
     fluidSolver = new MSAFluidSolver2D(128, 96);
-    fluidSolver.enableRGB(true).setFadeSpeed(0.006).setDeltaT(0.8).setVisc(0.00005).setSolverIterations(8);
+    fluidSolver.enableRGB(true).setFadeSpeed(0.0005).setDeltaT(0.8).setVisc(0.00004).setSolverIterations(7);
 
     // create image to hold fluid picture
     imgFluid = createImage(fluidSolver.getWidth(), fluidSolver.getHeight(), ARGB);
@@ -74,14 +47,6 @@ class Engine
 
     pushEnvironment();
   }
-
-  // if only one emitter added to engin, add to emitters array
-  void init()
-  {
-    emitters = new Emitter[1];
-    emitters[0] = emitter;
-  }
-
   //pass through environment object to emitter objects (emitters handle controlling particles, not engine)
   void pushEnvironment()
   {
@@ -141,40 +106,12 @@ class Engine
     }
   }
 
-  void setColliderCollision(boolean isColliderCollision)
-  {
-    this.isColliderCollision = isColliderCollision;
-  }
-
-  //overloaded setBoundaryCollision method - individual boundaries set
-  void setBoundaryCollision(boolean isBoundaryCollision, boolean[] boundsSet)
-  {
-    this.isBoundaryCollision = isBoundaryCollision;
-    this.boundsSet = boundsSet;
-  }
-  //overloaded setBoundaryCollision method - all boundaries set
-  void setBoundaryCollision(boolean isBoundaryCollision)
-  {
-    this.isBoundaryCollision = isBoundaryCollision;
-    for(int i=0; i<boundsSet.length; i++)
-    {
-      boundsSet[i] = true;
-    }
-  }
-
-  //set individual boundary collisions to true
-  void setBounds(boolean[] boundsSet)
-  {
-    this.boundsSet = boundsSet;
-  }
-
   //collision detection
   void checkCollisions()
   {
     //boundary collisions
     if(isBoundaryCollision)
     {
-      
       for(int i = 0; i<emitters.length; i++)
       {
         for(int j=0; j<emitters[i].p.size(); j++)
@@ -196,7 +133,7 @@ class Engine
           //bottom bounds collision
           if(boundsSet[2] && part.loc.y > height - part.radius)
           {
-            println(part.loc.y);
+            //println(part.loc.y);
             part.loc.y = height - part.radius;
             part.vel.y *= -1;
             part.vel.y *= part.damping;
@@ -211,40 +148,6 @@ class Engine
         }
       }
     }
-    //collider collision
-    if(colliders != null && colliders.length>0)
-    {
-      for(int i=0; i<emitters.length; i++)
-      {
-        for(int j=0; j<emitters[i].p.size(); j++)
-        {
-          //get shallow clone of current particle
-          //Particle part = (Particle) emitters[i].p.get(j).clone();
-          //emitters[i].p.get(j).hiTest();
-          Particle part = (Particle) emitters[i].p.get(j);
-          part = part.getClone();
-          //add emitter offset
-          //part.loc.add(emitters[i].loc);
-
-          //check each particle against colliders
-          for(int k=0; k<colliders.length; k++)
-          {
-            Collider cldr = colliders[k];
-            if(dist(part.loc.x, part.loc.y, cldr.loc.x, cldr.loc.y) < part.radius + cldr.radius)
-            {
-              Particle realPart = (Particle) emitters[i].p.get(j);
-              //set particle to collider bounds to avoid overlap
-              correctEdgeOverlap((Particle) emitters[i].p.get(j), cldr, emitters[i].loc);
-              //get reflection vector
-              PVector rv = getReflection(part, cldr);
-              realPart.setVel(rv);
-              //damping slows particles on collisions
-              realPart.vel.y *= realPart.damping;
-            }
-          }
-        }
-      }
-    }
     for (Iterator i=allObjs.iterator(); i.hasNext();)
     {
       Particle part = (Particle) i.next();
@@ -254,43 +157,10 @@ class Engine
         Particle otherParticle = (Particle) j.next();
         if(!otherParticle.isDead)
         {
-          part.checkBounce(otherParticle);
+          part.checkHit(otherParticle);
         }
       }
     }
-  }
-
-  //reset to boundary edges
-  void correctEdgeOverlap(Particle part, Collider collider, PVector emitterOffset)
-  {
-    //get vector between object centers
-    PVector collisionNormal = PVector.sub(part.loc, collider.loc);
-    //convert vecotr to unit length (0-1)
-    collisionNormal.normalize();
-    //set to perfect distance (sum of the radii)
-    collisionNormal.mult(collider.radius + part.radius);
-    //put particle precisely on collider edge
-    part.loc.set(PVector.add(collider.loc, collisionNormal));
-  }
-
-  //non-orthogonal reflection, using rotation of coordinate system
-  PVector getReflection(Particle particle, Collider collider)
-  {
-    //get vector between object centers
-    PVector collisionNormal = PVector.sub(particle.loc, collider.loc);
-    //calculate reflection of angle by rotating vectors to 0 on unic circle
-    //initial theta of collisionNormal
-    float theta = atan2(collisionNormal.y, collisionNormal.x);
-
-    //rotate particle velocity vector by -theta ( to bring 0 on unit circle)
-    float vx = cos(-theta)*particle.vel.x - sin(-theta)*particle.vel.y;
-    float vy = sin(-theta)*particle.vel.x + cos(-theta)*particle.vel.y;
-
-    //reverse x component and rotate velocity vector back to original position
-    PVector temp = new PVector(vx, vy);
-    vx = cos(theta) * -temp.x - sin(theta)*temp.y;
-    vy = sin(theta) * -temp.x + cos(theta)*temp.y;
-    return new PVector(vx, vy);
   }
   void addForce(float x, float y, float dx, float dy) 
   {
@@ -320,18 +190,31 @@ class Engine
       fluidSolver.vOld[index] += dy * velocityMult;
     }
   }
-
-
-  //setters
-  void setEmitter(Emitter emitter)
+  
+  void setColliderCollision(boolean isColliderCollision)
   {
-    this.emitter = emitter;
-    //create emitters array and adds emitter at [0]
-    init();
-    //pass envirnoment to emitters
-    pushEnvironment();
+    this.isColliderCollision = isColliderCollision;
   }
-
+  //overloaded setBoundaryCollision method - individual boundaries set
+  void setBoundaryCollision(boolean isBoundaryCollision, boolean[] boundsSet)
+  {
+    this.isBoundaryCollision = isBoundaryCollision;
+    this.boundsSet = boundsSet;
+  }
+  //overloaded setBoundaryCollision method - all boundaries set
+  void setBoundaryCollision(boolean isBoundaryCollision)
+  {
+    this.isBoundaryCollision = isBoundaryCollision;
+    for(int i=0; i<boundsSet.length; i++)
+    {
+      boundsSet[i] = true;
+    }
+  }
+  //set individual boundary collisions to true
+  void setBounds(boolean[] boundsSet)
+  {
+    this.boundsSet = boundsSet;
+  }
   void setEmitter(Emitter[] emitters)
   {
     this.emitters = emitters;

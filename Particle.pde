@@ -10,26 +10,23 @@ class Particle extends Sprite implements Locatable
   float lifeTime = 0;
   float damping = 0.825;
   PVector vel = new PVector();
-  //boolean isFirstEmission = true;
   boolean isDead = false;
-  boolean isEmitted = false;
+  char type = 'p';
 
-  float mass = 0.5;
   //default constructor
   Particle()
   {
     super();
     setColComponents();
-    //birthLoc = new PVector(mouseX, mouseY);
   }
   //constructor
-  Particle(float radius, color col, float lifeSpan, float damping)
+  Particle(float radius, color col, float lifeSpan, float damping, char type)
   {
     super(radius, col);
     this.lifeSpan = lifeSpan;
     this.damping = damping;
+    this.type = type;
     setColComponents();
-    //birthLoc = new PVector(mouseX, mouseY);
   }
   
   Particle(color col, float lifeSpan, float damping)
@@ -86,17 +83,7 @@ class Particle extends Sprite implements Locatable
   {
     this.vel = vel;
   }
-  
-  //used by engine for collision detection
-  Particle getClone()
-  {
-    Particle p = new Particle();
-    p.loc.set(loc);
-    p.vel.set(vel);
-    p.radius = radius;
-    p.damping = damping;
-    return p;
-  }
+
   void kill()
   {
     this.isDead = true;
@@ -106,115 +93,64 @@ class Particle extends Sprite implements Locatable
   {
     return loc;
   }
-  
-  boolean checkBounce(Particle otherParticle)
+  void checkHit(Particle otherParticle)
+  {
+    if(isHit(otherParticle))
+    {
+      bounce(otherParticle);
+    }
+  }
+  boolean isHit(Particle otherParticle)
   {
     if (otherParticle != this)
     {  
-      float newX = loc.x;
-      float newY = loc.y;
-      float otherNewX = otherParticle.loc.x;
-      float otherNewY = otherParticle.loc.y;
-      
-      float dx = otherNewX - newX; 
-      float dy = otherNewY - newY;
-      float distSq = dx*dx + dy*dy;
-
       if(dist(this.loc.x, this.loc.y, otherParticle.loc.x, otherParticle.loc.y) < this.radius + otherParticle.radius)
-      //if(distSq <= this.radius * otherParticle.radius)
-      //if(xCollision || yCollision)
       {
-        // The two balls are within a radius of each other so they are about to bounce.
-        float collisionAngle = atan2(dy, dx); 
-        float collisionX = cos(collisionAngle);
-        float collisionY = sin(collisionAngle);
-        float collisionXTangent = cos(collisionAngle+HALF_PI);
-        float collisionYTangent = sin(collisionAngle+HALF_PI);
-        
-        PVector collisionNormal = new PVector(-dx,-dy);
-        collisionNormal.normalize();
-        collisionNormal.mult(this.radius + otherParticle.radius);
-        this.loc.set(PVector.add(otherParticle.loc, collisionNormal));
-        
-        float v1 = sqrt(vel.x*vel.x+vel.y*vel.y);
-        float v2 = sqrt(otherParticle.vel.x*otherParticle.vel.x+otherParticle.vel.y*otherParticle.vel.y);
-        
-        float d1 = atan2(vel.y, vel.x);
-        float d2 = atan2(otherParticle.vel.y, otherParticle.vel.x);
-        
-        float v1x = v1*cos(d1-collisionAngle);
-        float v1y = v1*sin(d1-collisionAngle);
-        
-        float v2x = v2*cos(d2-collisionAngle);
-        float v2y = v2*sin(d2-collisionAngle);
-        
-        vel.x = damping*(collisionX*v2x + collisionXTangent*v1y);
-        vel.y = damping*(collisionY*v2x + collisionYTangent*v1y);
-        
-        otherParticle.vel.x = damping*(collisionX*v1x + collisionXTangent*v2y);
-        otherParticle.vel.y = damping*(collisionY*v1x + collisionYTangent*v2y);
-        
+        // The two balls are within a radius of each other so they are about to bounce
         return true;
       } 
     }
-    return false;    // No bounce.
+    return false;
   }
-  void checkCollision(Particle otherParticle)
+  void bounce(Particle otherParticle)
   {
-    Particle part = this.getClone();
-
-    float newX = loc.x + vel.x;
-    float newY = loc.y + vel.y;
-    float otherNewX = otherParticle.loc.x + otherParticle.vel.x;
-    float otherNewY = otherParticle.loc.y + otherParticle.vel.y;
+    float newX = loc.x;
+    float newY = loc.y;
+    float otherNewX = otherParticle.loc.x;
+    float otherNewY = otherParticle.loc.y;
     
     float dx = otherNewX - newX; 
     float dy = otherNewY - newY;
-    float distSq = dx*dx + dy*dy; 
-   
-    //if(dist(part.loc.x, part.loc.y, otherParticle.loc.x, otherParticle.loc.y) < this.radius + otherParticle.radius)
-    if (distSq <= this.radius * otherParticle.radius)
-    {
-      //set particle to collider bounds to avoid overlap
-      correctEdgeOverlap(this, otherParticle);
-      //get reflection vector
-      PVector rv = getReflection(part, otherParticle);
-      //println(rv);
-      this.setVel(rv);
-      //damping slows particles on collisions
-      //this.vel.y *= this.damping;
-    }
-  }
-  void correctEdgeOverlap(Particle part, Particle otherParticle)
-  {
-    //get vector between object centers
-    PVector collisionNormal = PVector.sub(part.loc, otherParticle.loc);
-    //convert vecotr to unit length (0-1)
+    float distSq = dx*dx + dy*dy;
+    
+    float collisionAngle = atan2(dy, dx); 
+    float collisionX = cos(collisionAngle);
+    float collisionY = sin(collisionAngle);
+    float collisionXTangent = cos(collisionAngle+HALF_PI);
+    float collisionYTangent = sin(collisionAngle+HALF_PI);
+    
+    PVector collisionNormal = new PVector(-dx,-dy);
     collisionNormal.normalize();
-    //set to perfect distance (sum of the radii)
-    collisionNormal.mult(otherParticle.radius + part.radius);
-    //put particle precisely on collider edge
-    part.loc.set(PVector.add(otherParticle.loc, collisionNormal));
-  }
-
-  //non-orthogonal reflection, using rotation of coordinate system
-  PVector getReflection(Particle particle, Particle otherParticle)
-  {
-    //get vector between object centers
-    PVector collisionNormal = PVector.sub(particle.loc, otherParticle.loc);
-    //calculate reflection of angle by rotating vectors to 0 on unic circle
-    //initial theta of collisionNormal
-    float theta = atan2(collisionNormal.y, collisionNormal.x);
-
-    //rotate particle velocity vector by -theta ( to bring 0 on unit circle)
-    float vx = cos(-theta)*particle.vel.x - sin(-theta)*particle.vel.y;
-    float vy = sin(-theta)*particle.vel.x + cos(-theta)*particle.vel.y;
-
-    //reverse x component and rotate velocity vector back to original position
-    PVector temp = new PVector(vx, vy);
-    vx = cos(theta) * -temp.x - sin(theta)*temp.y;
-    vy = sin(theta) * -temp.x + cos(theta)*temp.y;
-    return new PVector(vx, vy);
+    collisionNormal.mult(this.radius + otherParticle.radius);
+    this.loc.set(PVector.add(otherParticle.loc, collisionNormal));
+    
+    float v1 = sqrt(vel.x*vel.x+vel.y*vel.y);
+    float v2 = sqrt(otherParticle.vel.x*otherParticle.vel.x+otherParticle.vel.y*otherParticle.vel.y);
+    
+    float d1 = atan2(vel.y, vel.x);
+    float d2 = atan2(otherParticle.vel.y, otherParticle.vel.x);
+    
+    float v1x = v1*cos(d1-collisionAngle);
+    float v1y = v1*sin(d1-collisionAngle);
+    
+    float v2x = v2*cos(d2-collisionAngle);
+    float v2y = v2*sin(d2-collisionAngle);
+    
+    vel.x = damping*(collisionX*v2x + collisionXTangent*v1y);
+    vel.y = damping*(collisionY*v2x + collisionYTangent*v1y);
+    
+    otherParticle.vel.x = damping*(collisionX*v1x + collisionXTangent*v2y);
+    otherParticle.vel.y = damping*(collisionY*v1x + collisionYTangent*v2y);
   }
 }
   

@@ -32,11 +32,7 @@ class Emitter
   final static float MOMENTUM = 0.1;
   final static float FLUID_FORCE = 0.4;
   int envIndex = 0;
-  
   boolean isOn = false;
-  //boolean isOnPrev = false;
-  //boolean stopIndexIsSet = false;
-  //int stopIndex = 20;
   
   //default constructor
   Emitter()
@@ -51,12 +47,11 @@ class Emitter
     this.type = type;
     birthRate = maxParticles/((lifeSpan/1000.0) * (sketchFrameRate));
     this.lifeSpan = lifeSpan;
-    //birthRate = 0.5;
     this.birthPath = birthPath;
     this.sprayWidth = sprayWidth;
     this.envIndex = envIndex;
   }
-  //constructor for single emission with birthRate param (explosions etc)
+  //constructor for single emission with birthRate param (explosions etc) !!!NOT USABLE ATM
   Emitter(PVector loc, PVector birthPath, float birthRate, float sprayWidth, Particle p, int maxParticles)
   {
     this.loc = loc;
@@ -89,12 +84,57 @@ class Emitter
       {
         switch(type)
         {
+          /*particle Types:
+            p - base particle
+            a - arrow (don't use)
+            
+            w - water
+            o - oil
+            s - seeds
+            f - fire
+            c - concrete
+            i - ice
+            k - fireworks
+            l - plants
+          */
           case 'p':
-            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), 30000, 0.98);
+            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
             initParticle(temp);
             break;
           case 'a':
-            temp = new Arrow(random(5, 40), color(255, random(80, 150), 10, 255), 5000, 0.85, 6);
+            temp = new Arrow(random(5, 40), color(255, random(80, 150), 10, 255), lifeSpan, 0.85, 6, type);
+            initParticle(temp);
+            break;
+          case 'w':
+            temp = new Water(random(15, 18), color(random(0,30), random(0,30), random(230, 255), 255), lifeSpan, 0.98, type);
+            initParticle(temp);
+            break;
+          case 'o':
+            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            initParticle(temp);
+            break;
+          case 's':
+            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            initParticle(temp);
+            break;
+          case 'f':
+            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            initParticle(temp);
+            break;
+          case 'c':
+            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            initParticle(temp);
+            break;
+          case 'i':
+            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            initParticle(temp);
+            break;
+          case 'k':
+            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            initParticle(temp);
+            break;
+          case 'l':
+            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
             initParticle(temp);
             break;
           default:
