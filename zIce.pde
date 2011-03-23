@@ -53,7 +53,7 @@ class Ice extends Particle
           bounce(otherParticle);
           break;
         case 'i': //collided with a ice particle
-          bounce(otherParticle);
+          
           break;
         case 'k': //collided with a fireworks particle
           bounce(otherParticle);

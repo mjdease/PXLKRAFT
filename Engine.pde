@@ -79,6 +79,7 @@ class Engine
     }
     if(frameCount%30 == 0)
     {
+      println(frameRate);
       //updateAllObjs();
     }
     //println(allObjs.size());
@@ -169,8 +170,8 @@ class Engine
       int index = fluidSolver.getIndexForNormalizedPosition(x, y);
       color drawColor;
       colorMode(HSB, 360, 1, 1);
-      float hue = ((x + y) * 180 + frameCount) % 360;
-      drawColor = color(hue, 1, 1);
+      //float hue = ((x + y) * 180 + frameCount) % 360;
+      drawColor = color(dyeHue, 1, 1);
       //println( fluidSolver.rOld[index] +" : "+fluidSolver.gOld[index]+" : "+fluidSolver.bOld[index]);
 
       fluidSolver.rOld[index]  += red(drawColor) * colorMult;

@@ -114,10 +114,10 @@ class Particle extends Sprite implements Locatable
   }
   void bounce(Particle otherParticle)
   {
-    float newX = loc.x;
-    float newY = loc.y;
-    float otherNewX = otherParticle.loc.x;
-    float otherNewY = otherParticle.loc.y;
+    float newX = loc.x + vel.x;
+    float newY = loc.y + vel.y;
+    float otherNewX = otherParticle.loc.x + otherParticle.vel.x;
+    float otherNewY = otherParticle.loc.y + otherParticle.vel.y;
     
     float dx = otherNewX - newX; 
     float dy = otherNewY - newY;
@@ -129,10 +129,19 @@ class Particle extends Sprite implements Locatable
     float collisionXTangent = cos(collisionAngle+HALF_PI);
     float collisionYTangent = sin(collisionAngle+HALF_PI);
     
-    PVector collisionNormal = new PVector(-dx,-dy);
-    collisionNormal.normalize();
-    collisionNormal.mult(this.radius + otherParticle.radius);
-    this.loc.set(PVector.add(otherParticle.loc, collisionNormal));
+      PVector collisionNormal = new PVector(-dx,-dy);
+      collisionNormal.normalize();
+      collisionNormal.mult(this.radius + otherParticle.radius);
+    //if(this.type != 'c' && otherParticle.type != 'c')
+    if(otherParticle.type == 'c')
+    {
+      this.loc.set(PVector.add(otherParticle.loc, collisionNormal));
+    }
+    else
+    {
+      collisionNormal.mult(-1);
+      otherParticle.loc.set(PVector.add(this.loc, collisionNormal));
+    }
     
     float v1 = sqrt(vel.x*vel.x+vel.y*vel.y);
     float v2 = sqrt(otherParticle.vel.x*otherParticle.vel.x+otherParticle.vel.y*otherParticle.vel.y);

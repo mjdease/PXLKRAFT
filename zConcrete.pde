@@ -21,7 +21,7 @@ class Concrete extends Particle
   //moves particle - (overrides Particle move())
   void move()
   {
-    loc.add(vel);
+    vel.set(0,0,0);
     translate(loc.x, loc.y);
   }
   //handle particle-particle collisions/reactions
@@ -50,7 +50,6 @@ class Concrete extends Particle
           bounce(otherParticle);
           break;
         case 'c': //collided with a concrete particle
-          bounce(otherParticle);
           break;
         case 'i': //collided with a ice particle
           bounce(otherParticle);
