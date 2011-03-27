@@ -38,7 +38,18 @@ class Fire extends Particle
         bounce(otherParticle);
         break;
       case 'w': //collided with a water particle
-        otherParticle.toKill = true;
+        if(otherParticle.isFrozen && !otherParticle.isMelting)
+        {
+          otherParticle.meltBuffer++;
+        }
+        else if(!otherParticle.isFrozen && !otherParticle.isMelting && !otherParticle.isBoiling && !otherParticle.isSteam)
+        {
+          otherParticle.boilBuffer++;
+        }
+        if(otherParticle.meltBuffer>10)
+          otherParticle.isMelting = true;
+        if(otherParticle.boilBuffer>10)
+          otherParticle.isBoiling = true;
         break;
       case 'o': //collided with a oil particle
         bounce(otherParticle);

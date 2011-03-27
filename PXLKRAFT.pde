@@ -11,9 +11,13 @@ import processing.opengl.*;
  */
 
 PVector wand1 = new PVector(0,0);
+PVector wandP1 = new PVector(0,0);
 PVector force1 = new PVector(0,0);
 PVector wand2 = new PVector(0,0);
+PVector wandP2 = new PVector(0,0);
 PVector force2 = new PVector(0,0);
+
+PVector offScreen = new PVector(-100, -100, 0);
 
 /*particle Types:
  p - base particle
@@ -28,17 +32,15 @@ PVector force2 = new PVector(0,0);
  k - fireworks
  l - plants
  */
-char w1Type = 'w';
-char w2Type = 'p';
 
 final static int particle_max = 200;
 final static int arrow_max = 200;
 
-final static int water_max = 200;
-final static int oil_max = 200;
+final static int water_max = 1200;
+final static int oil_max = 400;
 final static int seed_max = 100;
 final static int fire_max = 100;
-final static int concrete_max = 200;
+final static int concrete_max = 400;
 final static int ice_max = 100;
 final static int firework_max = 100;
 int particleCount = 0;
@@ -63,15 +65,13 @@ Engine engine;
 //fluids
 float invWidth, invHeight;
 float cursorNormX, cursorNormY, cursorVelX, cursorVelY;
-int dyeHue = 233;
+color dye1, dye2;
 
 //tracking
 Glob glob;
 Thread wrapper;
 
-float constantFPS = 60.0;
-
-PVector tempVector;
+float constantFPS = 30.0;
 
 void setup()
 {
@@ -86,22 +86,24 @@ void setup()
   //box2d.createWorld();
 
   //tracking thread
-  // glob = new Glob(width, height, this);
-  //glob.start();
-  //glob.start();
+  //glob = new Glob(width, height);
   //wrapper = new Thread(glob);
   //wrapper.start();
 
   //instantiate emitters
-  //Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, char type, int maxParticles, int lifeSpan, int envIndex)
+  //Emitter(PVector loc, float sketchFrameRate, PVector birthForce, float sprayWidth, char type, float birthRate, int envIndex)
   //Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, char type, int maxParticles, float birthRate, int envIndex) 
-  emitters[0] = new Emitter(new PVector(0,0), constantFPS, new PVector(0,0), 3, 'p', int(5000), 0);
-  emitters[1] = new Emitter(new PVector(0,0), constantFPS, new PVector(0,0), 3, 'p', int(5000), 0);
+  emitters[0] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'w', 0.2, 0);
+  emitters[1] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'f', 0.2, 0);
+  setHSB(233, 1,1,1);
+  setHSB(0, 1,1,2);
+  changeParticle('w', 0);
+  changeParticle('f', 1);
 
   //instantiate Environments
   //Environment(float gravity, float friction, PVector wind, float resistance, float turbulence)
   //standard
-  environments[0] = new Environment(0.11, 0.785, new PVector(0,0), 0.995, 0.01);
+  environments[0] = new Environment(0.2, 0.785, new PVector(0,0), 0.995, 0.01);
   //upside down
   //environments[1] = new Environment(-0.15, 0.5, new PVector(0,0), 0.995, 0.05);
   //no gravity
@@ -153,7 +155,7 @@ void readMouse()
       cursorNormY = mouseY * invHeight;
       cursorVelX = (mouseX - pmouseX) * invWidth;
       cursorVelY = (mouseY - pmouseY) * invHeight;
-      engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY);
+      engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY, 1);
     }
     force1.set(pmouseX-mouseX, pmouseY-mouseY, 0);
     wand1.set(mouseX, mouseY, 0);
@@ -175,15 +177,30 @@ void readWands()
   switch(page)
   {
   case 'v':
-    //glob.run();
-    if(glob.getPos1().x != glob.getPPos1().x || glob.getPos1().y != glob.getPPos1().y)
+    glob.track();
+    wandP1.set(wand1);
+    wand1.set(glob.getPos1());
+    if(wand1.x == -100)
     {
-      tempVector = glob.getPos1();
-      cursorNormX = tempVector.x * invWidth;
-      cursorNormY = tempVector.y * invHeight;
-      cursorVelX = (tempVector.x - tempVector.x) * invWidth;
-      cursorVelY = (tempVector.y - tempVector.y) * invHeight;
-      engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY);
+      println("wand1");
+      emitters[0].isOn = false;
+      break;
+    }
+    wandP2.set(wand2);
+    wand2.set(glob.getPos2());
+    if(wand2.x == -100)
+    {
+      println("wand2");
+      emitters[1].isOn = false;
+      break;
+    }
+    if(wand1.x != wandP1.x || wand1.y != wandP1.y)
+    {
+      cursorNormX = wand1.x * invWidth;
+      cursorNormY = wand1.y * invHeight;
+      cursorVelX = (wand1.x - wandP1.x) * invWidth;
+      cursorVelY = (wand1.y - wandP1.y) * invHeight;
+      engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY, 1);
       //println(glob.isDown1());
     }
     if(glob.isDown1() && !emitters[0].isOn)
@@ -194,15 +211,13 @@ void readWands()
     {
       emitters[0].isOn = false;
     }
-
-    if(glob.getPos2().x != glob.getPPos2().x || glob.getPos2().y != glob.getPPos2().y)
+    if(wand2.x != wandP2.x || wand2.y != wandP2.y)
     {
-      tempVector = glob.getPos2();
-      cursorNormX = tempVector.x * invWidth;
-      cursorNormY = tempVector.y * invHeight;
-      cursorVelX = (tempVector.x - tempVector.x) * invWidth;
-      cursorVelY = (tempVector.y - tempVector.y) * invHeight;
-      engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY);
+      cursorNormX = wand2.x * invWidth;
+      cursorNormY = wand2.y * invHeight;
+      cursorVelX = (wand2.x - wandP2.x) * invWidth;
+      cursorVelY = (wand2.y - wandP2.y) * invHeight;
+      engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY, 2);
     }
     if(glob.isDown2() && !emitters[1].isOn)
     {
@@ -213,13 +228,12 @@ void readWands()
       emitters[1].isOn = false;
     }
 
-    force1.set(glob.getPPos1().x - glob.getPos1().x, glob.getPPos1().y - glob.getPos1().y, 0);
-    wand1.set(glob.getPos1().x, glob.getPos1().y, 0);
+    force1.set(wandP1.x - wand1.x, wandP1.y - wand1.y, 0);
 
-    force2.set(glob.getPPos2().x - glob.getPos2().x, glob.getPPos2().y - glob.getPos2().y, 0);
-    wand2.set(glob.getPos2().x, glob.getPos2().y, 0);
+    force2.set(wandP2.x - wand2.x, wandP2.y - wand2.y, 0);
     break;
   case 'c':
+    glob.calibrate();
     break;
   case 'm':
     break;
@@ -251,7 +265,7 @@ void keyPressed()
   }
   else
   {
-    if(!wandIsInput)
+    if(true)
     {
       switch(key)
       {
@@ -261,62 +275,86 @@ void keyPressed()
       case '2':
         emitters[1].isOn = !emitters[1].isOn;
         break;
-        //things you can set for particles:
-        //PVector birthPath, float sprayWidth, char type, int maxParticles, int lifeSpan (-1 = infinite), int envIndex, float birthRate
-      case 'w':
-        emitters[0].setType('w');
-        emitters[0].setLifeSpan(-1);
-        emitters[0].setBirthRate(0.2);
-        emitters[0].setBirthForce(new PVector(0,5));
-        dyeHue = 233;
-        break;
-      case 'o':
-        emitters[0].setType('o');
-        emitters[0].setLifeSpan(-1);
-        emitters[0].setBirthRate(0.2);
-        emitters[0].setBirthForce(new PVector(0,5));
-        dyeHue = 31;
-        break;
-      case 's':
-        emitters[0].setType('s');
-        emitters[0].setLifeSpan(-1);
-        emitters[0].setBirthRate(0.1);
-        emitters[0].setBirthForce(new PVector(0,5));
-        dyeHue = 50;
-        break;
-      case 'f':
-        emitters[0].setType('f');
-        emitters[0].setLifeSpan(600);
-        emitters[0].calcAndSetRate(fire_max);
-        emitters[0].setBirthForce(new PVector(0,-7));
-        emitters[0].setSprayWidth(5);
-        dyeHue = 0;
-        break;
-      case 'c':
-        emitters[0].setType('c');
-        emitters[0].setLifeSpan(-1);
-        emitters[0].setBirthRate(0.3);
-        emitters[0].setBirthForce(new PVector(0,0));
-        dyeHue = 233;
-        break;
-      case 'i':
-        emitters[0].setType('i');
-        emitters[0].setLifeSpan(1200);
-        emitters[0].calcAndSetRate(fire_max);
-        emitters[0].setBirthForce(new PVector(0,0));
-        dyeHue = 178;
-        break;
-      case 'k':
-        emitters[0].setType('k');
-        emitters[0].setLifeSpan(-1);
-        emitters[0].setBirthRate(0.1);
-        emitters[0].setBirthForce(new PVector(0,5));
-        dyeHue = 290;
-        break;
       default:
         break;
       }
+      changeParticle(key, 0);
     }
   }
+}
+
+void changeParticle(char type, int wand)
+{
+  
+  switch(type)
+  {
+    //things you can set for particles:
+    //PVector birthPath, float sprayWidth, char type, int maxParticles, int lifeSpan (-1 = infinite), int envIndex, float birthRate
+  case 'w':
+    emitters[wand].setType('w');
+    emitters[wand].setLifeSpan(-1);
+    emitters[wand].setBirthRate(0.8);
+    emitters[wand].setBirthForce(new PVector(0,5));
+    setHSB(233,1,1,wand+1);
+    break;
+  case 'o':
+    emitters[wand].setType('o');
+    emitters[wand].setLifeSpan(-1);
+    emitters[wand].setBirthRate(0.8);
+    emitters[wand].setBirthForce(new PVector(0,5));
+    setHSB(37,1,.58,wand+1);
+    break;
+  case 's':
+    emitters[wand].setType('s');
+    emitters[wand].setLifeSpan(-1);
+    emitters[wand].setBirthRate(0.1);
+    emitters[wand].setBirthForce(new PVector(0,5));
+    setHSB(50,1,1,wand+1);
+    break;
+  case 'f':
+    emitters[wand].setType('f');
+    emitters[wand].setLifeSpan(600);
+    emitters[wand].calcAndSetRate(fire_max);
+    emitters[wand].setBirthForce(new PVector(0,-7));
+    emitters[wand].setSprayWidth(5);
+    setHSB(0,1,1,wand+1);
+    break;
+  case 'c':
+    emitters[wand].setType('c');
+    emitters[wand].setLifeSpan(-1);
+    emitters[wand].setBirthRate(1);
+    emitters[wand].setBirthForce(new PVector(0,0));
+    setHSB(233,0,0.68,wand+1);
+    break;
+  case 'i':
+    emitters[wand].setType('i');
+    emitters[wand].setLifeSpan(1200);
+    emitters[wand].calcAndSetRate(fire_max);
+    emitters[wand].setBirthForce(new PVector(0,0));
+    setHSB(178,1,1,wand+1);
+    break;
+  case 'k':
+    emitters[wand].setType('k');
+    emitters[wand].setLifeSpan(-1);
+    emitters[wand].setBirthRate(0.1);
+    emitters[wand].setBirthForce(new PVector(0,5));
+    setHSB(290,1,1,wand+1);
+    break;
+  default:
+    break;
+  }
+}
+void setHSB(int h, float s, float b, int wand)
+{
+  colorMode(HSB, 360, 1, 1);
+  if(wand==1)
+  {
+    dye1 = color(h,s,b);
+  }
+  if(wand==2)
+  {
+    dye2 = color(h,s,b);
+  }
+  colorMode(RGB, 255);
 }
 

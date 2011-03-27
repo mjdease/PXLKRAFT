@@ -32,6 +32,8 @@ class Emitter
   Particle temp;
   int envIndex = 0;
   boolean isOn = false;
+  PVector concretePos = new PVector(-10,-10);
+  PVector concretePPos = new PVector(-100, -100);
   
   //default constructor
   Emitter()
@@ -105,7 +107,7 @@ class Emitter
             l - plants
           */
           case 'p':
-            temp = new Particle(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            temp = new Particle(random(9, 12), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
             initParticle(temp);
             particleCount++;
             break;
@@ -115,12 +117,12 @@ class Emitter
             arrowCount++;
             break;
           case 'w':
-            temp = new Water(random(15, 18), color(random(0,30), random(0,30), random(230, 255), 255), lifeSpan, 0.98, type);
+            temp = new Water(random(7, 9), color(random(0,30), random(0,30), random(230, 255), 255), lifeSpan, 0.95, type);
             initParticle(temp);
             waterCount++;
             break;
           case 'o':
-            temp = new Oil(random(13, 17), color(random(170, 190), random(110,125), random(20,40), 255), lifeSpan, 0.98, type);
+            temp = new Oil(random(7, 9), color(random(170, 190), random(110,125), random(20,40), 255), lifeSpan, 0.98, type);
             initParticle(temp);
             oilCount++;
             break;
@@ -135,9 +137,15 @@ class Emitter
             fireCount++;
             break;
           case 'c':
-            temp = new Concrete(random(12, 15), color(random(150,200), 255), lifeSpan, 0.98, type);
-            initParticle(temp);
-            concreteCount++;
+            concretePos.set(loc.x, loc.y, 0);
+            println(concretePPos);
+            if(PVector.dist(concretePos, concretePPos) > 10)
+            {
+              temp = new Concrete(random(13, 16), color(175, 255), lifeSpan, 0.98, type);
+              initParticle(temp);
+              concreteCount++;
+              concretePPos.set(concretePos);
+            }
             break;
           case 'i':
             temp = new Ice(random(3, 7), color(random(120,130), random(225,235), random(230,240), 255), lifeSpan, 0.98, type);
@@ -227,8 +235,8 @@ class Emitter
       else
       {
         int fluidIndex = engine.fluidSolver.getIndexForNormalizedPosition(part.loc.x * invWidth, part.loc.y * invHeight);
-        part.vel.x += engine.fluidSolver.u[fluidIndex] * (width/24);
-        part.vel.y += engine.fluidSolver.v[fluidIndex] * (height/24);
+        part.vel.x += engine.fluidSolver.u[fluidIndex] * (width/20);
+        part.vel.y += engine.fluidSolver.v[fluidIndex] * (height/20);
         //accelerate based on gravity
         part.vel.y += environment.gravity;
         part.vel.y += random(-environment.turbulence, environment.turbulence) + environment.wind.y;

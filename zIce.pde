@@ -1,6 +1,6 @@
 class Ice extends Particle
 {
-  
+
   //default constructor
   Ice()
   {
@@ -38,7 +38,17 @@ class Ice extends Particle
           bounce(otherParticle);
           break;
         case 'w': //collided with a water particle
-          bounce(otherParticle);
+          if(!otherParticle.isFrozen && !otherParticle.isMelting && !otherParticle.isBoiling && !otherParticle.isSteam && !otherParticle.isFreezing)
+          {
+            otherParticle.freezeBuffer++;
+          }
+          if(otherParticle.freezeBuffer>10)
+          {
+            println(otherParticle.freezeBuffer);
+            otherParticle.isFrozen = true;
+            otherParticle.freezeBuffer = 0;
+            otherParticle.col = color(red(this.col), green(this.col), blue(this.col), 255);
+          }
           break;
         case 'o': //collided with a oil particle
           bounce(otherParticle);

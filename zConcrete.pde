@@ -15,7 +15,7 @@ class Concrete extends Particle
   {
     fill(col);
     noStroke();
-    rect(0, 0, 2*radius, 2*radius);
+    ellipse(0, 0, 2*radius, 2*radius);
   }
     
   //moves particle - (overrides Particle move())

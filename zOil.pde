@@ -39,6 +39,12 @@ class Oil extends Particle
           break;
         case 'w': //collided with a water particle
           bounce(otherParticle);
+          if(otherParticle.loc.y < this.loc.y)
+          {
+            float temp = this.loc.y;
+            this.loc.y = otherParticle.loc.y;
+            otherParticle.loc.y = temp;
+          }
           break;
         case 'o': //collided with a oil particle
           bounce(otherParticle);
@@ -47,7 +53,7 @@ class Oil extends Particle
           bounce(otherParticle);
           break;
         case 'f': //collided with a fire particle
-          bounce(otherParticle);
+          //bounce(otherParticle);
           break;
         case 'c': //collided with a concrete particle
           bounce(otherParticle);

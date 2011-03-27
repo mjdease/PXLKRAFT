@@ -13,6 +13,20 @@ class Particle extends Sprite implements Locatable
   boolean isDead = false;
   boolean toKill = false;
   char type = 'p';
+  
+  //water vars
+  boolean isFrozen = false;
+  boolean isFreezing = false;
+  boolean isMelting = false;
+  boolean isBoiling = false;
+  boolean isSteam = false;
+  int meltBuffer = 0;
+  int meltIndex = 0;
+  int boilBuffer = 0;
+  int boilIndex = 0;
+  int freezeBuffer = 0;
+  int freezeIndex = 0;
+  
 
   //default constructor
   Particle()
@@ -134,7 +148,7 @@ class Particle extends Sprite implements Locatable
       collisionNormal.normalize();
       collisionNormal.mult(this.radius + otherParticle.radius);
     //if(this.type != 'c' && otherParticle.type != 'c')
-    if(otherParticle.type == 'c')
+    if(otherParticle.type == 'c' || otherParticle.isFrozen)
     {
       this.loc.set(PVector.add(otherParticle.loc, collisionNormal));
     }

@@ -35,7 +35,7 @@ class Engine
     this.emitters = emitters;
     this.environment = environment;
     fluidSolver = new MSAFluidSolver2D(128, 96);
-    fluidSolver.enableRGB(true).setFadeSpeed(0.001).setDeltaT(0.8).setVisc(0.00004).setSolverIterations(7);
+    fluidSolver.enableRGB(true).setFadeSpeed(0.002).setDeltaT(0.8).setVisc(0.00004).setSolverIterations(7);
 
     // create image to hold fluid picture
     imgFluid = createImage(fluidSolver.getWidth(), fluidSolver.getHeight(), ARGB);
@@ -154,7 +154,7 @@ class Engine
       }
     }
   }
-  void addForce(float x, float y, float dx, float dy) 
+  void addForce(float x, float y, float dx, float dy, int wand) 
   {
     float speed = dx * dx  + dy * dy;
 
@@ -171,7 +171,11 @@ class Engine
       color drawColor;
       colorMode(HSB, 360, 1, 1);
       //float hue = ((x + y) * 180 + frameCount) % 360;
-      drawColor = color(dyeHue, 1, 1);
+      drawColor = dye1;
+      if(wand == 1)
+        drawColor = dye1;
+      if(wand == 2)
+        drawColor = dye2;
       //println( fluidSolver.rOld[index] +" : "+fluidSolver.gOld[index]+" : "+fluidSolver.bOld[index]);
 
       fluidSolver.rOld[index]  += red(drawColor) * colorMult;
