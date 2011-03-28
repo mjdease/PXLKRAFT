@@ -34,6 +34,7 @@ class Emitter
   boolean isOn = false;
   PVector concretePos = new PVector(-10,-10);
   PVector concretePPos = new PVector(-100, -100);
+  boolean firstEmit = true;
   boolean isFirework = false;
   
   //default constructor
@@ -175,12 +176,66 @@ class Emitter
             break;
           case 'c':
             concretePos.set(loc.x, loc.y, 0);
+            float x = 0;
+            float y = 0;
             //println(concretePPos);
-            if(PVector.dist(concretePos, concretePPos) > 10)
+            if(PVector.dist(concretePos, concretePPos) > 9*4 && !firstEmit)
+            {
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              x = lerp(concretePPos.x, concretePos.x, 0.25);
+              y = lerp(concretePPos.y, concretePos.y, 0.25);
+              initParticle(temp, x, y);
+              concreteCount++;
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              x = lerp(concretePPos.x, concretePos.x, 0.5);
+              y = lerp(concretePPos.y, concretePos.y, 0.5);
+              initParticle(temp, x, y);
+              concreteCount++;
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              x = lerp(concretePPos.x, concretePos.x, 0.75);
+              y = lerp(concretePPos.y, concretePos.y, 0.75);
+              initParticle(temp, x, y);
+              concreteCount++;
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              initParticle(temp);
+              concreteCount++;
+              concretePPos.set(concretePos);
+            }
+            else if(PVector.dist(concretePos, concretePPos) > 9*3 && !firstEmit)
+            {
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              x = lerp(concretePPos.x, concretePos.x, 0.33);
+              y = lerp(concretePPos.y, concretePos.y, 0.33);
+              initParticle(temp, x, y);
+              concreteCount++;
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              x = lerp(concretePPos.x, concretePos.x, 0.67);
+              y = lerp(concretePPos.y, concretePos.y, 0.67);
+              initParticle(temp, x, y);
+              concreteCount++;
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              initParticle(temp);
+              concreteCount++;
+              concretePPos.set(concretePos);
+            }
+            else if(PVector.dist(concretePos, concretePPos) > 9*2 && !firstEmit)
+            {
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              x = lerp(concretePPos.x, concretePos.x, 0.5);
+              y = lerp(concretePPos.y, concretePos.y, 0.5);
+              initParticle(temp, x, y);
+              concreteCount++;
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              initParticle(temp);
+              concreteCount++;
+              concretePPos.set(concretePos);
+            }
+            else if(PVector.dist(concretePos, concretePPos) > 9)
             {
               temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               initParticle(temp);
               concreteCount++;
+              firstEmit = false;
               concretePPos.set(concretePos);
             }
             break;
@@ -213,6 +268,17 @@ class Emitter
     r = random(sprayWidth);
     
     temp.loc.set(loc.x, loc.y, 0);
+    temp.birthTime = millis();
+    temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
+    p.add(temp);
+    engine.allObjs.add(temp);
+  }
+  void initParticle(Particle particle, float x, float y)
+  {
+    theta = random(TWO_PI);
+    r = random(sprayWidth);
+    
+    temp.loc.set(x, y, 0);
     temp.birthTime = millis();
     temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
     p.add(temp);
@@ -378,5 +444,14 @@ class Emitter
     void setEnvironment(Environment environment)
   {
     this.environment = environment;
+  }
+  void turnOn()
+  {
+    this.isOn = true;
+  }
+  void turnOff()
+  {
+    this.isOn = false;
+    firstEmit = true;
   }
 }

@@ -184,7 +184,7 @@ void readWands()
     if(wand1.x == -100)
     {
       println("wand1");
-      emitters[0].isOn = false;
+      emitters[0].turnOff();
       break;
     }
     wandP2.set(wand2);
@@ -192,7 +192,7 @@ void readWands()
     if(wand2.x == -100)
     {
       println("wand2");
-      emitters[1].isOn = false;
+      emitters[1].turnOff();
       break;
     }
     if(wand1.x != wandP1.x || wand1.y != wandP1.y)
@@ -206,11 +206,11 @@ void readWands()
     }
     if(glob.isDown1() && !emitters[0].isOn)
     {
-      emitters[0].isOn = true;
+      emitters[0].turnOn();
     }
     if(!glob.isDown1() && emitters[0].isOn)
     {
-      emitters[0].isOn = false;
+      emitters[0].turnOff();
     }
     if(wand2.x != wandP2.x || wand2.y != wandP2.y)
     {
@@ -222,11 +222,11 @@ void readWands()
     }
     if(glob.isDown2() && !emitters[1].isOn)
     {
-      emitters[1].isOn = true;
+      emitters[1].turnOn();
     }
     if(!glob.isDown2() && emitters[1].isOn)
     {
-      emitters[1].isOn = false;
+      emitters[1].turnOff();
     }
 
     force1.set(wandP1.x - wand1.x, wandP1.y - wand1.y, 0);
@@ -271,10 +271,24 @@ void keyPressed()
       switch(key)
       {
       case '1':
-        emitters[0].isOn = !emitters[0].isOn;
+        if(!emitters[0].isOn)
+        {
+          emitters[0].turnOn();
+        }
+        else
+        {
+          emitters[0].turnOff();
+        }
         break;
       case '2':
-        emitters[1].isOn = !emitters[1].isOn;
+        if(!emitters[1].isOn)
+        {
+          emitters[1].turnOn();
+        }
+        else
+        {
+          emitters[1].turnOff();
+        }
         break;
       default:
         break;
