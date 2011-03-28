@@ -39,7 +39,7 @@ class Oil extends Particle
           break;
         case 'w': //collided with a water particle
           bounce(otherParticle);
-          if(otherParticle.loc.y < this.loc.y)
+          if(otherParticle.loc.y < this.loc.y && !otherParticle.isFrozen)
           {
             float temp = this.loc.y;
             this.loc.y = otherParticle.loc.y;

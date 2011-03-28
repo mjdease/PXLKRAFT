@@ -67,6 +67,7 @@ class Emitter
   Emitter(PVector loc, PVector birthForce, float particleNum, float sprayWidth, char type, int lifeSpan)
   {
     this.loc = loc;
+    println(this.loc);
     this.type = type;
     this.birthRate = particleNum - 1;
     this.birthForce = birthForce;
@@ -122,7 +123,7 @@ class Emitter
             waterCount++;
             break;
           case 'o':
-            temp = new Oil(random(7, 9), color(random(170, 190), random(110,125), random(20,40), 255), lifeSpan, 0.98, type);
+            temp = new Oil(random(6, 8), color(random(170, 190), random(110,125), random(20,40), 255), lifeSpan, 0.98, type);
             initParticle(temp);
             oilCount++;
             break;
@@ -138,7 +139,7 @@ class Emitter
             break;
           case 'c':
             concretePos.set(loc.x, loc.y, 0);
-            println(concretePPos);
+            //println(concretePPos);
             if(PVector.dist(concretePos, concretePPos) > 10)
             {
               temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);

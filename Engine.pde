@@ -83,7 +83,7 @@ class Engine
         if(burst.isOn)
           burst.isOn = false;
         burst.emit();
-        if(burst.birthTime + burst.lifeSpan < millis())
+        if(burst.birthTime + burst.lifeSpan +500 < millis())
           burstEmitters.remove(i);
       }
     }
@@ -169,7 +169,7 @@ class Engine
       color drawColor;
       colorMode(HSB, 360, 1, 1);
       //float hue = ((x + y) * 180 + frameCount) % 360;
-      drawColor = dye1;
+      drawColor = dye3;
       if(wand == 1)
         drawColor = dye1;
       if(wand == 2)

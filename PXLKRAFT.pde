@@ -39,7 +39,7 @@ final static int arrow_max = 200;
 final static int water_max = 1200;
 final static int oil_max = 400;
 final static int seed_max = 100;
-final static int fire_max = 100;
+final static int fire_max = 1000;
 final static int concrete_max = 400;
 final static int ice_max = 100;
 final static int firework_max = 100;
@@ -65,7 +65,7 @@ Engine engine;
 //fluids
 float invWidth, invHeight;
 float cursorNormX, cursorNormY, cursorVelX, cursorVelY;
-color dye1, dye2;
+color dye1, dye2, dye3;
 
 //tracking
 Glob glob;
@@ -97,6 +97,7 @@ void setup()
   emitters[1] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'f', 0.2);
   setHSB(233, 1,1,1);
   setHSB(0, 1,1,2);
+  setHSB(58, 1,1,3);
   changeParticle('w', 0);
   changeParticle('f', 1);
 
@@ -300,21 +301,21 @@ void changeParticle(char type, int wand)
   case 'o':
     emitters[wand].setType('o');
     emitters[wand].setLifeSpan(-1);
-    emitters[wand].setBirthRate(0.8);
+    emitters[wand].setBirthRate(2);
     emitters[wand].setBirthForce(new PVector(0,5));
     setHSB(37,1,.58,wand+1);
     break;
   case 's':
     emitters[wand].setType('s');
     emitters[wand].setLifeSpan(-1);
-    emitters[wand].setBirthRate(0.1);
+    emitters[wand].setBirthRate(0.2);
     emitters[wand].setBirthForce(new PVector(0,5));
     setHSB(50,1,1,wand+1);
     break;
   case 'f':
     emitters[wand].setType('f');
     emitters[wand].setLifeSpan(600);
-    emitters[wand].calcAndSetRate(fire_max);
+    emitters[wand].calcAndSetRate(100);
     emitters[wand].setBirthForce(new PVector(0,-7));
     emitters[wand].setSprayWidth(5);
     setHSB(0,1,1,wand+1);
@@ -329,14 +330,14 @@ void changeParticle(char type, int wand)
   case 'i':
     emitters[wand].setType('i');
     emitters[wand].setLifeSpan(1200);
-    emitters[wand].calcAndSetRate(fire_max);
+    emitters[wand].calcAndSetRate(ice_max);
     emitters[wand].setBirthForce(new PVector(0,0));
     setHSB(178,1,1,wand+1);
     break;
   case 'k':
     emitters[wand].setType('k');
     emitters[wand].setLifeSpan(-1);
-    emitters[wand].setBirthRate(0.1);
+    emitters[wand].setBirthRate(0.2);
     emitters[wand].setBirthForce(new PVector(0,5));
     setHSB(290,1,1,wand+1);
     break;
@@ -354,6 +355,10 @@ void setHSB(int h, float s, float b, int wand)
   if(wand==2)
   {
     dye2 = color(h,s,b);
+  }
+  if(wand ==3)
+  {
+    dye3 = color(h,s,b);
   }
   colorMode(RGB, 255);
 }
