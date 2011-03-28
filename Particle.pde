@@ -26,6 +26,7 @@ class Particle extends Sprite implements Locatable
   int boilIndex = 0;
   int freezeBuffer = 0;
   int freezeIndex = 0;
+  int fireBuffer = 0;
   
 
   //default constructor

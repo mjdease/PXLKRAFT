@@ -48,11 +48,17 @@ class Fire extends Particle
         }
         if(otherParticle.meltBuffer>10)
           otherParticle.isMelting = true;
-        if(otherParticle.boilBuffer>10)
+        if(otherParticle.boilBuffer>20)
           otherParticle.isBoiling = true;
         break;
       case 'o': //collided with a oil particle
-        bounce(otherParticle);
+        otherParticle.fireBuffer++
+        if(otherParticle.fireBuffer > 20)
+        {
+          otherParticle.toKill = true;
+          //Emitter(PVector loc, PVector birthForce, float particleNum, float sprayWidth, char type, int lifeSpan)
+          new Emitter(otherParticle.loc, new PVector(0, 4), 20, 10, 'f', 2000);
+        }
         break;
       case 's': //collided with a seed particle
         bounce(otherParticle);

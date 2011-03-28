@@ -28,9 +28,9 @@ class Emitter
   char type;
   int lifeSpan;
   int birthNum = 0;
+  int birthTime;
   float birthRemainder = 0.0;
   Particle temp;
-  int envIndex = 0;
   boolean isOn = false;
   PVector concretePos = new PVector(-10,-10);
   PVector concretePPos = new PVector(-100, -100);
@@ -40,7 +40,7 @@ class Emitter
   {
   }
   //constructor for infinite emission
-  Emitter(PVector loc, float sketchFrameRate, PVector birthForce, float sprayWidth, char type, int lifeSpan, int envIndex)
+  Emitter(PVector loc, float sketchFrameRate, PVector birthForce, float sprayWidth, char type, int lifeSpan)
   {
     this.loc = loc;
     this.sketchFrameRate = sketchFrameRate;
@@ -50,10 +50,9 @@ class Emitter
     this.birthForce = birthForce;
     this.birthPath.add(birthForce);
     this.sprayWidth = sprayWidth;
-    this.envIndex = envIndex;
   }
   //infinite life particles
-  Emitter(PVector loc, float sketchFrameRate, PVector birthForce, float sprayWidth, char type, float birthRate, int envIndex)
+  Emitter(PVector loc, float sketchFrameRate, PVector birthForce, float sprayWidth, char type, float birthRate)
   {
     this.loc = loc;
     this.sketchFrameRate = sketchFrameRate;
@@ -63,18 +62,19 @@ class Emitter
     this.birthForce = birthForce;
     this.birthPath.add(birthForce);
     this.sprayWidth = sprayWidth;
-    this.envIndex = envIndex;
   }
   //constructor for single emission with birthRate param (explosions etc) !!!NOT USABLE ATM
-  Emitter(PVector loc, PVector birthForce, float birthRate, float sprayWidth, Particle p)
+  Emitter(PVector loc, PVector birthForce, float particleNum, float sprayWidth, char type, int lifeSpan)
   {
     this.loc = loc;
     this.type = type;
-    //ensure birthRate max is particleCount-1
-    this.birthRate = maxParticles - 1;
+    this.birthRate = particleNum - 1;
     this.birthForce = birthForce;
     this.birthPath.add(birthForce);
     this.sprayWidth = sprayWidth;
+    this.lifeSpan = lifeSpan;
+    this.birthTime = millis();
+    this.isOn = true;
     isInfinite = false;
   }
   
@@ -89,7 +89,7 @@ class Emitter
       birthRemainder %= 1;
 
       colorMode(RGB,255);
-      for(int i = 0; i < min(birthNum,maxParticles-p.size()); i++)
+      for(int i = 0; i < birthNum; i++)
       {
         switch(type)
         {
@@ -141,7 +141,7 @@ class Emitter
             println(concretePPos);
             if(PVector.dist(concretePos, concretePPos) > 10)
             {
-              temp = new Concrete(random(13, 16), color(175, 255), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               initParticle(temp);
               concreteCount++;
               concretePPos.set(concretePos);
@@ -175,7 +175,7 @@ class Emitter
     theta = random(TWO_PI);
     r = random(sprayWidth);
     
-    temp.loc.set(loc.x, loc.y, 0);
+    //temp.loc.set(loc.x, loc.y, 0);
     temp.birthTime = millis();
     temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
     temp.loc = new PVector(loc.x, loc.y);

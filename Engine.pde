@@ -4,7 +4,7 @@ class Engine
   Emitter emitter;
   Emitter[] emitters;
 
-  //ArrayList<Particle> allObjs = new ArrayList<Particle>();
+  ArrayList<Emitter> burstEmitters = new ArrayList<Emitter>();
 
   HashGrid allObjs;
   static final int RADIUS = 40;
@@ -50,7 +50,7 @@ class Engine
   {
     for(int i=0; i<emitters.length; i++)
     {
-      emitters[i].setEnvironment(environment[emitters[i].envIndex]);
+      emitters[i].setEnvironment(environment[0]);
     }
   }
 
@@ -76,6 +76,16 @@ class Engine
         emitters[i].create();
         emitters[i].emit();
       }
+      for (int i = burstEmitters.size() - 1 ; i >= 0; i--)
+      {
+        Emitter burst = (Emitter) burstEmitters.get(i);
+        burst.create();
+        if(burst.isOn)
+          burst.isOn = false;
+        burst.emit();
+        if(burst.birthTime + burst.lifeSpan < millis())
+          burstEmitters.remove(i);
+      }
     }
     if(frameCount%30 == 0)
     {
@@ -84,18 +94,6 @@ class Engine
     }
     //println(allObjs.size());
     allObjs.updateAll();
-  }
-  
-  void updateAllObjs()
-  {
-    for (Iterator i=allObjs.iterator(); i.hasNext();)
-    {
-      Particle part = (Particle) i.next();
-      if(part.isDead)
-      {
-        allObjs.remove(part);
-      }
-    }
   }
 
   //collision detection
@@ -129,7 +127,7 @@ class Engine
             part.loc.y = height - part.radius;
             part.vel.y *= -1;
             part.vel.y *= part.damping;
-            part.vel.x *= environment[emitters[i].envIndex].friction;
+            part.vel.x *= environment[0].friction;
           }
           //top bounds collision
           else if(boundsSet[3] && part.loc.y < part.radius)

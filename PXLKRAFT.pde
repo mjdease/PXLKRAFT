@@ -93,8 +93,8 @@ void setup()
   //instantiate emitters
   //Emitter(PVector loc, float sketchFrameRate, PVector birthForce, float sprayWidth, char type, float birthRate, int envIndex)
   //Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, char type, int maxParticles, float birthRate, int envIndex) 
-  emitters[0] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'w', 0.2, 0);
-  emitters[1] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'f', 0.2, 0);
+  emitters[0] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'w', 0.2);
+  emitters[1] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'f', 0.2);
   setHSB(233, 1,1,1);
   setHSB(0, 1,1,2);
   changeParticle('w', 0);
