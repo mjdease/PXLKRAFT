@@ -57,13 +57,8 @@ class Fire extends Particle
         if(otherParticle.fireBuffer > 10 && !otherParticle.toKill)
         {
           otherParticle.toKill = true;
-          //Emitter(PVector loc, PVector birthForce, float particleNum, float sprayWidth, char type, int lifeSpan)
-          //for(int i=0; i<12; i++)
-          //{
-          //  engine.addForce(otherParticle.loc.x*invWidth,otherParticle.loc.y*invHeight,cos(TWO_PI/(i+1))/50,sin(TWO_PI/(i+1))/50,-1);
-          //}
           engine.addForce(this.loc.x*invWidth,this.loc.y*invHeight,0,-0.05, -1);
-          engine.burstEmitters.add(new Emitter(this.loc, new PVector(0, -5), 10, 10, 'f', 1000));
+          engine.burstEmitters.add(new Emitter(this.loc, new PVector(0, -5), 10, 10, 'f', 1000, false));
         }
         break;
       case 's': //collided with a seed particle
@@ -79,7 +74,15 @@ class Fire extends Particle
         bounce(otherParticle);
         break;
       case 'k': //collided with a fireworks particle
-        bounce(otherParticle);
+        if(!otherParticle.isIgnited)
+        {
+          otherParticle.igniteBuffer++;
+        }
+        if(otherParticle.igniteBuffer > 10)
+        {
+          otherParticle.isIgnited = true;
+          otherParticle.igniteBuffer = 0;
+        }
         break;
       case 'l': //collided with a plant particle
         bounce(otherParticle);

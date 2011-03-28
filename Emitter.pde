@@ -34,6 +34,7 @@ class Emitter
   boolean isOn = false;
   PVector concretePos = new PVector(-10,-10);
   PVector concretePPos = new PVector(-100, -100);
+  boolean isFirework = false;
   
   //default constructor
   Emitter()
@@ -63,8 +64,8 @@ class Emitter
     this.birthPath.add(birthForce);
     this.sprayWidth = sprayWidth;
   }
-  //constructor for single emission with birthRate param (explosions etc) !!!NOT USABLE ATM
-  Emitter(PVector loc, PVector birthForce, float particleNum, float sprayWidth, char type, int lifeSpan)
+  //constructor for single emission with birthRate param (explosions etc)
+  Emitter(PVector loc, PVector birthForce, float particleNum, float sprayWidth, char type, int lifeSpan, boolean fWorks)
   {
     this.loc = loc;
     println(this.loc);
@@ -77,6 +78,8 @@ class Emitter
     this.birthTime = millis();
     this.isOn = true;
     isInfinite = false;
+    if(fWorks)
+      isFirework = true;
   }
   
   //general methods
@@ -90,6 +93,32 @@ class Emitter
       birthRemainder %= 1;
 
       colorMode(RGB,255);
+      int colIndex = 0;
+      color colFW = color(0);
+      if(isFirework)
+      {
+        colIndex = int(random(0,5));
+        switch(colIndex)
+        {
+          case 0:
+            colFW = color(random(240,255), random(240,255), random(0,10));
+            break;
+          case 1:
+            colFW = color(random(0,10), random(240,255), random(25,40));
+            break;
+          case 2:
+            colFW = color(random(240,255), random(0,10), random(240,255));
+            break;
+          case 3:
+            colFW = color(random(240,255), random(140,165), random(0,10));
+            break;
+          case 4:
+            colFW = color(random(0,10), random(240,250), random(245,255));
+            break;
+          default:
+            break;
+        }
+      }
       for(int i = 0; i < birthNum; i++)
       {
         switch(type)
@@ -133,7 +162,14 @@ class Emitter
             seedCount++;
             break;
           case 'f':
-            temp = new Fire(random(3, 7), color(random(225,255), random(0,30), random(0,30), 255), lifeSpan, 0.98, type);
+            if(isFirework)
+            {
+              temp = new Fire(random(3,7), colFW, lifeSpan, 0.98, type);
+            }
+            else
+            {
+              temp = new Fire(random(3, 7), color(random(225,255), random(0,30), random(0,30), 255), lifeSpan, 0.98, type);
+            }
             initParticle(temp);
             fireCount++;
             break;
@@ -176,10 +212,9 @@ class Emitter
     theta = random(TWO_PI);
     r = random(sprayWidth);
     
-    //temp.loc.set(loc.x, loc.y, 0);
+    temp.loc.set(loc.x, loc.y, 0);
     temp.birthTime = millis();
     temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
-    temp.loc = new PVector(loc.x, loc.y);
     p.add(temp);
     engine.allObjs.add(temp);
   }

@@ -20,6 +20,7 @@ class Particle extends Sprite implements Locatable
   boolean isMelting = false;
   boolean isBoiling = false;
   boolean isSteam = false;
+  boolean isIgnited = false;
   int meltBuffer = 0;
   int meltIndex = 0;
   int boilBuffer = 0;
@@ -27,6 +28,8 @@ class Particle extends Sprite implements Locatable
   int freezeBuffer = 0;
   int freezeIndex = 0;
   int fireBuffer = 0;
+  int igniteBuffer = 0;
+  int igniteIndex = 0;
   
 
   //default constructor

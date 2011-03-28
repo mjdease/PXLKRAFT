@@ -21,8 +21,30 @@ class Firework extends Particle
   //moves particle - (overrides Particle move())
   void move()
   {
-    loc.add(vel);
+    if(isIgnited)
+    {
+      vel.normalize();
+      vel.add(0,-15,0);
+      loc.add(vel);
+      igniteIndex++;
+      if(igniteIndex > 30)
+      {
+        //i=1 forces in all diretions, but bad for dye
+        for(int i=2; i<9; i++)
+        {
+          //println(cos(i*PI/4)+"+"+sin(i*PI/4));
+          engine.addForce(this.loc.x*invWidth,this.loc.y*invHeight,cos(i*PI/4)*10,sin(i*PI/4)*10,-1);
+        }
+        engine.burstEmitters.add(new Emitter(new PVector(loc.x, loc.y), new PVector(0, 0), 40, 30, 'f', 1000, true));
+        toKill = true;
+      }
+    }
+    else
+    {
+      loc.add(vel);
+    }
     translate(loc.x, loc.y);
+    
   }
   //handle particle-particle collisions/reactions
   void checkHit(Particle otherParticle)
