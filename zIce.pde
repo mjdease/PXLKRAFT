@@ -40,7 +40,7 @@ class Ice extends Particle
         case 'w': //collided with a water particle
           if(!otherParticle.isFrozen && !otherParticle.isMelting && !otherParticle.isBoiling && !otherParticle.isSteam && !otherParticle.isFreezing)
           {
-            otherParticle.freezeBuffer++;
+            otherParticle.freezeBuffer+=2;
           }
           if(otherParticle.freezeBuffer>10)
           {

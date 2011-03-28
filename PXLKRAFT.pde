@@ -36,7 +36,7 @@ PVector offScreen = new PVector(-100, -100, 0);
 final static int particle_max = 200;
 final static int arrow_max = 200;
 
-final static int water_max = 1200;
+final static int water_max = 800;
 final static int oil_max = 400;
 final static int seed_max = 100;
 final static int fire_max = 1000;
@@ -353,7 +353,7 @@ void changeParticle(char type, int wand)
   case 'k':
     emitters[wand].setType('k');
     emitters[wand].setLifeSpan(-1);
-    emitters[wand].setBirthRate(0.2);
+    emitters[wand].setBirthRate(0.3);
     emitters[wand].setBirthForce(new PVector(0,5));
     setHSB(290,1,1,wand+1);
     break;

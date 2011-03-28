@@ -49,6 +49,7 @@ class Fire extends Particle
         }
         if(otherParticle.meltBuffer>10)
         {
+          meltBuffer = 0;
           otherParticle.isMelting = true;
           otherParticle.vel.set(0,0,0);
         }

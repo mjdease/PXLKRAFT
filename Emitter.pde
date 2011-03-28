@@ -148,12 +148,12 @@ class Emitter
             arrowCount++;
             break;
           case 'w':
-            temp = new Water(random(7, 9), color(random(0,30), random(0,30), random(230, 255), particleOpacity), lifeSpan, 0.95, type);
+            temp = new Water(random(8, 11), color(random(0,30), random(0,30), random(230, 255), particleOpacity), lifeSpan, 0.95, type);
             initParticle(temp);
             waterCount++;
             break;
           case 'o':
-            temp = new Oil(random(6, 8), color(random(170, 190), random(110,125), random(20,40), particleOpacity), lifeSpan, 0.98, type);
+            temp = new Oil(random(7, 10), color(random(170, 190), random(110,125), random(20,40), particleOpacity), lifeSpan, 0.98, type);
             initParticle(temp);
             oilCount++;
             break;

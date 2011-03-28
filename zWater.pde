@@ -94,7 +94,7 @@ class Water extends Particle
       case 'w': //collided with a water particle
         if(otherParticle.isFrozen && !otherParticle.isMelting && !this.isFrozen)
         {
-          this.freezeBuffer++;
+          this.freezeBuffer+=2;
           if(this.freezeBuffer>20)
           {
             this.isFrozen = true;
