@@ -92,7 +92,7 @@ class Water extends Particle
         bounce(otherParticle);
         break;
       case 'w': //collided with a water particle
-        if(otherParticle.isFrozen)
+        if(otherParticle.isFrozen && !otherParticle.isMelting && !this.isFrozen)
         {
           this.freezeBuffer++;
           if(this.freezeBuffer>20)
@@ -106,16 +106,30 @@ class Water extends Particle
         else
         {
           bounce(otherParticle);
-          break;
         }
+        if(!otherParticle.isFrozen && !this.isFrozen)
+        {
+          this.freezeBuffer--;
+        }
+        break;
       case 'o': //collided with a oil particle
         bounce(otherParticle);
         break;
       case 's': //collided with a seed particle
-        bounce(otherParticle);
+        if(!otherParticle.isPlanted)
+        {
+          otherParticle.plantBuffer++;
+        }
+        if(otherParticle.plantBuffer > 20)
+        {
+          otherParticle.isPlanted = true;
+          otherParticle.plantBuffer = 0;
+        }
+        //if(!otherParticle.isPlanted)
+          //bounce(otherParticle);
         break;
       case 'f': //collided with a fire particle
-        bounce(otherParticle);
+        //bounce(otherParticle);
         break;
       case 'c': //collided with a concrete particle
         bounce(otherParticle);
@@ -123,9 +137,6 @@ class Water extends Particle
       case 'i': //collided with a ice particle
         break;
       case 'k': //collided with a fireworks particle
-        bounce(otherParticle);
-        break;
-      case 'l': //collided with a plant particle
         bounce(otherParticle);
         break;
       default:

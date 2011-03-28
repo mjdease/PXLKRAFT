@@ -21,6 +21,8 @@ class Particle extends Sprite implements Locatable
   boolean isBoiling = false;
   boolean isSteam = false;
   boolean isIgnited = false;
+  boolean isPlanted = false;
+  boolean isSource = false;
   int meltBuffer = 0;
   int meltIndex = 0;
   int boilBuffer = 0;
@@ -30,6 +32,9 @@ class Particle extends Sprite implements Locatable
   int fireBuffer = 0;
   int igniteBuffer = 0;
   int igniteIndex = 0;
+  int plantBuffer = 0;
+  int plantIndex = 0;
+  int plantHeight = int(random(300, 600));
   
 
   //default constructor
@@ -152,9 +157,29 @@ class Particle extends Sprite implements Locatable
       collisionNormal.normalize();
       collisionNormal.mult(this.radius + otherParticle.radius);
     //if(this.type != 'c' && otherParticle.type != 'c')
-    if(otherParticle.type == 'c' || otherParticle.isFrozen)
+    if(otherParticle.type == 'c' || otherParticle.isFrozen || otherParticle.isPlanted)
     {
-      this.loc.set(PVector.add(otherParticle.loc, collisionNormal));
+      if(
+        (otherParticle.type == 'c' && this.isFrozen) ||
+        (otherParticle.type == 'c' && this.isPlanted) ||
+        (otherParticle.isFrozen && this.isPlanted)
+        )
+      {
+        this.loc.set(PVector.add(otherParticle.loc, collisionNormal));
+      }
+      else if(
+        (this.type == 'c' && otherParticle.isFrozen) ||
+        (this.type == 'c' && otherParticle.isPlanted) ||
+        (this.isFrozen && otherParticle.isPlanted)
+        )
+      {
+        collisionNormal.mult(-1);
+        otherParticle.loc.set(PVector.add(this.loc, collisionNormal));
+      }
+      else
+      {
+        this.loc.set(PVector.add(otherParticle.loc, collisionNormal));
+      }
     }
     else
     {

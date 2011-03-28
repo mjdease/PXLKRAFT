@@ -40,7 +40,7 @@ final static int water_max = 1200;
 final static int oil_max = 400;
 final static int seed_max = 100;
 final static int fire_max = 1000;
-final static int concrete_max = 400;
+final static int concrete_max = 600;
 final static int ice_max = 100;
 final static int firework_max = 100;
 int particleCount = 0;
@@ -52,6 +52,8 @@ int fireCount = 0;
 int concreteCount = 0;
 int iceCount = 0;
 int fireworkCount = 0;
+
+int particleOpacity = 200;
 
 boolean wandIsInput = false;
 char page = 'v'; //v=visualization, c=calibration, m=music, u=mainmenu

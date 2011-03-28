@@ -69,7 +69,7 @@ class Emitter
   Emitter(PVector loc, PVector birthForce, float particleNum, float sprayWidth, char type, int lifeSpan, boolean fWorks)
   {
     this.loc = loc;
-    println(this.loc);
+    //println(this.loc);
     this.type = type;
     this.birthRate = particleNum - 1;
     this.birthForce = birthForce;
@@ -102,19 +102,19 @@ class Emitter
         switch(colIndex)
         {
           case 0:
-            colFW = color(random(240,255), random(240,255), random(0,10));
+            colFW = color(random(240,255), random(240,255), random(0,10), particleOpacity);
             break;
           case 1:
-            colFW = color(random(0,10), random(240,255), random(25,40));
+            colFW = color(random(0,10), random(240,255), random(25,40), particleOpacity);
             break;
           case 2:
-            colFW = color(random(240,255), random(0,10), random(240,255));
+            colFW = color(random(240,255), random(0,10), random(240,255), particleOpacity);
             break;
           case 3:
-            colFW = color(random(240,255), random(140,165), random(0,10));
+            colFW = color(random(240,255), random(140,165), random(0,10), particleOpacity);
             break;
           case 4:
-            colFW = color(random(0,10), random(240,250), random(245,255));
+            colFW = color(random(0,10), random(240,250), random(245,255), particleOpacity);
             break;
           default:
             break;
@@ -138,27 +138,28 @@ class Emitter
             l - plants
           */
           case 'p':
-            temp = new Particle(random(9, 12), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
+            temp = new Particle(random(9, 12), color(random(255,180), random(120,160), random(0, 30), particleOpacity), lifeSpan, 0.98, type);
             initParticle(temp);
             particleCount++;
             break;
           case 'a':
-            temp = new Arrow(random(5, 40), color(255, random(80, 150), 10, 255), lifeSpan, 0.85, 6, type);
+            temp = new Arrow(random(5, 40), color(255, random(80, 150), 10, particleOpacity), lifeSpan, 0.85, 6, type);
             initParticle(temp);
             arrowCount++;
             break;
           case 'w':
-            temp = new Water(random(7, 9), color(random(0,30), random(0,30), random(230, 255), 255), lifeSpan, 0.95, type);
+            temp = new Water(random(7, 9), color(random(0,30), random(0,30), random(230, 255), particleOpacity), lifeSpan, 0.95, type);
             initParticle(temp);
             waterCount++;
             break;
           case 'o':
-            temp = new Oil(random(6, 8), color(random(170, 190), random(110,125), random(20,40), 255), lifeSpan, 0.98, type);
+            temp = new Oil(random(6, 8), color(random(170, 190), random(110,125), random(20,40), particleOpacity), lifeSpan, 0.98, type);
             initParticle(temp);
             oilCount++;
             break;
           case 's':
-            temp = new Seed(random(2, 4), color(random(220,240), random(160,180), random(55,75), 255), lifeSpan, 0.98, type);
+            temp = new Seed(random(2, 4), color(random(220,240), random(160,180), random(55,75), particleOpacity), lifeSpan, 0.98, type);
+            temp.isSource = true;
             initParticle(temp);
             seedCount++;
             break;
@@ -169,7 +170,7 @@ class Emitter
             }
             else
             {
-              temp = new Fire(random(3, 7), color(random(225,255), random(0,30), random(0,30), 255), lifeSpan, 0.98, type);
+              temp = new Fire(random(3, 7), color(random(225,255), random(0,30), random(0,30), particleOpacity), lifeSpan, 0.98, type);
             }
             initParticle(temp);
             fireCount++;
@@ -181,78 +182,74 @@ class Emitter
             //println(concretePPos);
             if(PVector.dist(concretePos, concretePPos) > 9*4 && !firstEmit)
             {
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.25);
               y = lerp(concretePPos.y, concretePos.y, 0.25);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.5);
               y = lerp(concretePPos.y, concretePos.y, 0.5);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.75);
               y = lerp(concretePPos.y, concretePos.y, 0.75);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
               initParticle(temp);
               concreteCount++;
               concretePPos.set(concretePos);
             }
             else if(PVector.dist(concretePos, concretePPos) > 9*3 && !firstEmit)
             {
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.33);
               y = lerp(concretePPos.y, concretePos.y, 0.33);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.67);
               y = lerp(concretePPos.y, concretePos.y, 0.67);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
               initParticle(temp);
               concreteCount++;
               concretePPos.set(concretePos);
             }
             else if(PVector.dist(concretePos, concretePPos) > 9*2 && !firstEmit)
             {
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.5);
               y = lerp(concretePPos.y, concretePos.y, 0.5);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
               initParticle(temp);
               concreteCount++;
               concretePPos.set(concretePos);
             }
             else if(PVector.dist(concretePos, concretePPos) > 9)
             {
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
               initParticle(temp);
               concreteCount++;
-              firstEmit = false;
+              if(firstEmit)
+                firstEmit = false;
               concretePPos.set(concretePos);
             }
             break;
           case 'i':
-            temp = new Ice(random(3, 7), color(random(120,130), random(225,235), random(230,240), 255), lifeSpan, 0.98, type);
+            temp = new Ice(random(3, 7), color(random(120,130), random(225,235), random(230,240), particleOpacity), lifeSpan, 0.98, type);
             initParticle(temp);
             iceCount++;
             break;
           case 'k':
-            temp = new Firework(random(3, 5), color(random(190,210), random(65,80), random(220,230), 255), lifeSpan, 0.98, type);
+            temp = new Firework(random(3, 5), color(random(190,210), random(65,80), random(220,230), particleOpacity), lifeSpan, 0.98, type);
             initParticle(temp);
             fireworkCount++;
-            break;
-          case 'l':
-            //plants dont get emitted ><
-            //temp = new Plant(random(18, 20), color(random(255,180), random(120,160), random(0, 30), 255), lifeSpan, 0.98, type);
-            //initParticle(temp);
             break;
           default:
             println("unknown particle type...");
@@ -281,6 +278,16 @@ class Emitter
     temp.loc.set(x, y, 0);
     temp.birthTime = millis();
     temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
+    p.add(temp);
+    engine.allObjs.add(temp);
+  }
+  void createPlant(PVector location)
+  {
+    temp = new Seed(random(3, 6), color(random(75,95), random(220,240), random(10,30), 255), -1, 0.98, 's');
+    temp.loc = location;
+    temp.birthTime = millis();
+    temp.vel = new PVector(0,0);
+    temp.isPlanted = true;
     p.add(temp);
     engine.allObjs.add(temp);
   }

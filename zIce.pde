@@ -32,10 +32,10 @@ class Ice extends Particle
       switch(otherParticle.type)
       {
         case 'p': //collided with a base particle
-          bounce(otherParticle);
+          //bounce(otherParticle);
           break;
         case 'a': //collided with a arrow
-          bounce(otherParticle);
+          //bounce(otherParticle);
           break;
         case 'w': //collided with a water particle
           if(!otherParticle.isFrozen && !otherParticle.isMelting && !otherParticle.isBoiling && !otherParticle.isSteam && !otherParticle.isFreezing)
@@ -54,10 +54,10 @@ class Ice extends Particle
           bounce(otherParticle);
           break;
         case 's': //collided with a seed particle
-          bounce(otherParticle);
+          //bounce(otherParticle);
           break;
         case 'f': //collided with a fire particle
-          bounce(otherParticle);
+          //bounce(otherParticle);
           break;
         case 'c': //collided with a concrete particle
           bounce(otherParticle);
@@ -66,10 +66,7 @@ class Ice extends Particle
           
           break;
         case 'k': //collided with a fireworks particle
-          bounce(otherParticle);
-          break;
-        case 'l': //collided with a plant particle
-          bounce(otherParticle);
+          //bounce(otherParticle);
           break;
         default:
           break;

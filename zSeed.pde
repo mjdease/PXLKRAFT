@@ -21,7 +21,18 @@ class Seed extends Particle
   //moves particle - (overrides Particle move())
   void move()
   {
-    loc.add(vel);
+    if(isPlanted && isSource)
+    {
+      if(plantIndex%4 == 0 && plantIndex<plantHeight)
+      {
+        emitters[0].createPlant(new PVector(this.loc.x, this.loc.y - (plantIndex)));
+      }
+      plantIndex+=4;
+    }
+    else if(isPlanted)
+    {}
+    else
+      loc.add(vel);
     translate(loc.x, loc.y);
   }
   //handle particle-particle collisions/reactions
@@ -38,16 +49,17 @@ class Seed extends Particle
           bounce(otherParticle);
           break;
         case 'w': //collided with a water particle
-          bounce(otherParticle);
+          //if(!this.isPlanted)
+            //bounce(otherParticle);
           break;
         case 'o': //collided with a oil particle
           bounce(otherParticle);
           break;
         case 's': //collided with a seed particle
-          bounce(otherParticle);
+          //bounce(otherParticle);
           break;
         case 'f': //collided with a fire particle
-          bounce(otherParticle);
+          //bounce(otherParticle);
           break;
         case 'c': //collided with a concrete particle
           bounce(otherParticle);
@@ -56,9 +68,6 @@ class Seed extends Particle
           bounce(otherParticle);
           break;
         case 'k': //collided with a fireworks particle
-          bounce(otherParticle);
-          break;
-        case 'l': //collided with a plant particle
           bounce(otherParticle);
           break;
         default:

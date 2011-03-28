@@ -48,8 +48,11 @@ class Fire extends Particle
           otherParticle.boilBuffer++;
         }
         if(otherParticle.meltBuffer>10)
+        {
           otherParticle.isMelting = true;
-        if(otherParticle.boilBuffer>30)
+          otherParticle.vel.set(0,0,0);
+        }
+        if(otherParticle.boilBuffer>40)
           otherParticle.isBoiling = true;
         break;
       case 'o': //collided with a oil particle
@@ -62,7 +65,16 @@ class Fire extends Particle
         }
         break;
       case 's': //collided with a seed particle
-        bounce(otherParticle);
+        if(otherParticle.isPlanted)
+        {
+          otherParticle.fireBuffer++;
+        }
+        if(otherParticle.fireBuffer > 20 && !otherParticle.toKill)
+        {
+          otherParticle.toKill = true;
+          engine.addForce(this.loc.x*invWidth,this.loc.y*invHeight,0,-0.01, -1);
+          engine.burstEmitters.add(new Emitter(this.loc, new PVector(0, -3), 2, 5, 'f', 1000, false));
+        }
         break;
       case 'f': //collided with a fire particle
 
@@ -83,9 +95,6 @@ class Fire extends Particle
           otherParticle.isIgnited = true;
           otherParticle.igniteBuffer = 0;
         }
-        break;
-      case 'l': //collided with a plant particle
-        bounce(otherParticle);
         break;
       default:
         break;

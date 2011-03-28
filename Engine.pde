@@ -81,7 +81,7 @@ class Engine
         Emitter burst = (Emitter) burstEmitters.get(i);
         burst.create();
         if(burst.isOn)
-          burst.isOn = false;
+          burst.turnOff();
         burst.emit();
         if(burst.birthTime + burst.lifeSpan +500 < millis())
           burstEmitters.remove(i);

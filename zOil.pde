@@ -64,9 +64,6 @@ class Oil extends Particle
         case 'k': //collided with a fireworks particle
           bounce(otherParticle);
           break;
-        case 'l': //collided with a plant particle
-          bounce(otherParticle);
-          break;
         default:
           break;
       }
