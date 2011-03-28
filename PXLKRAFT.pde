@@ -1,6 +1,8 @@
 import org.gicentre.utils.geom.*;
 import msafluid.*;
 import processing.opengl.*;
+import ddf.minim.*;
+import ddf.minim.effects.*;
 
 /**
  -----------------PXLKRAFT-------------------
@@ -17,7 +19,8 @@ PVector wand2 = new PVector(0,0);
 PVector wandP2 = new PVector(0,0);
 PVector force2 = new PVector(0,0);
 
-PVector offScreen = new PVector(-100, -100, 0);
+Minim minim;
+Music music;
 
 /*particle Types:
  p - base particle
@@ -82,10 +85,9 @@ void setup()
   background(0);
   frameRate(constantFPS);
   rectMode(CENTER);
-
-
-  //box2d = new PBox2D(this);
-  //box2d.createWorld();
+  
+  minim = new Minim(this);
+  music = new Music();
 
   //tracking thread
   //glob = new Glob(width, height);
@@ -93,8 +95,6 @@ void setup()
   //wrapper.start();
 
   //instantiate emitters
-  //Emitter(PVector loc, float sketchFrameRate, PVector birthForce, float sprayWidth, char type, float birthRate, int envIndex)
-  //Emitter(PVector loc, float sketchFrameRate, PVector birthPath, float sprayWidth, char type, int maxParticles, float birthRate, int envIndex) 
   emitters[0] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'w', 0.2);
   emitters[1] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'f', 0.2);
   setHSB(233, 1,1,1);
@@ -128,9 +128,13 @@ void setup()
 void draw()
 {
   if(!wandIsInput)
-    readMouse();
+  {
+    readMouse(); 
+  }
   else
+  {
     readWands();
+  }
 
   force1.normalize();
   force1.mult(-3);
@@ -161,7 +165,10 @@ void readMouse()
       engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY, 1);
     }
     force1.set(pmouseX-mouseX, pmouseY-mouseY, 0);
+    wandP1.set(wand1);
     wand1.set(mouseX, mouseY, 0);
+    music.movedMouse(wand1, wand2);
+    music.run(wand1);
     break; 
   case 'c':
     glob.calibrate();
@@ -234,6 +241,9 @@ void readWands()
     force1.set(wandP1.x - wand1.x, wandP1.y - wand1.y, 0);
 
     force2.set(wandP2.x - wand2.x, wandP2.y - wand2.y, 0);
+    
+    music.movedMouse(wand1, wand2);
+    music.run(wand1);
     break;
   case 'c':
     glob.calibrate();
