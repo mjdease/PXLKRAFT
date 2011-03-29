@@ -182,58 +182,58 @@ class Emitter
             //println(concretePPos);
             if(PVector.dist(concretePos, concretePPos) > 9*4 && !firstEmit)
             {
-              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.25);
               y = lerp(concretePPos.y, concretePos.y, 0.25);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.5);
               y = lerp(concretePPos.y, concretePos.y, 0.5);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.75);
               y = lerp(concretePPos.y, concretePos.y, 0.75);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               initParticle(temp);
               concreteCount++;
               concretePPos.set(concretePos);
             }
             else if(PVector.dist(concretePos, concretePPos) > 9*3 && !firstEmit)
             {
-              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.33);
               y = lerp(concretePPos.y, concretePos.y, 0.33);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.67);
               y = lerp(concretePPos.y, concretePos.y, 0.67);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               initParticle(temp);
               concreteCount++;
               concretePPos.set(concretePos);
             }
             else if(PVector.dist(concretePos, concretePPos) > 9*2 && !firstEmit)
             {
-              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               x = lerp(concretePPos.x, concretePos.x, 0.5);
               y = lerp(concretePPos.y, concretePos.y, 0.5);
               initParticle(temp, x, y);
               concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               initParticle(temp);
               concreteCount++;
               concretePPos.set(concretePos);
             }
             else if(PVector.dist(concretePos, concretePPos) > 9)
             {
-              temp = new Concrete(random(14, 16), color(175, particleOpacity), lifeSpan, 0.98, type);
+              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
               initParticle(temp);
               concreteCount++;
               if(firstEmit)

@@ -22,20 +22,6 @@ PVector force2 = new PVector(0,0);
 Minim minim;
 Music music;
 
-/*particle Types:
- p - base particle
- a - arrow (don't use)
- 
- w - water
- o - oil
- s - seeds
- f - fire
- c - concrete
- i - ice
- k - fireworks
- l - plants
- */
-
 final static int particle_max = 200;
 final static int arrow_max = 200;
 
