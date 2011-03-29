@@ -167,6 +167,7 @@ class Emitter
             if(isFirework)
             {
               temp = new Fire(random(3,7), colFW, lifeSpan, 0.98, type);
+              temp.isFirework = true;
             }
             else
             {
@@ -177,69 +178,10 @@ class Emitter
             break;
           case 'c':
             concretePos.set(loc.x, loc.y, 0);
-            float x = 0;
-            float y = 0;
-            //println(concretePPos);
-            if(PVector.dist(concretePos, concretePPos) > 9*4 && !firstEmit)
-            {
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
-              x = lerp(concretePPos.x, concretePos.x, 0.25);
-              y = lerp(concretePPos.y, concretePos.y, 0.25);
-              initParticle(temp, x, y);
-              concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
-              x = lerp(concretePPos.x, concretePos.x, 0.5);
-              y = lerp(concretePPos.y, concretePos.y, 0.5);
-              initParticle(temp, x, y);
-              concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
-              x = lerp(concretePPos.x, concretePos.x, 0.75);
-              y = lerp(concretePPos.y, concretePos.y, 0.75);
-              initParticle(temp, x, y);
-              concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
-              initParticle(temp);
-              concreteCount++;
-              concretePPos.set(concretePos);
-            }
-            else if(PVector.dist(concretePos, concretePPos) > 9*3 && !firstEmit)
-            {
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
-              x = lerp(concretePPos.x, concretePos.x, 0.33);
-              y = lerp(concretePPos.y, concretePos.y, 0.33);
-              initParticle(temp, x, y);
-              concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
-              x = lerp(concretePPos.x, concretePos.x, 0.67);
-              y = lerp(concretePPos.y, concretePos.y, 0.67);
-              initParticle(temp, x, y);
-              concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
-              initParticle(temp);
-              concreteCount++;
-              concretePPos.set(concretePos);
-            }
-            else if(PVector.dist(concretePos, concretePPos) > 9*2 && !firstEmit)
-            {
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
-              x = lerp(concretePPos.x, concretePos.x, 0.5);
-              y = lerp(concretePPos.y, concretePos.y, 0.5);
-              initParticle(temp, x, y);
-              concreteCount++;
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
-              initParticle(temp);
-              concreteCount++;
-              concretePPos.set(concretePos);
-            }
-            else if(PVector.dist(concretePos, concretePPos) > 9)
-            {
-              temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
-              initParticle(temp);
-              concreteCount++;
-              if(firstEmit)
-                firstEmit = false;
-              concretePPos.set(concretePos);
-            }
+            int numParticles = floor(PVector.dist(concretePos, concretePPos)/9);
+            println(PVector.dist(concretePos, concretePPos));
+            println(numParticles);
+            drawConcrete(numParticles);
             break;
           case 'i':
             temp = new Ice(random(3, 7), color(random(120,130), random(225,235), random(230,240), particleOpacity), lifeSpan, 0.98, type);
@@ -255,6 +197,42 @@ class Emitter
             println("unknown particle type...");
             break;
         }
+      }
+    }
+  }
+  void drawConcrete(int numParticles)
+  {
+    if(numParticles == 1 || firstEmit)
+    {
+      
+      temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+      initParticle(temp);
+      concreteCount++;
+      if(firstEmit)
+        firstEmit = false;
+      concretePPos.set(concretePos);
+      return;
+    }
+    float x = 0;
+    float y = 0;
+    for(int i = 1; i<=numParticles; i++)
+    {
+      temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+      if(i==numParticles)
+      {
+        temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+        initParticle(temp);
+        concreteCount++;
+        concretePPos.set(concretePos);
+        continue;
+      }
+      else
+      {
+        x = lerp(concretePPos.x, concretePos.x, (1.0/numParticles)*i);
+        y = lerp(concretePPos.y, concretePos.y, (1.0/numParticles)*i);
+        initParticle(temp, x, y);
+        println("drew at " + x +"+"+ y);
+        concreteCount++;
       }
     }
   }

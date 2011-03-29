@@ -43,6 +43,7 @@ int iceCount = 0;
 int fireworkCount = 0;
 
 int particleOpacity = 200;
+color[] firePalette;
 
 boolean wandIsInput = false;
 char page = 'v'; //v=visualization, c=calibration, m=music, u=mainmenu
@@ -88,6 +89,15 @@ void setup()
   setHSB(58, 1,1,3);
   changeParticle('w', 0);
   changeParticle('f', 1);
+  
+  //start code based on http://processing.org/learning/topics/firecube.html
+  colorMode(HSB);
+  firePalette = new color[255];
+  for(int x = 0; x < firePalette.length; x++) {
+    firePalette[x] = color(int(map(x, 0, 254, 0, 41)), 255, int(map(x, 0, 254, 128, 255)), x);
+  }
+  colorMode(RGB);
+  //end code from http://processing.org/learning/topics/firecube.html
 
   //instantiate Environments
   //Environment(float gravity, float friction, PVector wind, float resistance, float turbulence)

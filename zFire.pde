@@ -25,6 +25,16 @@ class Fire extends Particle
     translate(loc.x, loc.y);
     //println(loc);
   }
+  void createFade(float val)
+  {
+    colA -= val;
+    int colorIndex = int(map(lifeTime, 0, lifeSpan, 0, 255));
+    if(!isFirework)
+      col = firePalette[254-colorIndex];
+    else
+      col = color(colR, colG, colB, colA);
+  }
+  
   //handle particle-particle collisions/reactions
   void checkHit(Particle otherParticle)
   {

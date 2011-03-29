@@ -24,10 +24,10 @@ class Firework extends Particle
     if(isIgnited)
     {
       vel.normalize();
-      vel.add(0,-11,0);
+      vel.add(0,-14,0);
       loc.add(vel);
       igniteIndex++;
-      if(igniteIndex > 40)
+      if(igniteIndex > 32)
       {
         //i=1 forces in all diretions, but bad for dye
         for(int i=2; i<9; i++)
