@@ -3,6 +3,7 @@ import msafluid.*;
 import processing.opengl.*;
 import ddf.minim.*;
 import ddf.minim.effects.*;
+import gifAnimation.*;
 
 /**
  -----------------PXLKRAFT-------------------
@@ -46,7 +47,7 @@ int particleOpacity = 200;
 color[] firePalette;
 
 boolean wandIsInput = false;
-char page = 'v'; //v=visualization, c=calibration, m=music, u=mainmenu
+char page = 'u'; //v=visualization, c=calibration, m=music, u=mainmenu
 
 int emitterCount = 2;
 Emitter[] emitters = new Emitter[emitterCount];
@@ -58,6 +59,15 @@ Engine engine;
 float invWidth, invHeight;
 float cursorNormX, cursorNormY, cursorVelX, cursorVelY;
 color dye1, dye2, dye3;
+
+UI ui;
+//Music button rollovers, they are in UI class because there is an error if they are put in the button class
+Gif rhy1Over;
+Gif rhy2Over;
+Gif rhy3Over;
+Gif rhy4Over;
+Gif mel1Over;
+Gif mel2Over;
 
 //tracking
 Glob glob;
@@ -80,6 +90,27 @@ void setup()
   glob = new Glob(width, height);
   wrapper = new Thread(glob);
   wrapper.start();
+  
+  //Music button rollovers
+  rhy1Over = new Gif(this, "rhy1Over.gif");
+  rhy1Over.loop();
+  
+  rhy2Over = new Gif(this, "rhy2Over.gif");
+  rhy2Over.loop();
+  
+  rhy3Over = new Gif(this, "rhy3Over.gif");
+  rhy3Over.loop();
+  
+  rhy4Over = new Gif(this, "rhy4Over.gif");
+  rhy4Over.loop();
+  
+  mel1Over = new Gif(this, "mel1Over.gif");
+  mel1Over.loop();
+  
+  mel2Over = new Gif(this, "mel2Over.gif");
+  mel2Over.loop();
+  
+  ui = new UI();
 
   //instantiate emitters
   emitters[0] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'w', 0.2);
@@ -131,7 +162,7 @@ void draw()
   {
     readWands();
   }
-
+  ui.run();
   force1.normalize();
   force1.mult(-3);
   force1.add(emitters[0].birthForce);
