@@ -46,7 +46,7 @@ int particleOpacity = 200;
 color[] firePalette;
 
 boolean wandIsInput = false;
-char page = 'c'; //v=visualization, c=calibration, m=music, u=mainmenu
+char page = 'v'; //v=visualization, c=calibration, m=music, u=mainmenu
 
 int emitterCount = 2;
 Emitter[] emitters = new Emitter[emitterCount];

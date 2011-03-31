@@ -55,7 +55,8 @@ class Concrete extends Particle
           bounce(otherParticle);
           break;
         case 'k': //collided with a fireworks particle
-          bounce(otherParticle);
+          if(!otherParticle.isIgnited)
+            bounce(otherParticle);
           break;
         default:
           break;

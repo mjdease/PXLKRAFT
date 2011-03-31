@@ -68,7 +68,7 @@ class Fire extends Particle
         break;
       case 'o': //collided with a oil particle
         otherParticle.fireBuffer++;
-        if(otherParticle.fireBuffer > 10 && !otherParticle.toKill)
+        if(otherParticle.fireBuffer > 5 && !otherParticle.toKill)
         {
           otherParticle.toKill = true;
           engine.addForce(this.loc.x*invWidth,this.loc.y*invHeight,0,-0.05, -1);
@@ -84,7 +84,7 @@ class Fire extends Particle
         {
           otherParticle.toKill = true;
           engine.addForce(this.loc.x*invWidth,this.loc.y*invHeight,0,-0.01, -1);
-          engine.burstEmitters.add(new Emitter(this.loc, new PVector(0, -3), 2, 5, 'f', 1000, false));
+          engine.burstEmitters.add(new Emitter(this.loc, new PVector(0, -1), 4, 7, 'f', 1000, false));
         }
         break;
       case 'f': //collided with a fire particle

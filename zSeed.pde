@@ -23,11 +23,11 @@ class Seed extends Particle
   {
     if(isPlanted && isSource)
     {
-      if(plantIndex%4 == 0 && plantIndex<plantHeight)
+      if(plantIndex%6 == 0 && plantIndex<plantHeight)
       {
         emitters[0].createPlant(new PVector(this.loc.x, this.loc.y - (plantIndex)));
       }
-      plantIndex+=4;
+      plantIndex+=6;
     }
     else if(isPlanted)
     {}

@@ -69,13 +69,14 @@ class Firework extends Particle
           bounce(otherParticle);
           break;
         case 'f': //collided with a fire particle
-          bounce(otherParticle);
+          //bounce(otherParticle);
           break;
         case 'c': //collided with a concrete particle
-          bounce(otherParticle);
+          if(!this.isIgnited)
+            bounce(otherParticle);
           break;
         case 'i': //collided with a ice particle
-          bounce(otherParticle);
+          //bounce(otherParticle);
           break;
         case 'k': //collided with a fireworks particle
           bounce(otherParticle);
