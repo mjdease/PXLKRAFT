@@ -6,6 +6,7 @@ class Page{
   Button[] mainArray = new Button[3];
   Button[] musicArray = new Button[7];
   Button[] gameArray = new Button[9];
+  Button[] calibArray = new Button[0];
 
   Page(){ 
   mainArray[0] = new Button("music",width/2 - 75, height/2 - 51);

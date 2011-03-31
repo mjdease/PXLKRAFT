@@ -82,7 +82,7 @@ void setup()
   background(0);
   frameRate(constantFPS);
   rectMode(CENTER);
-  
+
   //minim = new Minim(this);
   //music = new Music();
 
@@ -90,26 +90,26 @@ void setup()
   glob = new Glob(width, height);
   wrapper = new Thread(glob);
   wrapper.start();
-  
+
   //Music button rollovers
   rhy1Over = new Gif(this, "rhy1Over.gif");
   rhy1Over.loop();
-  
+
   rhy2Over = new Gif(this, "rhy2Over.gif");
   rhy2Over.loop();
-  
+
   rhy3Over = new Gif(this, "rhy3Over.gif");
   rhy3Over.loop();
-  
+
   rhy4Over = new Gif(this, "rhy4Over.gif");
   rhy4Over.loop();
-  
+
   mel1Over = new Gif(this, "mel1Over.gif");
   mel1Over.loop();
-  
+
   mel2Over = new Gif(this, "mel2Over.gif");
   mel2Over.loop();
-  
+
   ui = new UI();
 
   //instantiate emitters
@@ -120,7 +120,7 @@ void setup()
   setHSB(58, 1,1,3);
   changeParticle('w', 0);
   changeParticle('f', 1);
-  
+
   //start code based on http://processing.org/learning/topics/firecube.html
   colorMode(HSB);
   firePalette = new color[255];
@@ -154,15 +154,14 @@ void setup()
 }
 void draw()
 {
-  if(!wandIsInput)
+  if(!wandIsInput || page != 'v')
   {
-    readMouse(); 
+    readMouse();
   }
   else
   {
     readWands();
   }
-  ui.run();
   force1.normalize();
   force1.mult(-3);
   force1.add(emitters[0].birthForce);
@@ -175,25 +174,19 @@ void draw()
   emitters[1].setBirthPath(force2);
   emitters[1].setLoc(wand2);
   engine.run();
+  ui.run();
   //println(frameRate);
 }
 
 void readMouse()
 {
+  wandP1.set(wand1);
+  wand1.set(mouseX, mouseY, 0);
   switch(page)
   {
   case 'v':
-    if(mouseX != pmouseX || mouseY != pmouseY);
-    {
-      cursorNormX = mouseX * invWidth;
-      cursorNormY = mouseY * invHeight;
-      cursorVelX = (mouseX - pmouseX) * invWidth;
-      cursorVelY = (mouseY - pmouseY) * invHeight;
-      engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY, 1);
-    }
     force1.set(pmouseX-mouseX, pmouseY-mouseY, 0);
-    wandP1.set(wand1);
-    wand1.set(mouseX, mouseY, 0);
+    wand1Fluids();
     //music.movedMouse(wand1, wand2);
     //music.run(wand1);
     break; 
@@ -201,8 +194,10 @@ void readMouse()
     glob.calibrate();
     break;
   case 'm':
+    wand1Fluids();
     break;
   case 'u':
+    wand1Fluids();
     break;
   default:
     break;
@@ -216,32 +211,19 @@ void readWands()
   case 'v':
     glob.track();
     wandP1.set(wand1);
-    //println(glob.getPos1());
-    //println(glob.getPos2());
-    //println(glob.isDown1());
-    //println(glob.isDown2());
     wand1.set(glob.getPos1());
-    if(wand1.x == -100)
-    {
-      //println("wand1");
-      emitters[0].turnOff();
-    }
     wandP2.set(wand2);
     wand2.set(glob.getPos2());
+    if(wand1.x == -100)
+    {
+      emitters[0].turnOff();
+    }
     if(wand2.x == -100)
     {
-      //println("wand2");
       emitters[1].turnOff();
     }
-    if(wand1.x != wandP1.x || wand1.y != wandP1.y)
-    {
-      cursorNormX = wand1.x * invWidth;
-      cursorNormY = wand1.y * invHeight;
-      cursorVelX = (wand1.x - wandP1.x) * invWidth;
-      cursorVelY = (wand1.y - wandP1.y) * invHeight;
-      engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY, 1);
-      //println(glob.isDown1());
-    }
+    wand1Fluids();
+    wand2Fluids();
     if(glob.isDown1() && !emitters[0].isOn)
     {
       if(wand1.x != -100)
@@ -251,14 +233,7 @@ void readWands()
     {
       emitters[0].turnOff();
     }
-    if(wand2.x != wandP2.x || wand2.y != wandP2.y)
-    {
-      cursorNormX = wand2.x * invWidth;
-      cursorNormY = wand2.y * invHeight;
-      cursorVelX = (wand2.x - wandP2.x) * invWidth;
-      cursorVelY = (wand2.y - wandP2.y) * invHeight;
-      engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY, 2);
-    }
+
     if(glob.isDown2() && !emitters[1].isOn)
     {
       if(wand2.x != -100)
@@ -272,7 +247,7 @@ void readWands()
     force1.set(wandP1.x - wand1.x, wandP1.y - wand1.y, 0);
 
     force2.set(wandP2.x - wand2.x, wandP2.y - wand2.y, 0);
-    
+
     //music.movedMouse(wand1, wand2);
     //music.run(wand1);
     break;
@@ -280,11 +255,36 @@ void readWands()
     glob.calibrate();
     break;
   case 'm':
+    wand1Fluids();
     break;
   case 'u':
+    wand1Fluids();
     break;
   default:
     break;
+  }
+}
+void wand1Fluids()
+{
+  if(wand1.x != wandP1.x || wand1.y != wandP1.y)
+  {
+    cursorNormX = wand1.x * invWidth;
+    cursorNormY = wand1.y * invHeight;
+    cursorVelX = (wand1.x - wandP1.x) * invWidth;
+    cursorVelY = (wand1.y - wandP1.y) * invHeight;
+    engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY, 1);
+    //println(glob.isDown1());
+  }
+}
+void wand2Fluids()
+{
+  if(wand2.x != wandP2.x || wand2.y != wandP2.y)
+  {
+    cursorNormX = wand2.x * invWidth;
+    cursorNormY = wand2.y * invHeight;
+    cursorVelX = (wand2.x - wandP2.x) * invWidth;
+    cursorVelY = (wand2.y - wandP2.y) * invHeight;
+    engine.addForce(cursorNormX, cursorNormY, cursorVelX, cursorVelY, 2);
   }
 }
 
@@ -343,7 +343,7 @@ void keyPressed()
 
 void changeParticle(char type, int wand)
 {
-  
+
   switch(type)
   {
     //things you can set for particles:

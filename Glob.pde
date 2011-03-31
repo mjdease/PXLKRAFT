@@ -47,6 +47,7 @@ class Glob implements Runnable
   int h;
   
   int[] img;
+  PImage pImg = createImage(320, 240, RGB);
   
   Glob (int wid , int hei)
   {
@@ -255,12 +256,14 @@ class Glob implements Runnable
     colorMode(RGB, 255);
     m.update();
     img = m.cameraImage();
-    loadPixels();
+    pImg.loadPixels();
     for(int i =0;i<w*h;i++)
     {
-      pixels[i%320+1024*(i/320)] = img[i];
+      //pImg.pixels[i%320+1024*(i/320)] = img[i];
+      pImg.pixels[i] = img[i];
     }
-    updatePixels();
+    pImg.updatePixels();
+    image(pImg, 0, 0);
     int c = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);
     
     //println(int(red(c))+"," + int(green(c)) + "," + int(blue(c)) + ":" + mouseX +";"+mouseY);
@@ -304,13 +307,7 @@ class Glob implements Runnable
       }
       else if(key=='e')
       {
-        page='v';
-        wandIsInput = true;
-        background(0);
-        println("Wand1 : "+ r1+"," + g1 + "," + b1);
-        println("Wand1 Clicked: "+ r1c+"," + g1c + "," + b1c);
-        println("Wand2 : "+ r2+"," + g2 + "," + b2);
-        println("Wand2 Clicked: "+ r2c+"," + g2c + "," + b2c);
+        ui.calibrationSuccess();
       }
       else if(key==' ')
       {

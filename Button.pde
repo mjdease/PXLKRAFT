@@ -188,6 +188,17 @@ class Button {
       }
       else if(type == "calib")
       {
+        ui.inCalib = true;
+        for(int k = 0; k < 9; k++)
+        {
+          if(k > ui.Main.calibArray.length - 1)
+          {
+            ui.Main.buttonArray[k] = null;
+          }
+          else {
+            ui.Main.buttonArray[k] = ui.Main.calibArray[k];
+          }
+        }
         page = 'c';
       }
       else if(type == "fire")
