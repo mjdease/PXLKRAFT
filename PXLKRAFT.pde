@@ -83,11 +83,11 @@ void setup()
   frameRate(constantFPS);
   rectMode(CENTER);
 
-  //minim = new Minim(this);
-  //music = new Music();
+  minim = new Minim(this);
+  music = new Music();
 
   //tracking thread
-  glob = new Glob(width, height);
+  glob = new Glob(width, height + 50);
   wrapper = new Thread(glob);
   wrapper.start();
 
@@ -154,7 +154,7 @@ void setup()
 }
 void draw()
 {
-  if(!wandIsInput || page != 'v')
+  if(!wandIsInput) //|| page != 'v'
   {
     readMouse();
   }
@@ -187,8 +187,8 @@ void readMouse()
   case 'v':
     force1.set(pmouseX-mouseX, pmouseY-mouseY, 0);
     wand1Fluids();
-    //music.movedMouse(wand1, wand2);
-    //music.run(wand1);
+    music.movedMouse(wand1, wand2);
+    music.run(wand1);
     break; 
   case 'c':
     glob.calibrate();
@@ -206,14 +206,14 @@ void readMouse()
 
 void readWands()
 {
+  glob.track();
+  wandP1.set(wand1);
+  wand1.set(glob.getPos1());
+  wandP2.set(wand2);
+  wand2.set(glob.getPos2());
   switch(page)
   {
   case 'v':
-    glob.track();
-    wandP1.set(wand1);
-    wand1.set(glob.getPos1());
-    wandP2.set(wand2);
-    wand2.set(glob.getPos2());
     if(wand1.x == -100)
     {
       emitters[0].turnOff();
@@ -248,8 +248,8 @@ void readWands()
 
     force2.set(wandP2.x - wand2.x, wandP2.y - wand2.y, 0);
 
-    //music.movedMouse(wand1, wand2);
-    //music.run(wand1);
+    music.movedMouse(wand1, wand2);
+    music.run(wand1);
     break;
   case 'c':
     glob.calibrate();

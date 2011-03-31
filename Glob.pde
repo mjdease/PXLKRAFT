@@ -104,7 +104,7 @@ class Glob implements Runnable
     isSet1 = false;
     isSet2 = false;
     //println("running");
-    //archive();
+    archive();
     m.update();
     m.trackNotColor(rB,gB,bB,255);
     
@@ -129,7 +129,7 @@ class Glob implements Runnable
       rr = int(red(c));
       gg = int(green(c));
       bb = int(blue(c));
-      println("red"+rr+"green"+gg+"blue"+bb);
+      //println("red"+rr+"green"+gg+"blue"+bb);
       if(rr>r1c-threshold && rr<r1c+threshold && gg>g1c-threshold && gg<g1c+threshold && bb>b1c-threshold &&bb<b1c+threshold)
       {
         rect(0, 0, 10, 10);
@@ -137,7 +137,7 @@ class Glob implements Runnable
         y1 = centroidY;
         click1 = true;
         isSet1=true;
-        println("clicked 1 " + x1 + ":" + y1);
+        //println("clicked 1 " + x1 + ":" + y1);
         return;
       }
       if(rr>r2c-threshold && rr<r2c+threshold && gg>g2c-threshold && gg<g2c+threshold && bb>b2c-threshold &&bb<b2c+threshold)
@@ -147,7 +147,7 @@ class Glob implements Runnable
         y2 = centroidY;
         click2 = true;
         isSet2=true;
-        println("clicked 2 " + x2 + ":" + y2);
+        //println("clicked 2 " + x2 + ":" + y2);
         return;
       }
       if(rr>r1-threshold && rr<r1+threshold && gg>g1-threshold && gg<g1+threshold && bb>b1-threshold &&bb<b1+threshold)
@@ -157,7 +157,7 @@ class Glob implements Runnable
         y1 = centroidY;
         click1 = false;
         isSet1=true;
-        println("wand 1 " + x1 + ":" + y1);
+        //println("wand 1 " + x1 + ":" + y1);
         return;
       }
       if(rr>r2-threshold && rr<r2+threshold && gg>g2-threshold && gg<g2+threshold && bb>b2-threshold &&bb<b2+threshold)
@@ -167,7 +167,7 @@ class Glob implements Runnable
         y2 = centroidY;
         click2 = false;
         isSet2=true;
-        println("wand 2 " + x2 + ":" + y2);
+        //println("wand 2 " + x2 + ":" + y2);
         return;
       }
     }
@@ -238,7 +238,20 @@ class Glob implements Runnable
   {
      return (pclick2); 
   }
-  
+  boolean wand1Pressed()
+  {
+    if(!pclick1 && click1)
+      return true;
+    else
+      return false;
+  }
+  boolean wand2Pressed()
+  {
+    if(!pclick2 && click2)
+      return true;
+    else
+      return false;
+  }
    void archive()
   {  
      px1 = x1;
@@ -262,6 +275,7 @@ class Glob implements Runnable
       //pImg.pixels[i%320+1024*(i/320)] = img[i];
       pImg.pixels[i] = img[i];
     }
+    //pImg.resize(1024, 768);
     pImg.updatePixels();
     image(pImg, 0, 0);
     int c = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);

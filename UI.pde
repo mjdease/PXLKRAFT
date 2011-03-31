@@ -5,6 +5,8 @@ class UI
   PFont font;
   int cursorX;
   int cursorY;
+  int cursor2X;
+  int cursor2Y;
   int Hue;
   int margin = 20;
   int tlength = 305;
@@ -37,11 +39,20 @@ class UI
     
     Main.run();
     //turn off in 'v'
-    ease(10, 1, false);
-
+    if(page != 'v')
+    {
+      ease(10, 1, false);
+    }
+    else
+    {
+      cursorX = int(wand1.x);
+      cursorY = int(wand1.y);
+      cursor2X = int(wand2.x);
+      cursor2X = int(wand2.y);
+    }
     //TITLES
     //Main titles
-    if(inGame == false) {
+    if(inGame == false && inCalib == false) {
       fill(Hue,255,255,100);
       if(cursorX + 100 + margin > width - margin - tlength) {
         if(inMusic == false)
@@ -129,7 +140,7 @@ class UI
       }
     }
     //BOXES
-    if(inGame == false )
+    if(inGame == false && inCalib == false)
     {
       Hue += 1;
       if(Hue >= 1000)
@@ -212,8 +223,8 @@ class UI
       magn = 10;
     }
 
-    float distX = mouseX - cursorX;
-    float distY = mouseY - cursorY;
+    float distX = wand1.x - cursorX;
+    float distY = wand1.y - cursorY;
 
     if(distX > acc && type == true)
     {

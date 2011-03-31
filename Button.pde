@@ -108,27 +108,28 @@ class Button {
 
   void animate() {
     text("animating",20,20);
-    Y -= 2;
-    if( Y <= height - 63)
-      Y = height - 63;
+    Y -= 6;
+    if( Y <= height - 63 - 50)
+      Y = height - 63 - 50;
   }
 
   void animateOut() {
-    Y += 2;
-    if( Y >= height)
-      Y = height;
+    Y += 6;
+    if( Y >= height )
+      Y = height ;
   }
 
   void run(int i) {
     image(b, X, Y);
-    if(ui.inGame == true && mouseY > height - 63)
+    if(ui.inGame == true && (wand1.y > height - 63 - 50 || wand2.y > height - 63 - 50))
     {
       animate();
     }
     else if(ui.inGame == true) {
       animateOut();
     }
-    if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height && mousePressed)
+    //menu buttons by only the first wand
+    if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height && (glob.wand1Pressed() || mousePressed))
     {
       text(type,width/2,height/2);
       if(type == "play")
@@ -200,11 +201,90 @@ class Button {
           }
         }
         page = 'c';
-      }
+      } 
       else if(type == "fire")
       {
-        //TODO change variables
-        background(255);
+        changeParticle('f', 0);
+      }
+      else if(type == "stone")
+      {
+        changeParticle('c', 0);
+      }
+      else if(type == "ice")
+      {
+        changeParticle('i', 0);
+      }
+      else if(type == "works")
+      {
+        changeParticle('k', 0);
+      }
+      else if(type == "oil")
+      {
+        changeParticle('o', 0);
+      }
+      else if(type == "water")
+      {
+        changeParticle('w', 0);
+      }
+      else if(type == "seed")
+      {
+        changeParticle('s', 0);
+      }
+      else if(type == "rhy1")
+      {
+        music.setRhythm(0);
+      }
+      else if(type == "rhy2")
+      {
+        music.setRhythm(1);
+      }
+      else if(type == "rhy3")
+      {
+        music.setRhythm(2);
+      }
+      else if(type == "rhy4")
+      {
+        //music.setRhythm(3);
+      }
+      else if(type == "mel1")
+      {
+        //music.rhythm = 0;
+      }
+      else if(type == "mel2")
+      {
+        //music.rhythm = 0;
+      }
+    }
+    //ingame ui buttons by either wand
+    else if(ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height && glob.wand2Pressed())
+    {
+      if(type == "fire")
+      {
+        changeParticle('f', 1);
+      }
+      else if(type == "stone")
+      {
+        changeParticle('c', 1);
+      }
+      else if(type == "ice")
+      {
+        changeParticle('i', 1);
+      }
+      else if(type == "works")
+      {
+        changeParticle('k', 1);
+      }
+      else if(type == "oil")
+      {
+        changeParticle('o', 1);
+      }
+      else if(type == "water")
+      {
+        changeParticle('w', 1);
+      }
+      else if(type == "seed")
+      {
+        changeParticle('s', 1);
       }
     }
     else if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height)

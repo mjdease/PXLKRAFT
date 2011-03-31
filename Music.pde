@@ -359,6 +359,15 @@ class Music
     playGridNote(1000, 200);
   }
 
+  void setRhythm(int i)
+  {
+    groove[rhythm].pause();
+    rhythm = i;
+    groove[rhythm].setGain(12);
+    groove[rhythm].loop();
+    bpf = new LowPassFS(2000, groove[rhythm].sampleRate());
+    groove[rhythm].addEffect(bpf);
+  }
 
 
   void stop()
