@@ -12,7 +12,8 @@ class Glob implements Runnable
   int r1,g1,b1; //default colour
   int r1c,g1c,b1c; // clicked colour
   int x1,y1; // position
-  int px1 , py1 = -1; //previous position
+  int px1 = -1;
+  int py1 = -1; //previous position
   boolean click1 , pclick1; // whether its clicked
   boolean isSet1;
   //PVector v1;  
@@ -20,7 +21,8 @@ class Glob implements Runnable
   int r2,g2,b2;
   int r2c,g2c,b2c;
   int x2,y2;
-  int px2 , py2 = -1;
+  int px2 = -1;
+  int py2 = -1;
   boolean click2 , pclick2;
   boolean isSet2;
   //PVector v2;
@@ -29,6 +31,7 @@ class Glob implements Runnable
   
   // return vector
   PVector vector;
+  PVector vector2;
   
   // threshold
   int threshold;
@@ -73,6 +76,7 @@ class Glob implements Runnable
     //v2 = new PVector(0 , 0);
     
     vector = new PVector(0 , 0);
+    vector2 = new PVector(0 , 0);
     noStroke();
     noFill();
   }
@@ -95,11 +99,13 @@ class Glob implements Runnable
   
   void track()
   {
-    isSet1 = isSet2 = false;
+    colorMode(RGB, 255);
+    isSet1 = false;
+    isSet2 = false;
     //println("running");
-    archive();
+    //archive();
     m.update();
-    m.trackNotColor(rB,gB,bB,100);
+    m.trackNotColor(rB,gB,bB,255);
     
     int[][] a;
     int[] b;
@@ -107,6 +113,7 @@ class Glob implements Runnable
     color c;
     
     a = m.globBoxes();
+    //println(a.length);
     stroke(255,255,0);
     for(int i=0;i<a.length;i++)
     {
@@ -116,12 +123,12 @@ class Glob implements Runnable
       centroidY = b[1]+b[3]/2;
       //point(centroidX,centroidY);
       
-      c = m.average(b[0], b[1], b[2], b[3]);
+      c = m.average(b[0],b[1],b[0] + b[2],b[1] + b[3]);
       
       rr = int(red(c));
       gg = int(green(c));
       bb = int(blue(c));
-      
+      println("red"+rr+"green"+gg+"blue"+bb);
       if(rr>r1c-threshold && rr<r1c+threshold && gg>g1c-threshold && gg<g1c+threshold && bb>b1c-threshold &&bb<b1c+threshold)
       {
         rect(0, 0, 10, 10);
@@ -129,34 +136,38 @@ class Glob implements Runnable
         y1 = centroidY;
         click1 = true;
         isSet1=true;
-        //println("clicked 1 " + x1 + ":" + y1);
+        println("clicked 1 " + x1 + ":" + y1);
+        return;
       }
-      else if(rr>r2c-threshold && rr<r2c+threshold && gg>g2c-threshold && gg<g2c+threshold && bb>b2c-threshold &&bb<b2c+threshold)
+      if(rr>r2c-threshold && rr<r2c+threshold && gg>g2c-threshold && gg<g2c+threshold && bb>b2c-threshold &&bb<b2c+threshold)
       {
         rect(0, 0, 10, 10);
         x2 = centroidX;
         y2 = centroidY;
         click2 = true;
         isSet2=true;
-        //println("clicked 2 " + x2 + ":" + y2);
+        println("clicked 2 " + x2 + ":" + y2);
+        return;
       }
-      else if(rr>r1-threshold && rr<r1+threshold && gg>g1-threshold && gg<g1+threshold && bb>b1-threshold &&bb<b1+threshold)
+      if(rr>r1-threshold && rr<r1+threshold && gg>g1-threshold && gg<g1+threshold && bb>b1-threshold &&bb<b1+threshold)
       {
         rect(0, 0, 10, 10);
         x1 = centroidX;
         y1 = centroidY;
         click1 = false;
         isSet1=true;
-        //println("wand 1 " + x1 + ":" + y1);
+        println("wand 1 " + x1 + ":" + y1);
+        return;
       }
-      else if(rr>r2-threshold && rr<r2+threshold && gg>g2-threshold && gg<g2+threshold && bb>b2-threshold &&bb<b2+threshold)
+      if(rr>r2-threshold && rr<r2+threshold && gg>g2-threshold && gg<g2+threshold && bb>b2-threshold &&bb<b2+threshold)
       {
         rect(0, 0, 10, 10);
         x2 = centroidX;
         y2 = centroidY;
         click2 = false;
         isSet2=true;
-        //println("wand 2 " + x2 + ":" + y2);
+        println("wand 2 " + x2 + ":" + y2);
+        return;
       }
     }
   }
@@ -181,15 +192,15 @@ class Glob implements Runnable
   {
     if(!isSet2)
     {
-      vector.set(-100 , -100 , 0);
+      vector2.set(-100 , -100 , 0);
      
-      return vector;
+      return vector2;
     }
     else
     {
-      vector.set(round(x2 * wr) , round(y2 * hr) , 0);
+      vector2.set(round(x2 * wr) , round(y2 * hr) , 0);
      
-      return vector;
+      return vector2;
     }
   }
   
@@ -202,9 +213,9 @@ class Glob implements Runnable
   
   PVector getPPos2()
   {
-      vector.set(round(px2 * wr) , round(py2 * hr) , 0);
+      vector2.set(round(px2 * wr) , round(py2 * hr) , 0);
      
-      return vector;
+      return vector2;
   }
   
   boolean isDown1()
@@ -241,6 +252,7 @@ class Glob implements Runnable
   
   void calibrate()
   {
+    colorMode(RGB, 255);
     m.update();
     img = m.cameraImage();
     loadPixels();
@@ -293,7 +305,12 @@ class Glob implements Runnable
       else if(key=='e')
       {
         page='v';
+        wandIsInput = true;
         background(0);
+        println("Wand1 : "+ r1+"," + g1 + "," + b1);
+        println("Wand1 Clicked: "+ r1c+"," + g1c + "," + b1c);
+        println("Wand2 : "+ r2+"," + g2 + "," + b2);
+        println("Wand2 Clicked: "+ r2c+"," + g2c + "," + b2c);
       }
       else if(key==' ')
       {

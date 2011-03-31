@@ -171,7 +171,7 @@ class Emitter
             }
             else
             {
-              temp = new Fire(random(3, 7), color(random(225,255), random(0,30), random(0,30), particleOpacity), lifeSpan, 0.98, type);
+              temp = new Fire(random(3, 7), firePalette[254], lifeSpan, 0.98, type);
             }
             initParticle(temp);
             fireCount++;

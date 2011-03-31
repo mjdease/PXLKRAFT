@@ -46,7 +46,7 @@ int particleOpacity = 200;
 color[] firePalette;
 
 boolean wandIsInput = false;
-char page = 'v'; //v=visualization, c=calibration, m=music, u=mainmenu
+char page = 'c'; //v=visualization, c=calibration, m=music, u=mainmenu
 
 int emitterCount = 2;
 Emitter[] emitters = new Emitter[emitterCount];
@@ -73,13 +73,13 @@ void setup()
   frameRate(constantFPS);
   rectMode(CENTER);
   
-  minim = new Minim(this);
-  music = new Music();
+  //minim = new Minim(this);
+  //music = new Music();
 
   //tracking thread
-  //glob = new Glob(width, height);
-  //wrapper = new Thread(glob);
-  //wrapper.start();
+  glob = new Glob(width, height);
+  wrapper = new Thread(glob);
+  wrapper.start();
 
   //instantiate emitters
   emitters[0] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'w', 0.2);
@@ -163,8 +163,8 @@ void readMouse()
     force1.set(pmouseX-mouseX, pmouseY-mouseY, 0);
     wandP1.set(wand1);
     wand1.set(mouseX, mouseY, 0);
-    music.movedMouse(wand1, wand2);
-    music.run(wand1);
+    //music.movedMouse(wand1, wand2);
+    //music.run(wand1);
     break; 
   case 'c':
     glob.calibrate();
@@ -185,20 +185,22 @@ void readWands()
   case 'v':
     glob.track();
     wandP1.set(wand1);
+    //println(glob.getPos1());
+    //println(glob.getPos2());
+    //println(glob.isDown1());
+    //println(glob.isDown2());
     wand1.set(glob.getPos1());
     if(wand1.x == -100)
     {
-      println("wand1");
+      //println("wand1");
       emitters[0].turnOff();
-      break;
     }
     wandP2.set(wand2);
     wand2.set(glob.getPos2());
     if(wand2.x == -100)
     {
-      println("wand2");
+      //println("wand2");
       emitters[1].turnOff();
-      break;
     }
     if(wand1.x != wandP1.x || wand1.y != wandP1.y)
     {
@@ -211,7 +213,8 @@ void readWands()
     }
     if(glob.isDown1() && !emitters[0].isOn)
     {
-      emitters[0].turnOn();
+      if(wand1.x != -100)
+        emitters[0].turnOn();
     }
     if(!glob.isDown1() && emitters[0].isOn)
     {
@@ -227,7 +230,8 @@ void readWands()
     }
     if(glob.isDown2() && !emitters[1].isOn)
     {
-      emitters[1].turnOn();
+      if(wand2.x != -100)
+        emitters[1].turnOn();
     }
     if(!glob.isDown2() && emitters[1].isOn)
     {
@@ -238,8 +242,8 @@ void readWands()
 
     force2.set(wandP2.x - wand2.x, wandP2.y - wand2.y, 0);
     
-    music.movedMouse(wand1, wand2);
-    music.run(wand1);
+    //music.movedMouse(wand1, wand2);
+    //music.run(wand1);
     break;
   case 'c':
     glob.calibrate();
