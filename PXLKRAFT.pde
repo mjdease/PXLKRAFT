@@ -33,7 +33,6 @@ final static int fire_max = 1000;
 final static int concrete_max = 600;
 final static int ice_max = 100;
 final static int firework_max = 200;
-final static int eraser_max = 2;
 int particleCount = 0;
 int arrowCount = 0;
 int waterCount = 0;
@@ -43,7 +42,6 @@ int fireCount = 0;
 int concreteCount = 0;
 int iceCount = 0;
 int fireworkCount = 0;
-int eraserCount = 0;
 
 int particleOpacity = 200;
 color[] firePalette;
@@ -86,8 +84,8 @@ void setup()
   frameRate(constantFPS);
   rectMode(CENTER);
 
-  //minim = new Minim(this);
-  //music = new Music();
+  minim = new Minim(this);
+  music = new Music();
 
   //tracking thread
   glob = new Glob(width, height);
@@ -187,6 +185,7 @@ void reset()
 }
 void draw()
 {
+  rectMode(CENTER);
   if(!wandIsInput) //|| page != 'v'
   {
     readMouse();
@@ -224,10 +223,19 @@ void readMouse()
   case 'v':
     force1.set(pmouseX-mouseX, pmouseY-mouseY, 0);
     wand1Fluids();
-    //music.movedMouse(wand1, wand2);
-    //music.run(wand1);
+    if(mousePressed && !emitters[0].isOn)
+    {
+        emitters[0].turnOn();
+    }
+    if(!mousePressed && emitters[0].isOn)
+    {
+      emitters[0].turnOff();
+    }
+    music.movedMouse(wand1, wand2);
+    music.run(wand1);
     break; 
   case 'c':
+    background(200);
     glob.calibrate();
     break;
   case 'm':
@@ -285,11 +293,12 @@ void readWands()
 
     force2.set(wandP2.x - wand2.x, wandP2.y - wand2.y, 0);
     
-    //music.movedMouse(wand1, wand2);
-    //music.run(wand1);
+    music.movedMouse(wand1, wand2);
+    music.run(wand1);
     
     break;
   case 'c':
+    background(200);
     glob.calibrate();
     break;
   case 'm':
@@ -496,11 +505,10 @@ void setHSB(int h, float s, float b, int wand)
 void stop()
 {
   // always close Minim audio classes when you are done with them
-  //music.groove[music.rhythm].close();
-  //glob.running = false;
+  music.groove[music.rhythm].close();
 
   // always stop Minim before exiting.
-  //minim.stop();
+  minim.stop();
   String OS = System.getProperty("os.name");
   super.stop();
   

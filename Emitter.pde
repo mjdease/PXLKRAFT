@@ -433,7 +433,7 @@ class Emitter
     {
       Particle part = (Particle) p.get(0);
       part.isErasing = true;
-      println(p.size());
+      //println(p.size());
     }
   }
   void turnOff()

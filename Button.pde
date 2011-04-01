@@ -16,6 +16,7 @@ class Button {
   int high;
   int sec;
   int count;
+  int menuSoundBuffer = 0;
 
   Button(String inType, int x, int y) {
     X = x;
@@ -107,7 +108,7 @@ class Button {
   }
 
   void animate() {
-    text("animating",20,20);
+    //text("animating",20,20);
     Y += 6;
     if( Y >= 0)
       Y = 0;
@@ -121,6 +122,8 @@ class Button {
 
   void run(int i) {
     image(b, X, Y);
+    if(menuSoundBuffer >0)
+      menuSoundBuffer--;
     if(ui.inGame == true && (wand1.y < 63 || wand2.y < 63))
     {
       animate();
@@ -131,10 +134,15 @@ class Button {
     //menu buttons by only the first wand
     if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height && (glob.wand1Pressed() || mousePressed))
     {
-      text(type,width/2,height/2);
-      setHSB(233, 1,1,1);
+      //text(type,width/2,height/2);
+      if(menuSoundBuffer == 0)
+      {
+        music.playMenuSound();
+        menuSoundBuffer = 10;
+      }
       if(type == "play")
       { 
+        setHSB(233, 1,1,1);
         ui.inGame = true;        
         for(int k = 0; k < 9; k++)
         {

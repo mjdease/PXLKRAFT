@@ -91,7 +91,7 @@ class Glob implements Runnable
   
   void run()
   {
-    println("threading");
+    //println("threading");
      while(running)
      {
         track(); 
