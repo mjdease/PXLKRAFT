@@ -26,7 +26,7 @@ class Seed extends Particle
   {
     if(isPlanted && isSource)
     {
-      if(plantIndex%8 == 0 && plantIndex<plantHeight && !stopGrowing)
+      if(plantIndex%8 == 0 && plantIndex<plantHeight)
       {
         angle+=inc;
         emitters[0].createPlant(new PVector(this.loc.x + sin(angle)*6, this.loc.y - (plantIndex)));
@@ -79,7 +79,6 @@ class Seed extends Particle
           break;
         case 'c': //collided with a concrete particle
           bounce(otherParticle);
-          this.stopGrowing = true;
           break;
         case 'i': //collided with a ice particle
           bounce(otherParticle);

@@ -25,7 +25,6 @@ class Particle extends Sprite implements Locatable
   boolean isSource = false;
   boolean isFirework = false;
   boolean isErasing = false;
-  boolean stopGrowing = false;
   int meltBuffer = 0;
   int meltIndex = 0;
   int boilBuffer = 0;
