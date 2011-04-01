@@ -73,7 +73,7 @@ class Water extends Particle
   }
   void createFade(float val)
   {
-      colA-=3;
+    colA-=3;
     col = color(colR, colG, colB, colA);
     if(colA < 10)
       toKill = true;
@@ -126,7 +126,7 @@ class Water extends Particle
           otherParticle.plantBuffer = 0;
         }
         //if(!otherParticle.isPlanted)
-          //bounce(otherParticle);
+        //bounce(otherParticle);
         break;
       case 'f': //collided with a fire particle
         //bounce(otherParticle);

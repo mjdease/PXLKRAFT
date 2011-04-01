@@ -24,6 +24,7 @@ class Particle extends Sprite implements Locatable
   boolean isPlanted = false;
   boolean isSource = false;
   boolean isFirework = false;
+  boolean isErasing = false;
   int meltBuffer = 0;
   int meltIndex = 0;
   int boilBuffer = 0;
@@ -62,6 +63,13 @@ class Particle extends Sprite implements Locatable
     this.damping = damping;
     setColComponents();
     //birthLoc = new PVector(mouseX, mouseY);
+  }
+  Particle(float radius, color col, float lifeSpan, char type)
+  {
+    super(radius, col);
+    this.lifeSpan = lifeSpan;
+    this.type = type;
+    setColComponents();
   }
   
   //instance methods

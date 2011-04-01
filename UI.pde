@@ -49,6 +49,37 @@ class UI
       cursorY = int(wand1.y);
       cursor2X = int(wand2.x);
       cursor2X = int(wand2.y);
+      pushStyle();
+      noFill();
+      strokeWeight(4);
+      rectMode(CENTER);
+      stroke(dye1);
+      if(emitters[0].type != 'e')
+        rect(wand1.x, wand1.y, 20,20);
+      stroke(dye2);
+      if(emitters[1].type != 'e')
+        rect(wand2.x, wand2.y, 20,20);
+      if(emitters[0].type == 'e')
+      {
+        if(emitters[0].isOn)
+          stroke(dye1);
+        else
+          stroke(0,0,255);
+        rect(wand1.x, wand1.y, 20,20);
+        line(wand1.x - 10,wand1.y - 10,wand1.x + 10,wand1.y + 10);
+        line(wand1.x - 10,wand1.y + 10,wand1.x + 10,wand1.y - 10);
+      }
+      if(emitters[1].type == 'e')
+      {
+        if(emitters[1].isOn)
+          stroke(dye2);
+        else
+          stroke(0,0,255);
+        rect(wand2.x, wand2.y, 20,20);
+        line(wand2.x - 10,wand2.y - 10,wand2.x + 10,wand2.y + 10);
+        line(wand2.x - 10,wand2.y + 10,wand2.x + 10,wand2.y - 10);
+      }
+      popStyle();
     }
     //TITLES
     //Main titles

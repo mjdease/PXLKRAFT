@@ -107,6 +107,8 @@ class Engine
         for(int j=0; j<emitters[i].p.size(); j++)
         {
           Particle part = (Particle) emitters[i].p.get(j);
+          if(part.type == 'e')
+            continue;
           // right bounds collision
           if(boundsSet[0] && part.loc.x > width - part.radius)
           {
@@ -145,7 +147,7 @@ class Engine
       for(Iterator j=neighbours.iterator(); j.hasNext();)
       {
         Particle otherParticle = (Particle) j.next();
-        if(!otherParticle.isDead)
+        if(!otherParticle.isDead && otherParticle.type != 'e')
         {
           part.checkHit(otherParticle);
         }

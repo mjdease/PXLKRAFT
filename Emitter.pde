@@ -269,6 +269,15 @@ class Emitter
     p.add(temp);
     engine.allObjs.add(temp);
   }
+  void createErasor(PVector location)
+  {
+    temp = new Eraser(20, -1, 'e');
+    temp.loc = location;
+    temp.birthTime = millis();
+    temp.vel = new PVector(0,0);
+    p.add(temp);
+    engine.allObjs.add(temp);
+  }
   
   void emit()
   {
@@ -433,10 +442,26 @@ class Emitter
   void turnOn()
   {
     this.isOn = true;
+    if(type == 'e')
+    {
+      Particle part = (Particle) p.get(0);
+      part.isErasing = true;
+      println(p.size());
+    }
   }
   void turnOff()
   {
     this.isOn = false;
     firstEmit = true;
+    if(type == 'e')
+    {
+      Particle part = (Particle) p.get(0);
+      part.isErasing = false;
+    }
+  }
+  void killEraser()
+  {
+    Particle part = (Particle) p.get(0);
+    part.isErasing = false;
   }
 }

@@ -368,18 +368,5 @@ class Music
     bpf = new LowPassFS(2000, groove[rhythm].sampleRate());
     groove[rhythm].addEffect(bpf);
   }
-
-
-  void stop()
-  {
-    // always close Minim audio classes when you are done with them
-    groove[rhythm].close();
-
-
-    // always stop Minim before exiting.
-    minim.stop();
-
-    //super.stop();
-  }
 }
 

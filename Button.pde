@@ -202,6 +202,10 @@ class Button {
         }
         page = 'c';
       } 
+      else if (type == "erase")
+      {
+        changeParticle('e', 0);
+      }
       else if(type == "fire")
       {
         changeParticle('f', 0);
@@ -261,6 +265,10 @@ class Button {
       if(type == "fire")
       {
         changeParticle('f', 1);
+      }
+      else if (type == "erase")
+      {
+        changeParticle('e', 1);
       }
       else if(type == "stone")
       {

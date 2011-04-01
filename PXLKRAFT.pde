@@ -33,6 +33,7 @@ final static int fire_max = 1000;
 final static int concrete_max = 600;
 final static int ice_max = 100;
 final static int firework_max = 100;
+final static int eraser_max = 2;
 int particleCount = 0;
 int arrowCount = 0;
 int waterCount = 0;
@@ -42,6 +43,7 @@ int fireCount = 0;
 int concreteCount = 0;
 int iceCount = 0;
 int fireworkCount = 0;
+int eraserCount = 0;
 
 int particleOpacity = 200;
 color[] firePalette;
@@ -59,6 +61,7 @@ Engine engine;
 float invWidth, invHeight;
 float cursorNormX, cursorNormY, cursorVelX, cursorVelY;
 color dye1, dye2, dye3;
+color cursor1Col, cursor2Col;
 
 UI ui;
 //Music button rollovers, they are in UI class because there is an error if they are put in the button class
@@ -83,8 +86,8 @@ void setup()
   frameRate(constantFPS);
   rectMode(CENTER);
 
-  minim = new Minim(this);
-  music = new Music();
+  //minim = new Minim(this);
+  //music = new Music();
 
   //tracking thread
   glob = new Glob(width, height + 50);
@@ -151,9 +154,13 @@ void setup()
     true, true, true, true
   };
   engine.setBoundaryCollision(true, bounds);
+  
+  emitters[0].createErasor(wand1);
+  emitters[1].createErasor(wand2);
 }
 void draw()
 {
+  println(wand2);
   if(!wandIsInput) //|| page != 'v'
   {
     readMouse();
@@ -187,8 +194,8 @@ void readMouse()
   case 'v':
     force1.set(pmouseX-mouseX, pmouseY-mouseY, 0);
     wand1Fluids();
-    music.movedMouse(wand1, wand2);
-    music.run(wand1);
+    //music.movedMouse(wand1, wand2);
+    //music.run(wand1);
     break; 
   case 'c':
     glob.calibrate();
@@ -248,8 +255,8 @@ void readWands()
 
     force2.set(wandP2.x - wand2.x, wandP2.y - wand2.y, 0);
 
-    music.movedMouse(wand1, wand2);
-    music.run(wand1);
+    //music.movedMouse(wand1, wand2);
+    //music.run(wand1);
     break;
   case 'c':
     glob.calibrate();
@@ -266,7 +273,7 @@ void readWands()
 }
 void wand1Fluids()
 {
-  if(wand1.x != wandP1.x || wand1.y != wandP1.y)
+  if((wand1.x != wandP1.x || wand1.y != wandP1.y) && wand1.x != -100)
   {
     cursorNormX = wand1.x * invWidth;
     cursorNormY = wand1.y * invHeight;
@@ -278,7 +285,7 @@ void wand1Fluids()
 }
 void wand2Fluids()
 {
-  if(wand2.x != wandP2.x || wand2.y != wandP2.y)
+  if((wand2.x != wandP2.x || wand2.y != wandP2.y) && wand2.x != -100)
   {
     cursorNormX = wand2.x * invWidth;
     cursorNormY = wand2.y * invHeight;
@@ -349,6 +356,10 @@ void changeParticle(char type, int wand)
     //things you can set for particles:
     //PVector birthPath, float sprayWidth, char type, int maxParticles, int lifeSpan (-1 = infinite), int envIndex, float birthRate
   case 'w':
+    if(emitters[wand].type == 'e')
+    {
+      emitters[wand].killEraser();
+    }
     emitters[wand].setType('w');
     emitters[wand].setLifeSpan(-1);
     emitters[wand].setBirthRate(0.8);
@@ -356,13 +367,21 @@ void changeParticle(char type, int wand)
     setHSB(233,1,1,wand+1);
     break;
   case 'o':
+    if(emitters[wand].type == 'e')
+    {
+      emitters[wand].killEraser();
+    }
     emitters[wand].setType('o');
     emitters[wand].setLifeSpan(-1);
-    emitters[wand].setBirthRate(2);
+    emitters[wand].setBirthRate(.8);
     emitters[wand].setBirthForce(new PVector(0,5));
     setHSB(37,1,.58,wand+1);
     break;
   case 's':
+    if(emitters[wand].type == 'e')
+    {
+      emitters[wand].killEraser();
+    }
     emitters[wand].setType('s');
     emitters[wand].setLifeSpan(-1);
     emitters[wand].setBirthRate(0.2);
@@ -370,6 +389,10 @@ void changeParticle(char type, int wand)
     setHSB(50,1,1,wand+1);
     break;
   case 'f':
+    if(emitters[wand].type == 'e')
+    {
+      emitters[wand].killEraser();
+    }
     emitters[wand].setType('f');
     emitters[wand].setLifeSpan(600);
     emitters[wand].calcAndSetRate(100);
@@ -378,6 +401,10 @@ void changeParticle(char type, int wand)
     setHSB(0,1,1,wand+1);
     break;
   case 'c':
+    if(emitters[wand].type == 'e')
+    {
+      emitters[wand].killEraser();
+    }
     emitters[wand].setType('c');
     emitters[wand].setLifeSpan(-1);
     emitters[wand].setBirthRate(1);
@@ -385,6 +412,10 @@ void changeParticle(char type, int wand)
     setHSB(233,0,0.68,wand+1);
     break;
   case 'i':
+    if(emitters[wand].type == 'e')
+    {
+      emitters[wand].killEraser();
+    }
     emitters[wand].setType('i');
     emitters[wand].setLifeSpan(1200);
     emitters[wand].calcAndSetRate(ice_max);
@@ -392,11 +423,23 @@ void changeParticle(char type, int wand)
     setHSB(178,1,1,wand+1);
     break;
   case 'k':
+    if(emitters[wand].type == 'e')
+    {
+      emitters[wand].killEraser();
+    }
     emitters[wand].setType('k');
     emitters[wand].setLifeSpan(-1);
     emitters[wand].setBirthRate(0.3);
     emitters[wand].setBirthForce(new PVector(0,5));
     setHSB(290,1,1,wand+1);
+    break;
+  case 'e':
+    emitters[wand].setType('e');
+    emitters[wand].setLifeSpan(-1);
+    emitters[wand].setBirthRate(0);
+    if(emitters[wand].isOn)
+      emitters[wand].turnOn();
+    setHSB(0,1,1, wand+1);
     break;
   default:
     break;
@@ -418,5 +461,26 @@ void setHSB(int h, float s, float b, int wand)
     dye3 = color(h,s,b);
   }
   colorMode(RGB, 255);
+}
+void stop()
+{
+  // always close Minim audio classes when you are done with them
+  //music.groove[music.rhythm].close();
+  //glob.running = false;
+
+  // always stop Minim before exiting.
+  //minim.stop();
+  String OS = System.getProperty("os.name");
+  super.stop();
+  
+  try {
+    if (OS.startsWith("Windows")) {
+      String pidstr = java.lang.management.ManagementFactory.getRuntimeMXBean().getName();
+      String pid[] = pidstr.split("@");
+      Runtime.getRuntime().exec("taskkill /F /PID " + pid[0]).waitFor();
+    }
+  } 
+  catch (Exception e) {
+  }
 }
 
