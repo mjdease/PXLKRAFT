@@ -185,6 +185,7 @@ class Button {
             ui.Main.buttonArray[k] = ui.Main.mainArray[k];
           }
         }
+        reset();
         page = 'u';
       }
       else if(type == "calib")

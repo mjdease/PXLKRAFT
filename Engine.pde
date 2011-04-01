@@ -67,33 +67,45 @@ class Engine
       image(imgFluid, 0, 0, width, height);
     }
     fluidSolver.update();
-
-    if(emitters != null && emitters.length >0)
+    if(page == 'v')
     {
-      checkCollisions();
-      for(int i=0; i<emitters.length; i++)
+      if(emitters != null && emitters.length >0)
       {
-        emitters[i].create();
-        emitters[i].emit();
+        checkCollisions();
+        for(int i=0; i<emitters.length; i++)
+        {
+          emitters[i].create();
+          emitters[i].emit();
+        }
+        for (int i = burstEmitters.size() - 1 ; i >= 0; i--)
+        {
+          Emitter burst = (Emitter) burstEmitters.get(i);
+          burst.create();
+          if(burst.isOn)
+            burst.turnOff();
+          burst.emit();
+          if(burst.birthTime + burst.lifeSpan +500 < millis())
+            burstEmitters.remove(i);
+        }
       }
-      for (int i = burstEmitters.size() - 1 ; i >= 0; i--)
+      if(frameCount%30 == 0)
       {
-        Emitter burst = (Emitter) burstEmitters.get(i);
-        burst.create();
-        if(burst.isOn)
-          burst.turnOff();
-        burst.emit();
-        if(burst.birthTime + burst.lifeSpan +500 < millis())
-          burstEmitters.remove(i);
+        //println(frameRate);
+        updateAllObjs();
       }
+      //println(allObjs.size());
+      allObjs.updateAll();
     }
-    if(frameCount%30 == 0)
+  }
+  void updateAllObjs()
+  {
+    Iterator it = allObjs.iterator();
+    while(it.hasNext())
     {
-      //println(frameRate);
-      //updateAllObjs();
+      Particle item = (Particle) it.next();
+      if(item.isDead)
+        it.remove();
     }
-    //println(allObjs.size());
-    allObjs.updateAll();
   }
 
   //collision detection
@@ -108,7 +120,9 @@ class Engine
         {
           Particle part = (Particle) emitters[i].p.get(j);
           if(part.type == 'e')
+          {
             continue;
+          }
           // right bounds collision
           if(boundsSet[0] && part.loc.x > width - part.radius)
           {

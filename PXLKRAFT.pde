@@ -90,7 +90,7 @@ void setup()
   //music = new Music();
 
   //tracking thread
-  glob = new Glob(width, height + 50);
+  glob = new Glob(width, height);
   wrapper = new Thread(glob);
   wrapper.start();
 
@@ -157,10 +157,37 @@ void setup()
   
   emitters[0].createErasor(wand1);
   emitters[1].createErasor(wand2);
+
+}
+void reset()
+{
+  emitters[0] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'w', 0.2);
+  emitters[1] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'f', 0.2);
+  setHSB(233, 1,1,1);
+  setHSB(0, 1,1,2);
+  setHSB(58, 1,1,3);
+  changeParticle('w', 0);
+  changeParticle('f', 1);
+  
+  emitters[0].turnOff();
+  emitters[1].turnOff();
+  println(emitters[0].isOn);
+  
+  emitters[0].p = new ArrayList();
+  emitters[1].p = new ArrayList();
+  
+  Iterator it = engine.allObjs.iterator();
+  while(it.hasNext())
+  {
+    Particle item = (Particle) it.next();
+    it.remove();
+  }
+  
+  emitters[0].createErasor(wand1);
+  emitters[1].createErasor(wand2);
 }
 void draw()
 {
-  println(wand2);
   if(!wandIsInput) //|| page != 'v'
   {
     readMouse();
@@ -169,6 +196,10 @@ void draw()
   {
     readWands();
   }
+  if(page == 'c')
+    cursor();
+  else
+    noCursor();
   force1.normalize();
   force1.mult(-3);
   force1.add(emitters[0].birthForce);
@@ -254,9 +285,10 @@ void readWands()
     force1.set(wandP1.x - wand1.x, wandP1.y - wand1.y, 0);
 
     force2.set(wandP2.x - wand2.x, wandP2.y - wand2.y, 0);
-
+    
     //music.movedMouse(wand1, wand2);
     //music.run(wand1);
+    
     break;
   case 'c':
     glob.calibrate();
