@@ -103,10 +103,11 @@ class Water extends Particle
           }
           break;
         }
-        else
+        else if(this.isFrozen && otherParticle.isFrozen)
         {
-          bounce(otherParticle);
         }
+        else
+          bounce(otherParticle);
         if(!otherParticle.isFrozen && !this.isFrozen)
         {
           this.freezeBuffer--;
