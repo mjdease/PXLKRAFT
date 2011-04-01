@@ -177,6 +177,7 @@ class UI
       if(Hue >= 1000)
         Hue = 0;
       fill(Hue,255,255,40);
+      dye1 = color(Hue,255,255,40);
       noStroke();
       rect(cursorX-100,0,200,cursorY-100);
       rect(cursorX+100,cursorY-100,width-cursorX+100,200);

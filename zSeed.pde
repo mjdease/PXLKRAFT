@@ -1,6 +1,9 @@
 class Seed extends Particle
 {
-  
+  boolean branch1 = false;
+  boolean branch2 = false;
+  float inc = PI/4;
+  float angle = 0.0;
   //default constructor
   Seed()
   {
@@ -23,11 +26,24 @@ class Seed extends Particle
   {
     if(isPlanted && isSource)
     {
-      if(plantIndex%6 == 0 && plantIndex<plantHeight)
+      if(plantIndex%8 == 0 && plantIndex<plantHeight && !stopGrowing)
       {
-        emitters[0].createPlant(new PVector(this.loc.x, this.loc.y - (plantIndex)));
+        angle+=inc;
+        emitters[0].createPlant(new PVector(this.loc.x + sin(angle)*6, this.loc.y - (plantIndex)));
+        if(plantIndex == 96)
+          branch1 = true;
+        if(plantIndex == 192)
+          branch2 = true;
+        if(branch1 && plantIndex<128)
+        {
+          emitters[0].createPlant(new PVector(this.loc.x - (plantIndex-96), this.loc.y - (plantIndex)));
+        }
+        if(branch2 && plantIndex<222)
+        {
+          emitters[0].createPlant(new PVector(this.loc.x + (plantIndex-192), this.loc.y - (plantIndex)));
+        }
       }
-      plantIndex+=6;
+      plantIndex+=8;
     }
     else if(isPlanted)
     {}
@@ -53,7 +69,7 @@ class Seed extends Particle
             //bounce(otherParticle);
           break;
         case 'o': //collided with a oil particle
-          bounce(otherParticle);
+          //bounce(otherParticle);
           break;
         case 's': //collided with a seed particle
           //bounce(otherParticle);
@@ -63,6 +79,7 @@ class Seed extends Particle
           break;
         case 'c': //collided with a concrete particle
           bounce(otherParticle);
+          this.stopGrowing = true;
           break;
         case 'i': //collided with a ice particle
           bounce(otherParticle);

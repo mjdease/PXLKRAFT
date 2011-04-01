@@ -25,15 +25,15 @@ class Page{
   buttonArray[1] = mainArray[1];
   buttonArray[2] = mainArray[2];
   
-  gameArray[0] = new Button ("exit", 0, height);
-  gameArray[1] = new Button ("erase", width/2 - 63*4, height);
-  gameArray[2] = new Button ("stone", width/2 - 63*3, height);
-  gameArray[3] = new Button ("ice",   width/2 - 63*2, height);
-  gameArray[4] = new Button ("works", width/2 - 63, height);
-  gameArray[5] = new Button ("oil", width/2, height);
-  gameArray[6] = new Button ("water", width/2 + 63, height);
-  gameArray[7] = new Button ("fire", width/2 + 63*2, height);
-  gameArray[8] = new Button ("seed", width/2 + 63*3, height);
+  gameArray[0] = new Button ("exit", 0, -63);
+  gameArray[1] = new Button ("erase", width/2 - 63*4, -63);
+  gameArray[2] = new Button ("stone", width/2 - 63*3, -63);
+  gameArray[3] = new Button ("ice",   width/2 - 63*2, -63);
+  gameArray[4] = new Button ("works", width/2 - 63, -63);
+  gameArray[5] = new Button ("oil", width/2, -63);
+  gameArray[6] = new Button ("water", width/2 + 63, -63);
+  gameArray[7] = new Button ("fire", width/2 + 63*2, -63);
+  gameArray[8] = new Button ("seed", width/2 + 63*3, -63);
   }
   
   void run(){

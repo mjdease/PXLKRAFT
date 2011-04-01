@@ -124,19 +124,6 @@ class Emitter
       {
         switch(type)
         {
-          /*particle Types:
-            p - base particle
-            a - arrow (don't use)
-            
-            w - water
-            o - oil
-            s - seeds
-            f - fire
-            c - concrete
-            i - ice
-            k - fireworks
-            l - plants
-          */
           case 'p':
             temp = new Particle(random(9, 12), color(random(255,180), random(120,160), random(0, 30), particleOpacity), lifeSpan, 0.98, type);
             initParticle(temp);
@@ -153,7 +140,7 @@ class Emitter
             waterCount++;
             break;
           case 'o':
-            temp = new Oil(random(7, 10), color(random(170, 190), random(110,125), random(20,40), particleOpacity), lifeSpan, 0.98, type);
+            temp = new Oil(random(7, 10), color(random(190,210), random(65,80), random(220,230), particleOpacity), lifeSpan, 0.98, type);
             initParticle(temp);
             oilCount++;
             break;
@@ -189,7 +176,7 @@ class Emitter
             iceCount++;
             break;
           case 'k':
-            temp = new Firework(random(3, 5), color(random(190,210), random(65,80), random(220,230), particleOpacity), lifeSpan, 0.98, type);
+            temp = new Firework(random(3, 5), color(random(170, 190), random(110,125), random(20,40), particleOpacity), lifeSpan, 0.98, type);
             initParticle(temp);
             fireworkCount++;
             break;
@@ -261,7 +248,7 @@ class Emitter
   }
   void createPlant(PVector location)
   {
-    temp = new Seed(random(3, 6), color(random(75,95), random(220,240), random(10,30), 255), -1, 0.98, 's');
+    temp = new Seed(random(4, 6), color(random(75,95), random(220,240), random(10,30), 255), -1, 0.98, 's');
     temp.loc = location;
     temp.birthTime = millis();
     temp.vel = new PVector(0,0);

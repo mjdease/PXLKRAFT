@@ -50,6 +50,8 @@ class Oil extends Particle
           bounce(otherParticle);
           break;
         case 's': //collided with a seed particle
+          if(otherParticle.isPlanted)
+            break;
           bounce(otherParticle);
           break;
         case 'f': //collided with a fire particle

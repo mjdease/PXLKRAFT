@@ -28,11 +28,11 @@ final static int arrow_max = 200;
 
 final static int water_max = 800;
 final static int oil_max = 400;
-final static int seed_max = 100;
+final static int seed_max = 30;
 final static int fire_max = 1000;
 final static int concrete_max = 600;
 final static int ice_max = 100;
-final static int firework_max = 100;
+final static int firework_max = 200;
 final static int eraser_max = 2;
 int particleCount = 0;
 int arrowCount = 0;
@@ -171,7 +171,6 @@ void reset()
   
   emitters[0].turnOff();
   emitters[1].turnOff();
-  println(emitters[0].isOn);
   
   emitters[0].p = new ArrayList();
   emitters[1].p = new ArrayList();
@@ -407,7 +406,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setLifeSpan(-1);
     emitters[wand].setBirthRate(.8);
     emitters[wand].setBirthForce(new PVector(0,5));
-    setHSB(37,1,.58,wand+1);
+    setHSB(290,1,1,wand+1);
     break;
   case 's':
     if(emitters[wand].type == 'e')
@@ -416,7 +415,7 @@ void changeParticle(char type, int wand)
     }
     emitters[wand].setType('s');
     emitters[wand].setLifeSpan(-1);
-    emitters[wand].setBirthRate(0.2);
+    emitters[wand].setBirthRate(0.15);
     emitters[wand].setBirthForce(new PVector(0,5));
     setHSB(50,1,1,wand+1);
     break;
@@ -427,10 +426,10 @@ void changeParticle(char type, int wand)
     }
     emitters[wand].setType('f');
     emitters[wand].setLifeSpan(600);
-    emitters[wand].calcAndSetRate(100);
+    emitters[wand].calcAndSetRate(75);
     emitters[wand].setBirthForce(new PVector(0,-7));
     emitters[wand].setSprayWidth(5);
-    setHSB(0,1,1,wand+1);
+    setHSB(20,1,1,wand+1);
     break;
   case 'c':
     if(emitters[wand].type == 'e')
@@ -461,9 +460,9 @@ void changeParticle(char type, int wand)
     }
     emitters[wand].setType('k');
     emitters[wand].setLifeSpan(-1);
-    emitters[wand].setBirthRate(0.3);
+    emitters[wand].setBirthRate(0.5);
     emitters[wand].setBirthForce(new PVector(0,5));
-    setHSB(290,1,1,wand+1);
+    setHSB(37,1,0.58,wand+1);
     break;
   case 'e':
     emitters[wand].setType('e');

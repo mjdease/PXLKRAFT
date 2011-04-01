@@ -108,20 +108,20 @@ class Button {
 
   void animate() {
     text("animating",20,20);
-    Y -= 6;
-    if( Y <= height - 63 - 50)
-      Y = height - 63 - 50;
+    Y += 6;
+    if( Y >= 0)
+      Y = 0;
   }
 
   void animateOut() {
-    Y += 6;
-    if( Y >= height )
-      Y = height ;
+    Y -= 6;
+    if( Y <= -63 )
+      Y = -63 ;
   }
 
   void run(int i) {
     image(b, X, Y);
-    if(ui.inGame == true && (wand1.y > height - 63 - 50 || wand2.y > height - 63 - 50))
+    if(ui.inGame == true && (wand1.y < 63 || wand2.y < 63))
     {
       animate();
     }
@@ -132,6 +132,7 @@ class Button {
     if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height && (glob.wand1Pressed() || mousePressed))
     {
       text(type,width/2,height/2);
+      setHSB(233, 1,1,1);
       if(type == "play")
       { 
         ui.inGame = true;        
