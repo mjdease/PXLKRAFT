@@ -19,6 +19,7 @@ class Seed extends Particle
     fill(col);
     noStroke();
     rect(0, 0, 2*radius, 2*radius);
+    rotate(rotation);
   }
     
   //moves particle - (overrides Particle move())
@@ -29,18 +30,21 @@ class Seed extends Particle
       if(plantIndex%8 == 0 && plantIndex<plantHeight)
       {
         angle+=inc;
-        emitters[0].createPlant(new PVector(this.loc.x + sin(angle)*6, this.loc.y - (plantIndex)));
+        if(plantIndex + 8 >= plantHeight)
+          emitters[0].createPlant(new PVector(this.loc.x + sin(angle)*6, this.loc.y - (plantIndex)), true);
+        else
+          emitters[0].createPlant(new PVector(this.loc.x + sin(angle)*6, this.loc.y - (plantIndex)), false);
         if(plantIndex == 96)
           branch1 = true;
         if(plantIndex == 192)
           branch2 = true;
         if(branch1 && plantIndex<128)
         {
-          emitters[0].createPlant(new PVector(this.loc.x - (plantIndex-96), this.loc.y - (plantIndex)));
+          emitters[0].createPlant(new PVector(this.loc.x - (plantIndex-96), this.loc.y - (plantIndex)), false);
         }
         if(branch2 && plantIndex<222)
         {
-          emitters[0].createPlant(new PVector(this.loc.x + (plantIndex-192), this.loc.y - (plantIndex)));
+          emitters[0].createPlant(new PVector(this.loc.x + (plantIndex-192), this.loc.y - (plantIndex)), false);
         }
       }
       plantIndex+=8;

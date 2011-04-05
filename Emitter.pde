@@ -36,7 +36,7 @@ class Emitter
   PVector concretePPos = new PVector(-100, -100);
   boolean firstEmit = true;
   boolean isFirework = false;
-  
+
   //default constructor
   Emitter()
   {
@@ -251,9 +251,18 @@ class Emitter
     p.add(temp);
     engine.allObjs.add(temp);
   }
-  void createPlant(PVector location)
+  void createPlant(PVector location, boolean flower)
   {
+    if(flower)
+    {
+      int randomCol = int(random(0,5));
+      temp = new Seed(random(8, 10), flowerColor[randomCol], -1, 0.98, 's');
+      temp.rotation = PI/4;
+    }
+    else
+    {
     temp = new Seed(random(4, 6), color(random(75,95), random(220,240), random(10,30), 255), -1, 0.98, 's');
+    }
     temp.loc = location;
     temp.birthTime = millis();
     temp.vel = new PVector(0,0);

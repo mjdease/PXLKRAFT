@@ -37,6 +37,7 @@ class Particle extends Sprite implements Locatable
   int plantBuffer = 0;
   int plantIndex = 0;
   int plantHeight = int(random(100, 250));
+  float rotation = 0;
   
 
   //default constructor

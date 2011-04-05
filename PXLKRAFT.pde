@@ -45,6 +45,7 @@ int fireworkCount = 0;
 
 int particleOpacity = 200;
 color[] firePalette;
+color[] flowerColor;
 
 boolean wandIsInput = false;
 char page = 'u'; //v=visualization, c=calibration, m=music, u=mainmenu
@@ -130,6 +131,12 @@ void setup()
   }
   colorMode(RGB);
   //end code from http://processing.org/learning/topics/firecube.html
+  flowerColor = new color[5];
+  flowerColor[0] = color(255,255,255);
+  flowerColor[1] = color(218,11,48);
+  flowerColor[2] = color(254,227,21);
+  flowerColor[3] = color(255,127,33);
+  flowerColor[4] = color(150,143,214);
 
   //instantiate Environments
   //Environment(float gravity, float friction, PVector wind, float resistance, float turbulence)
