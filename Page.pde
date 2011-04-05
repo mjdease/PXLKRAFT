@@ -2,10 +2,10 @@ class Page{
   float tlength;
   float margin;
   float theight;
-  Button[] buttonArray = new Button[9];
+  Button[] buttonArray = new Button[10];
   Button[] mainArray = new Button[3];
-  Button[] musicArray = new Button[7];
-  Button[] gameArray = new Button[9];
+  Button[] musicArray = new Button[9];
+  Button[] gameArray = new Button[10];
   Button[] calibArray = new Button[0];
 
   Page(){ 
@@ -20,20 +20,23 @@ class Page{
   musicArray[4] = new Button("rhy3",width/2 - 170, height/2 + 75 + 20);
   musicArray[5] = new Button("rhy4",width/2 + 20 , height/2 + 75 + 20);
   musicArray[6] = new Button("back",width - 200, height - 200);
+  musicArray[7] = new Button("noMel",width/2 + 200, height/2 - 120);
+  musicArray[8] = new Button("noRhy",width/2 + 200, height/2 + 20);
   
   buttonArray[0] = mainArray[0];
   buttonArray[1] = mainArray[1];
   buttonArray[2] = mainArray[2];
   
-  gameArray[0] = new Button ("exit", 0, -63);
-  gameArray[1] = new Button ("erase", width/2 - 63*4, -63);
-  gameArray[2] = new Button ("stone", width/2 - 63*3, -63);
-  gameArray[3] = new Button ("ice",   width/2 - 63*2, -63);
-  gameArray[4] = new Button ("works", width/2 - 63, -63);
-  gameArray[5] = new Button ("oil", width/2, -63);
-  gameArray[6] = new Button ("water", width/2 + 63, -63);
-  gameArray[7] = new Button ("fire", width/2 + 63*2, -63);
-  gameArray[8] = new Button ("seed", width/2 + 63*3, -63);
+  gameArray[0] = new Button ("exit", 0, -80);
+  gameArray[1] = new Button ("erase",126, -80);
+  gameArray[2] = new Button ("stone", 229, -80);
+  gameArray[3] = new Button ("ice",  332, -80);
+  gameArray[4] = new Button ("works", 435, -80);
+  gameArray[5] = new Button ("oil", 538, -80);
+  gameArray[6] = new Button ("water", 615, -80);
+  gameArray[7] = new Button ("fire", 692, -80);
+  gameArray[8] = new Button ("seed", 769, -80);
+  gameArray[9] = new Button ("clear", 956, -80);
   }
   
   void run(){

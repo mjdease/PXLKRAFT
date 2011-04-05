@@ -1,11 +1,15 @@
 class Music
 {
-  AudioPlayer[] groove = new AudioPlayer[3];
-  AudioSample[] groove2 = new AudioSample[24];
+  AudioPlayer[] groove = new AudioPlayer[4];
+  AudioSample[][] groove2 = new AudioSample[2][24];
+
+  
   //WaveformRenderer waveform;
   LowPassFS bpf;
   int wfwidth;
   int rhythm;
+  int melody;
+  boolean noMelody = false;
   float distance;
   PVector pv1, pv2;
   PVector dist1, dist2;
@@ -21,37 +25,66 @@ class Music
     dir1 = new PVector(0,0);
     dir2 = new PVector(0,0);
     rhythm = 0;
+    melody = 0;
+    
 
-    groove[0] = minim.loadFile("data/sound/Rhythm_Track_1.mp3", 512);
-    groove[1] = minim.loadFile("data/sound/Rhythm_Track_2.mp3", 512);
-    groove[2] = minim.loadFile("data/sound/Rhythm_Track_3.mp3", 512);
-    groove[rhythm].setGain(12);
-    groove2[0] = minim.loadSample("data/sound/melody 1/1.mp3", 512);
-    groove2[1] = minim.loadSample("data/sound/melody 1/2.mp3", 512);
-    groove2[2] = minim.loadSample("data/sound/melody 1/3.mp3", 512);
-    groove2[3] = minim.loadSample("data/sound/melody 1/4.mp3", 512);
-    groove2[4] = minim.loadSample("data/sound/melody 1/5.mp3", 512);
-    groove2[5] = minim.loadSample("data/sound/melody 1/6.mp3", 512);
-    groove2[6] = minim.loadSample("data/sound/melody 1/7.mp3", 512);
-    groove2[7] = minim.loadSample("data/sound/melody 1/8.mp3", 512);
-    groove2[8] = minim.loadSample("data/sound/melody 1/9.mp3", 512);
-    groove2[9] = minim.loadSample("data/sound/melody 1/10.mp3", 512);
-    groove2[10] = minim.loadSample("data/sound/melody 1/11.mp3", 512);
-    groove2[11] = minim.loadSample("data/sound/melody 1/12.mp3", 512);
-    groove2[12] = minim.loadSample("data/sound/melody 1/13.mp3", 512);
-    groove2[13] = minim.loadSample("data/sound/melody 1/14.mp3", 512);
-    groove2[14] = minim.loadSample("data/sound/melody 1/15.mp3", 512);
-    groove2[15] = minim.loadSample("data/sound/melody 1/16.mp3", 512);
-    groove2[16] = minim.loadSample("data/sound/melody 1/17.mp3", 512);
-    groove2[17] = minim.loadSample("data/sound/melody 1/18.mp3", 512);
-    groove2[18] = minim.loadSample("data/sound/melody 1/19.mp3", 512);
-    groove2[19] = minim.loadSample("data/sound/melody 1/20.mp3", 512);
-    groove2[20] = minim.loadSample("data/sound/melody 1/21.mp3", 512);
-    groove2[21] = minim.loadSample("data/sound/melody 1/22.mp3", 512);
-    groove2[22] = minim.loadSample("data/sound/melody 1/23.mp3", 512);
-    groove2[23] = minim.loadSample("data/sound/melody 1/24.mp3", 512);
-
+    groove[0] = minim.loadFile("data/sound/Rhythm_Track_1.mp3", 1024);
+    groove[1] = minim.loadFile("data/sound/Rhythm_Track_2.mp3", 1024);
+    groove[2] = minim.loadFile("data/sound/Rhythm_Track_3.mp3", 1024);
+    groove[3] = minim.loadFile("data/sound/Rhythm_Track_4.mp3", 1024);
+       
+    groove2[0][0] = minim.loadSample("data/sound/melody 2/1.mp3", 1024);
+    groove2[0][1] = minim.loadSample("data/sound/melody 2/2.mp3", 1024);
+    groove2[0][2] = minim.loadSample("data/sound/melody 2/3.mp3", 1024);
+    groove2[0][3] = minim.loadSample("data/sound/melody 2/4.mp3", 1024);
+    groove2[0][4] = minim.loadSample("data/sound/melody 2/5.mp3", 1024);
+    groove2[0][5] = minim.loadSample("data/sound/melody 2/6.mp3", 1024);
+    groove2[0][6] = minim.loadSample("data/sound/melody 2/7.mp3", 1024);
+    groove2[0][7] = minim.loadSample("data/sound/melody 2/8.mp3", 1024);
+    groove2[0][8] = minim.loadSample("data/sound/melody 2/9.mp3", 1024);
+    groove2[0][9] = minim.loadSample("data/sound/melody 2/10.mp3", 1024);
+    groove2[0][10] = minim.loadSample("data/sound/melody 2/11.mp3", 1024);
+    groove2[0][11] = minim.loadSample("data/sound/melody 2/12.mp3", 1024);
+    groove2[0][12] = minim.loadSample("data/sound/melody 2/13.mp3", 1024);
+    groove2[0][13] = minim.loadSample("data/sound/melody 2/14.mp3", 1024);
+    groove2[0][14] = minim.loadSample("data/sound/melody 2/15.mp3", 1024);
+    groove2[0][15] = minim.loadSample("data/sound/melody 2/16.mp3", 1024);
+    groove2[0][16] = minim.loadSample("data/sound/melody 2/17.mp3", 1024);
+    groove2[0][17] = minim.loadSample("data/sound/melody 2/18.mp3", 1024);
+    groove2[0][18] = minim.loadSample("data/sound/melody 2/19.mp3", 1024);
+    groove2[0][19] = minim.loadSample("data/sound/melody 2/20.mp3", 1024);
+    groove2[0][20] = minim.loadSample("data/sound/melody 2/21.mp3", 1024);
+    groove2[0][21] = minim.loadSample("data/sound/melody 2/22.mp3", 1024);
+    groove2[0][22] = minim.loadSample("data/sound/melody 2/23.mp3", 1024);
+    groove2[0][23] = minim.loadSample("data/sound/melody 2/24.mp3", 1024);
+    
+    groove2[1][0] = minim.loadSample("data/sound/melody 1/1.mp3", 1024);
+    groove2[1][1] = minim.loadSample("data/sound/melody 1/2.mp3", 1024);
+    groove2[1][2] = minim.loadSample("data/sound/melody 1/3.mp3", 1024);
+    groove2[1][3] = minim.loadSample("data/sound/melody 1/4.mp3", 1024);
+    groove2[1][4] = minim.loadSample("data/sound/melody 1/5.mp3", 1024);
+    groove2[1][5] = minim.loadSample("data/sound/melody 1/6.mp3", 1024);
+    groove2[1][6] = minim.loadSample("data/sound/melody 1/7.mp3", 1024);
+    groove2[1][7] = minim.loadSample("data/sound/melody 1/8.mp3", 1024);
+    groove2[1][8] = minim.loadSample("data/sound/melody 1/9.mp3", 1024);
+    groove2[1][9] = minim.loadSample("data/sound/melody 1/10.mp3", 1024);
+    groove2[1][10] = minim.loadSample("data/sound/melody 1/11.mp3", 1024);
+    groove2[1][11] = minim.loadSample("data/sound/melody 1/12.mp3", 1024);
+    groove2[1][12] = minim.loadSample("data/sound/melody 1/13.mp3", 1024);
+    groove2[1][13] = minim.loadSample("data/sound/melody 1/14.mp3", 1024);
+    groove2[1][14] = minim.loadSample("data/sound/melody 1/15.mp3", 1024);
+    groove2[1][15] = minim.loadSample("data/sound/melody 1/16.mp3", 1024);
+    groove2[1][16] = minim.loadSample("data/sound/melody 1/17.mp3", 1024);
+    groove2[1][17] = minim.loadSample("data/sound/melody 1/18.mp3", 1024);
+    groove2[1][18] = minim.loadSample("data/sound/melody 1/19.mp3", 1024);
+    groove2[1][19] = minim.loadSample("data/sound/melody 1/20.mp3", 1024);
+    groove2[1][20] = minim.loadSample("data/sound/melody 1/21.mp3", 1024);
+    groove2[1][21] = minim.loadSample("data/sound/melody 1/22.mp3", 1024);
+    groove2[1][22] = minim.loadSample("data/sound/melody 1/23.mp3", 1024);
+    groove2[1][23] = minim.loadSample("data/sound/melody 1/24.mp3", 1024);
+    
     groove[rhythm].loop();
+    
     //waveform = new WaveformRenderer();
     //groove.addListener(waveform);
     bpf = new LowPassFS(2000, groove[rhythm].sampleRate());
@@ -60,6 +93,15 @@ class Music
   }
   void run(PVector wand1)
   {
+    groove[rhythm].setGain(6);
+     for (int i=0; i<= 23; i++)
+    {
+      groove2[0][i].setGain(-3);
+    }
+    
+    
+    if(noMelody)
+      return;
     //println(wandP1+"+"+wand1);
     if(frameCount % 2 == 0)
     { 
@@ -188,24 +230,24 @@ class Music
       if (heightgrid <=1)
       {  
         //rect(0,0,171,192);
-        groove2[0].trigger();
+        groove2[melody][0].trigger();
       }
 
       if (heightgrid <=2 && heightgrid > 1)
       {
-        groove2[3].trigger();
+        groove2[melody][3].trigger();
         //rect(0,192,171,192);
       }
 
       if (heightgrid <=3 && heightgrid > 2)
       {
-        groove2[6].trigger();
+        groove2[melody][6].trigger();
         //rect(0,384,171,192);
       }
 
       if (heightgrid <=4 && heightgrid > 3)
       {
-        groove2[9].trigger();
+        groove2[melody][9].trigger();
         //rect(0,576,171,192);
       }
     }
@@ -216,24 +258,24 @@ class Music
       if (heightgrid <=1)
       {  
         //rect(171,0,171,192);
-        groove2[1].trigger();
+        groove2[melody][1].trigger();
       }
 
       if (heightgrid <=2 && heightgrid > 1)
       {
-        groove2[4].trigger();
+        groove2[melody][4].trigger();
         //rect(171,192,171,192);
       }
 
       if (heightgrid <=3 && heightgrid > 2)
       {
-        groove2[7].trigger();
+        groove2[melody][7].trigger();
         //rect(171,384,171,192);
       }
 
       if (heightgrid <=4 && heightgrid > 3)
       {
-        groove2[10].trigger();
+        groove2[melody][10].trigger();
         //rect(171,576,171,192);
       }
     }
@@ -244,24 +286,24 @@ class Music
       if (heightgrid <=1)
       {  
         //rect(342,0,171,192);
-        groove2[2].trigger();
+        groove2[melody][2].trigger();
       }
 
       if (heightgrid <=2 && heightgrid > 1)
       {
-        groove2[5].trigger();
+        groove2[melody][5].trigger();
         //rect(342,192,171,192);
       }
 
       if (heightgrid <=3 && heightgrid > 2)
       {
-        groove2[8].trigger();
+        groove2[melody][8].trigger();
         //rect(342,384,171,192);
       }
 
       if (heightgrid <=4 && heightgrid > 3)
       {
-        groove2[11].trigger();
+        groove2[melody][11].trigger();
         //rect(342,576,171,192);
       }
     }
@@ -272,24 +314,24 @@ class Music
       if (heightgrid <=1)
       {  
         //rect(513,0,171,192);
-        groove2[12].trigger();
+        groove2[melody][12].trigger();
       }
 
       if (heightgrid <=2 && heightgrid > 1)
       {
-        groove2[15].trigger();
+        groove2[melody][15].trigger();
         //rect(513,192,171,192);
       }
 
       if (heightgrid <=3 && heightgrid > 2)
       {
-        groove2[18].trigger();
+        groove2[melody][18].trigger();
         //rect(513,384,171,192);
       }
 
       if (heightgrid <=4 && heightgrid > 3)
       {
-        groove2[21].trigger();
+        groove2[melody][21].trigger();
         //rect(513,576,171,192);
       }
     }
@@ -300,24 +342,24 @@ class Music
       if (heightgrid <=1)
       {  
         //rect(684,0,171,192);
-        groove2[13].trigger();
+        groove2[melody][13].trigger();
       }
 
       if (heightgrid <=2 && heightgrid > 1)
       {
-        groove2[16].trigger();
+        groove2[melody][16].trigger();
         //rect(684,192,171,192);
       }
 
       if (heightgrid <=3 && heightgrid > 2)
       {
-        groove2[19].trigger();
+        groove2[melody][19].trigger();
         //rect(684,384,171,192);
       }
 
       if (heightgrid <=4 && heightgrid > 3)
       {
-        groove2[22].trigger();
+        groove2[melody][22].trigger();
         //rect(684,576,171,192);
       }
     }
@@ -328,24 +370,24 @@ class Music
       if (heightgrid <=1)
       {  
         //rect(855,0,171,192);
-        groove2[14].trigger();
+        groove2[melody][14].trigger();
       }
 
       if (heightgrid <=2 && heightgrid > 1)
       {
-        groove2[17].trigger();
+        groove2[melody][17].trigger();
         //rect(855,192,171,192);
       }
 
       if (heightgrid <=3 && heightgrid > 2)
       {
-        groove2[20].trigger();
+        groove2[melody][20].trigger();
         //rect(855,384,171,192);
       }
 
       if (heightgrid <=4 && heightgrid > 3)
       {
-        groove2[23].trigger();
+        groove2[melody][23].trigger();
         //rect(855,576,171,192);
       }
     }
@@ -358,15 +400,26 @@ class Music
   {
     playGridNote(1000, 200);
   }
-
-  void setRhythm(int i)
+  
+  void setMelody(int uimelody)
+  {
+    noMelody = false;
+    melody = uimelody; 
+  }
+  void setRhythm(int uirhythm)
   {
     groove[rhythm].pause();
-    rhythm = i;
-    groove[rhythm].setGain(12);
+    rhythm = uirhythm;
     groove[rhythm].loop();
-    bpf = new LowPassFS(2000, groove[rhythm].sampleRate());
-    groove[rhythm].addEffect(bpf);
+  }
+  void noRhythm()
+  {
+    groove[rhythm].pause();
+  }
+  
+  void noMelody()
+  {
+    noMelody = true;
   }
 }
 

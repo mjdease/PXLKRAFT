@@ -23,8 +23,6 @@ class UI
     textSize(20);
     //noCursor();
 
-    
-
     inGame = false;
     inMusic = false;
     inCalib = false;

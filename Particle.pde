@@ -147,10 +147,10 @@ class Particle extends Sprite implements Locatable
   }
   void bounce(Particle otherParticle)
   {
-    float newX = loc.x + vel.x;
-    float newY = loc.y + vel.y;
-    float otherNewX = otherParticle.loc.x + otherParticle.vel.x;
-    float otherNewY = otherParticle.loc.y + otherParticle.vel.y;
+    float newX = loc.x;
+    float newY = loc.y;
+    float otherNewX = otherParticle.loc.x;
+    float otherNewY = otherParticle.loc.y;
     
     float dx = otherNewX - newX; 
     float dy = otherNewY - newY;

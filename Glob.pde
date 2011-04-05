@@ -9,8 +9,9 @@ class Glob implements Runnable
   //background colour
   int rB,gB,bB;
   // wand 1 variables
-  int r1,g1,b1; //default colour
-  int r1c,g1c,b1c; // clicked colour
+  color wc1, wcp1; 
+  //int r1,g1,b1; //default colour
+  //int r1c,g1c,b1c; // clicked colour
   int x1,y1; // position
   int px1 = -1;
   int py1 = -1; //previous position
@@ -18,8 +19,9 @@ class Glob implements Runnable
   boolean isSet1;
   //PVector v1;  
   // wand 2 variables
-  int r2,g2,b2;
-  int r2c,g2c,b2c;
+  color wc2, wcp2;
+  //int r2,g2,b2;
+  //int r2c,g2c,b2c;
   int x2,y2;
   int px2 = -1;
   int py2 = -1;
@@ -62,7 +64,7 @@ class Glob implements Runnable
     // minimum glob size
     int minGlob = 10;
     
-    threshold = 100;
+    threshold = 10;
     
     wand = wandClick = 0;
     
@@ -100,7 +102,8 @@ class Glob implements Runnable
   
   void track()
   {
-    colorMode(RGB, 255);
+    pushStyle();
+    colorMode(HSB, 255);
     isSet1 = false;
     isSet2 = false;
     //println("running");
@@ -129,55 +132,49 @@ class Glob implements Runnable
       rr = int(red(c));
       gg = int(green(c));
       bb = int(blue(c));
-      //println("red"+rr+"green"+gg+"blue"+bb);
-      if(rr>r1c-threshold && rr<r1c+threshold && gg>g1c-threshold && gg<g1c+threshold && bb>b1c-threshold &&bb<b1c+threshold)
+      
+      if(hue(c)>hue(wc1)-threshold && hue(c)<hue(wc1)+threshold)
       {
-        rect(0, 0, 10, 10);
-        x1 = centroidX;
-        y1 = centroidY;
-        click1 = true;
-        isSet1=true;
-        //println("clicked 1 " + x1 + ":" + y1);
-        return;
-      }
-      if(rr>r2c-threshold && rr<r2c+threshold && gg>g2c-threshold && gg<g2c+threshold && bb>b2c-threshold &&bb<b2c+threshold)
-      {
-        rect(0, 0, 10, 10);
-        x2 = centroidX;
-        y2 = centroidY;
-        click2 = true;
-        isSet2=true;
-        //println("clicked 2 " + x2 + ":" + y2);
-        return;
-      }
-      if(rr>r1-threshold && rr<r1+threshold && gg>g1-threshold && gg<g1+threshold && bb>b1-threshold &&bb<b1+threshold)
-      {
-        rect(0, 0, 10, 10);
         x1 = centroidX;
         y1 = centroidY;
         click1 = false;
         isSet1=true;
-        //println("wand 1 " + x1 + ":" + y1);
-        return;
+        //println("wand 1 " + hue(wc1));
       }
-      if(rr>r2-threshold && rr<r2+threshold && gg>g2-threshold && gg<g2+threshold && bb>b2-threshold &&bb<b2+threshold)
+      else if(hue(c)>hue(wcp1)-threshold && hue(c)<hue(wcp1)+threshold)
       {
-        rect(0, 0, 10, 10);
+        x1 = centroidX;
+        y1 = centroidY;
+        click1 = true;
+        isSet1=true;
+        //println("clicked 1 " + hue(wcp1));
+      }
+      else if(hue(c)>hue(wc2)-threshold && hue(c)<hue(wc2)+threshold)
+      {
         x2 = centroidX;
         y2 = centroidY;
         click2 = false;
         isSet2=true;
-        //println("wand 2 " + x2 + ":" + y2);
-        return;
+        //println("wand 2 " + hue(wc2));
+      }
+      else if(hue(c)>hue(wcp2)-threshold && hue(c)<hue(wcp2)+threshold)
+      {
+        x2 = centroidX;
+        y2 = centroidY;
+        click2 = true;
+        isSet2=true;
+        //println("clicked 2 " + hue(wcp2));
       }
     }
+    popStyle();
+    return;
   }
   
   PVector getPos1()
   {
     if(!isSet1)
     {
-      vector.set(-100 , -100 , 0);
+      vector.set(-100 , -100 , 0);//round(px1 * wr) , round(py1 * hr) , 0);
      
       return vector;
     }
@@ -193,7 +190,7 @@ class Glob implements Runnable
   {
     if(!isSet2)
     {
-      vector2.set(-100 , -100 , 0);
+      vector2.set(-100 , -100 , 0);//round(px2 * wr) , round(py2 * hr) , 0
      
       return vector2;
     }
@@ -208,14 +205,12 @@ class Glob implements Runnable
   PVector getPPos1()
   {
       vector.set(round(px1 * wr) , round(py1 * hr) , 0);
-     
       return vector;
   }
   
   PVector getPPos2()
   {
       vector2.set(round(px2 * wr) , round(py2 * hr) , 0);
-     
       return vector2;
   }
   
@@ -266,59 +261,46 @@ class Glob implements Runnable
   
   void calibrate()
   {
-    colorMode(RGB, 255);
+    pushStyle();
+    colorMode(HSB, 255);
     m.update();
     img = m.cameraImage();
     pImg.loadPixels();
     for(int i =0;i<w*h;i++)
     {
-      //pImg.pixels[i%320+1024*(i/320)] = img[i];
       pImg.pixels[i] = img[i];
     }
-    //pImg.resize(1024, 768);
     pImg.updatePixels();
     image(pImg, 0, 0);
-    int c = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);
     
     //println(int(red(c))+"," + int(green(c)) + "," + int(blue(c)) + ":" + mouseX +";"+mouseY);
     if(mousePressed)
     {
       if (mouseButton == LEFT)
       {
-        r1 = int(red(c));
-        g1 = int(green(c));
-        b1 = int(blue(c));
-        wand =1;
-        println("Wand "+wand +":"+ r1+"," + g1+"," + b1);
+        wc1 = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);
+        println("Wand 1: "+ hue(wc1)+"," + saturation(wc1)+"," + brightness(wc1));
       }
       
       else if(mouseButton == RIGHT)
       {
-        r1c = int(red(c));
-        g1c = int(green(c));
-        b1c = int(blue(c));
-        wandClick =1;
-        println("Wand Click "+wandClick +":"+ r1c+"," + g1c + "," + b1c);
+        wcp1 = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);
+        println("Wand 1 Click: "+ hue(wcp1)+"," + saturation(wcp1)+"," + brightness(wcp1));
       }
     }
     if(keyPressed)
     {
-      if(key == 'x')
+      if(key == 'z')
       {
-        r2c = int(red(c));
-        g2c = int(green(c));
-        b2c = int(blue(c));
-        wandClick = 2;
-        println("Wand Click "+wandClick +":"+ r2c+"," + g2c + "," + b2c);
+        wc2 = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);
+        println("Wand 2: "+ hue(wc2)+"," + saturation(wc2)+"," + brightness(wc2));
       }
-      else if(key == 'z')
+      else if(key == 'x')
       {
-        r2 = int(red(c));
-        g2 = int(green(c));
-        b2 = int(blue(c));
-        wand = 2;
-        println("Wand "+wand +":"+ r2+"," + g2 + "," + b2);
+        wcp2 = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);
+        println("Wand 2 Click: "+ hue(wcp2)+"," + saturation(wcp2)+"," + brightness(wcp2));
       }
+      
       else if(key=='e')
       {
         ui.calibrationSuccess();
@@ -327,9 +309,18 @@ class Glob implements Runnable
       {
         println(m.version());
         println("ABOUT: SUNMOCK YANG, MATT DEASE, PAUL YOUNG, KYLE THORMPSON, GRAMBO FIRST BLOOD");
+        println("PRESS s FOR CAMERA SETTINGS");
+      }
+      else if(key=='c')
+      {
+        println("Wand 1: " + hue(wc1)+"," + saturation(wc1)+"," + brightness(wc1) + "\nClicked 1: " +hue(wcp1)+"," + saturation(wcp1)+"," + brightness(wcp1) + "\nWand 2: " + hue(wc2)+"," + saturation(wc2)+"," + brightness(wc2) + "\nClicked 2: " + hue(wcp2)+"," + saturation(wcp2)+"," + brightness(wcp2));
+      }
+      else if(key=='s')
+      {
+        m.settings();
       }
     }
-    //return m.cameraImage();
+    popStyle();
   }
   void quit()
   {

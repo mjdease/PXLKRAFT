@@ -7,7 +7,7 @@ class Engine
   ArrayList<Emitter> burstEmitters = new ArrayList<Emitter>();
 
   HashGrid allObjs;
-  static final int RADIUS = 40;
+  static final int RADIUS = 25;
 
   MSAFluidSolver2D fluidSolver;
   PImage imgFluid;
@@ -90,7 +90,7 @@ class Engine
       }
       if(frameCount%30 == 0)
       {
-        //println(frameRate);
+        println(frameRate);
         updateAllObjs();
       }
       //println(allObjs.size());

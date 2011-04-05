@@ -89,6 +89,11 @@ class Emitter
     //println(frameRate + " - " + birthRate + " - " + birthNum + " - " + birthRemainder + " - " + p.size());
     if(isOn && !isMaxed())
     {
+      for(int i = 0; i<ui.Main.gameArray.length; i++)
+      {
+        if(ui.Main.gameArray[i].isOverButton())
+          return;
+      }
       birthRemainder = birthRate + birthRemainder;
       birthNum = floor(birthRemainder);
       birthRemainder %= 1;
@@ -135,7 +140,7 @@ class Emitter
             arrowCount++;
             break;
           case 'w':
-            temp = new Water(random(8, 11), color(random(0,30), random(0,30), random(230, 255), particleOpacity), lifeSpan, 0.95, type);
+            temp = new Water(random(8, 10), color(random(0,30), random(0,30), random(230, 255), particleOpacity), lifeSpan, 0.95, type);
             initParticle(temp);
             waterCount++;
             break;
@@ -192,7 +197,7 @@ class Emitter
     if(numParticles == 1 || firstEmit)
     {
       
-      temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+      temp = new Concrete(15, color(175, 255), lifeSpan, 0.98, type);
       initParticle(temp);
       concreteCount++;
       if(firstEmit)
@@ -204,10 +209,10 @@ class Emitter
     float y = 0;
     for(int i = 1; i<=numParticles; i++)
     {
-      temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+      temp = new Concrete(15, color(175, 255), lifeSpan, 0.98, type);
       if(i==numParticles)
       {
-        temp = new Concrete(random(14, 16), color(175, 255), lifeSpan, 0.98, type);
+        temp = new Concrete(15, color(175, 255), lifeSpan, 0.98, type);
         initParticle(temp);
         concreteCount++;
         concretePPos.set(concretePos);

@@ -8,7 +8,18 @@ class Button {
   PImage backOver;
   PImage calibOver;
   PImage exitPic;
-
+  
+  //In game rollovers
+  PImage eraseO;
+  PImage stoneO;
+  PImage iceO;
+  PImage worksO;
+  PImage oilO;
+  PImage waterO;
+  PImage fireO;
+  PImage seedO;
+  PImage noMelO;
+  PImage noRhyO;
 
   int X;
   int Y;
@@ -27,6 +38,18 @@ class Button {
     musicOver = loadImage("musicOver.gif");
     backOver = loadImage("backOver.gif");
     calibOver = loadImage("calibOver.gif");
+    
+    //ingame rollovers
+    eraseO = loadImage("eraseO.gif");
+    stoneO = loadImage("stoneO.gif");
+    iceO = loadImage("iceO.gif");
+    worksO = loadImage("worksO.gif");
+    oilO = loadImage("oilO.gif");
+    waterO = loadImage("waterO.gif");
+    fireO = loadImage("fireO.gif");
+    seedO = loadImage("seedO.gif");
+    noMelO = loadImage("noMelO.gif");
+    noRhyO = loadImage("noRhyO.gif");
 
     //fills the b image with 
     if(inType == "play")
@@ -105,19 +128,34 @@ class Button {
     {
       b = loadImage("seed.gif");
     }
+    else if (inType == "clear")
+    {
+      b = loadImage("clear.gif");
+    }
+    else if (inType == "noMel")
+    {
+      b = loadImage("noMel.gif");
+    }
+    else if (inType == "noRhy")
+    {
+      b = loadImage("noRhy.gif");
+    }
   }
 
   void animate() {
-    //text("animating",20,20);
+    rect(0,0,width,Y);
     Y += 6;
     if( Y >= 0)
       Y = 0;
+      rect(0,0,width,Y);
   }
 
   void animateOut() {
+    rect(0,0,width,Y);
     Y -= 6;
-    if( Y <= -63 )
-      Y = -63 ;
+    if( Y <= -80 )
+      Y = -80 ;
+      
   }
 
   void run(int i) {
@@ -125,6 +163,7 @@ class Button {
     if(menuSoundBuffer >0)
       menuSoundBuffer--;
     if(ui.inGame == true && (wand1.y < 63 || wand2.y < 63))
+    //if(ui.inGame == true && mouseY < 102)
     {
       animate();
     }
@@ -144,7 +183,7 @@ class Button {
       { 
         setHSB(233, 1,1,1);
         ui.inGame = true;        
-        for(int k = 0; k < 9; k++)
+        for(int k = 0; k < 10; k++)
         {
           ui.Main.buttonArray[k] = ui.Main.gameArray[k];
         }
@@ -153,7 +192,7 @@ class Button {
       else if (type == "music")
       {
         ui.inMusic = true;
-        for(int k = 0; k < 9; k++)
+        for(int k = 0; k < 10; k++)
         {
           if(k > ui.Main.musicArray.length - 1)
           {
@@ -168,7 +207,7 @@ class Button {
       else if (type == "back")
       {
         ui.inMusic = false;
-        for (int k = 0; k < 9; k++)
+        for (int k = 0; k < 10; k++)
         {
           if( k > ui.Main.mainArray.length - 1)
           {
@@ -184,7 +223,7 @@ class Button {
       {
         ui.inGame = false;
         animateOut();
-        for (int k = 0; k < 9; k++)
+        for (int k = 0; k < 10; k++)
         {
           if( k > ui.Main.mainArray.length - 1)
           {
@@ -200,7 +239,7 @@ class Button {
       else if(type == "calib")
       {
         ui.inCalib = true;
-        for(int k = 0; k < 9; k++)
+        for(int k = 0; k < 10; k++)
         {
           if(k > ui.Main.calibArray.length - 1)
           {
@@ -258,15 +297,27 @@ class Button {
       }
       else if(type == "rhy4")
       {
-        //music.setRhythm(3);
+        music.setRhythm(3);
       }
       else if(type == "mel1")
       {
-        //music.rhythm = 0;
+        music.setMelody(0);
       }
       else if(type == "mel2")
       {
-        //music.rhythm = 0;
+        music.setMelody(1);
+      }
+      else if(type == "noMel")
+      {
+        music.noMelody();
+      }
+      else if(type == "noRhy")
+      {
+        music.noRhythm();
+      }
+      else if(type == "clear")
+      {
+        reset();
       }
     }
     //ingame ui buttons by either wand
@@ -304,6 +355,28 @@ class Button {
       {
         changeParticle('s', 1);
       }
+      else if(type == "clear")
+      {
+        reset();
+      }
+      else if(type == "exit")
+      {
+        ui.inGame = false;
+        animateOut();
+        for (int k = 0; k < 10; k++)
+        {
+          if( k > ui.Main.mainArray.length - 1)
+          {
+            ui.Main.buttonArray[k] = null;
+          }
+          else {
+            ui.Main.buttonArray[k] = ui.Main.mainArray[k];
+          }
+        }
+        reset();
+        page = 'u';
+      }
+      
     }
     else if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height)
     {
@@ -347,7 +420,56 @@ class Button {
       {
         image(mel2Over, X, Y);
       }
+      else if(type == "erase")
+      {
+        image(eraseO,X,Y);
+      }
+      else if(type == "stone")
+      {
+        image(stoneO,X,Y);
+      }
+      else if(type == "ice")
+      {
+        image(iceO,X,Y);
+      }
+      else if(type == "works")
+      {
+        image(worksO,X,Y);
+      }
+      else if(type == "oil")
+      {
+        image(oilO,X,Y);
+      }
+      else if(type == "water")
+      {
+        image(waterO,X,Y);
+      }
+      else if(type == "fire")
+      {
+        image(fireO,X,Y);
+      }
+      else if(type == "seed")
+      {
+        image(seedO,X,Y);
+      }
+      else if(type == "noMel")
+      {
+        image(noMelO,X,Y);
+      }
+      else if(type == "noRhy")
+      {
+        image(noRhyO,X,Y);
+      }
     }
+  }
+  boolean isOverButton()
+  {
+    if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height)
+      return true;
+    else if(ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height)
+      return true;
+    else
+      return false;
   }
 }
 

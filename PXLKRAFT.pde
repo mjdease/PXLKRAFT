@@ -159,8 +159,6 @@ void setup()
 }
 void reset()
 {
-  emitters[0] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'w', 0.2);
-  emitters[1] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'f', 0.2);
   setHSB(233, 1,1,1);
   setHSB(0, 1,1,2);
   setHSB(58, 1,1,3);
@@ -182,6 +180,8 @@ void reset()
   
   emitters[0].createErasor(wand1);
   emitters[1].createErasor(wand2);
+  
+  engine.fluidSolver.reset();
 }
 void draw()
 {
