@@ -117,7 +117,7 @@ class Water extends Particle
         bounce(otherParticle);
         break;
       case 's': //collided with a seed particle
-        if(!otherParticle.isPlanted)
+        if(!otherParticle.isPlanted && !this.isFrozen)
         {
           otherParticle.plantBuffer++;
         }

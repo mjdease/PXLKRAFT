@@ -76,10 +76,7 @@ class Fire extends Particle
         }
         break;
       case 's': //collided with a seed particle
-        if(otherParticle.isPlanted)
-        {
-          otherParticle.fireBuffer++;
-        }
+        otherParticle.fireBuffer++;
         if(otherParticle.fireBuffer > 20 && !otherParticle.toKill)
         {
           otherParticle.toKill = true;

@@ -301,7 +301,8 @@ class Emitter
             oilCount--;
             break;
           case 's':
-            seedCount--;
+            if(part.isSource)
+              seedCount--;
             break;
           case 'f':
             fireCount--;
