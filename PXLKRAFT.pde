@@ -270,12 +270,14 @@ void readWands()
     {
       emitters[0].turnOff();
     }
+    else
+      wand1Fluids();
     if(wand2.x == -100)
     {
       emitters[1].turnOff();
     }
-    wand1Fluids();
-    wand2Fluids();
+    else
+      wand2Fluids();
     if(glob.isDown1() && !emitters[0].isOn)
     {
       if(wand1.x != -100)

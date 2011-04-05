@@ -19,7 +19,6 @@ class Seed extends Particle
     fill(col);
     noStroke();
     rect(0, 0, 2*radius, 2*radius);
-    rotate(rotation);
   }
     
   //moves particle - (overrides Particle move())
