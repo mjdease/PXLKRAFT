@@ -98,7 +98,7 @@ class Fire extends Particle
         {
           otherParticle.igniteBuffer++;
         }
-        if(otherParticle.igniteBuffer > 10)
+        if(otherParticle.igniteBuffer > 5)
         {
           otherParticle.isIgnited = true;
           otherParticle.igniteBuffer = 0;

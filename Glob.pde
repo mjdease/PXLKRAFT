@@ -37,6 +37,10 @@ class Glob implements Runnable
   
   // threshold
   int threshold;
+  int thresh = 200;
+  
+  int calibratedR, calibratedG, calibratedB;
+  int closestColor;
   
   //wand selector counter
   int wand;
@@ -58,8 +62,10 @@ class Glob implements Runnable
     w = 320;
     h = 240;
     
-    wr = wid / w;
-    hr = hei / h;
+    //wr = wid / w;
+    //hr = hei / h;
+    wr = 3.303;
+    hr = 3.339;
     
     // minimum glob size
     int minGlob = 10;
@@ -103,18 +109,20 @@ class Glob implements Runnable
   void track()
   {
     pushStyle();
-    colorMode(HSB, 255);
+    colorMode(RGB, 255);
     isSet1 = false;
     isSet2 = false;
     //println("running");
     archive();
     m.update();
-    m.trackNotColor(rB,gB,bB,255);
+    m.trackNotColor(rB,gB,bB,128);
     
     int[][] a;
     int[] b;
     int centroidX, centroidY, rr,gg,bb;
     color c;
+    int hueDiff, satDiff, briDiff;
+    int wc1Correl, wcp1Correl, wc2Correl, wcp2Correl;
     
     a = m.globBoxes();
     //println(a.length);
@@ -129,57 +137,69 @@ class Glob implements Runnable
       
       c = m.average(b[0],b[1],b[0] + b[2],b[1] + b[3]);
       
-      rr = int(red(c));
-      gg = int(green(c));
-      bb = int(blue(c));
+      calibratedR = int(red(c));
+      calibratedG = int(green(c));
+      calibratedB = int(blue(c));
       
-      if(hue(c)>hue(wc1)-threshold && hue(c)<hue(wc1)+threshold)
+      wc1Correl = int(abs(calibratedR - red(wc1)) + abs(calibratedG - green(wc1)) + abs(calibratedB - blue(wc1)));
+      wcp1Correl = int(abs(calibratedR - red(wcp1)) + abs(calibratedG - green(wcp1)) + abs(calibratedB - blue(wcp1)));
+      wc2Correl = int(abs(calibratedR - red(wc2)) + abs(calibratedG - green(wc2)) + abs(calibratedB - blue(wc2)));
+      wcp2Correl = int(abs(calibratedR - red(wcp2)) + abs(calibratedG - green(wcp2)) + abs(calibratedB - blue(wcp2)));
+      closestColor = min(min(wc1Correl, wcp1Correl), min(wc2Correl, wcp2Correl));
+      if(frameCount%30==0)
       {
-        x1 = centroidX;
-        y1 = centroidY;
-        click1 = false;
-        isSet1=true;
-        //println("wand 1 " + hue(wc1));
+        //println(closestColor +"+"+ wc1Correl +"+"+ wcp1Correl +"+"+ wc2Correl +"+"+ wcp2Correl);
       }
-      else if(hue(c)>hue(wcp1)-threshold && hue(c)<hue(wcp1)+threshold)
+      if(closestColor < thresh)
       {
-        x1 = centroidX;
-        y1 = centroidY;
-        click1 = true;
-        isSet1=true;
-        //println("clicked 1 " + hue(wcp1));
-      }
-      else if(hue(c)>hue(wc2)-threshold && hue(c)<hue(wc2)+threshold)
-      {
-        x2 = centroidX;
-        y2 = centroidY;
-        click2 = false;
-        isSet2=true;
-        //println("wand 2 " + hue(wc2));
-      }
-      else if(hue(c)>hue(wcp2)-threshold && hue(c)<hue(wcp2)+threshold)
-      {
-        x2 = centroidX;
-        y2 = centroidY;
-        click2 = true;
-        isSet2=true;
-        //println("clicked 2 " + hue(wcp2));
+        if(closestColor == wc1Correl)
+        {
+          x1 = centroidX;
+          y1 = centroidY;
+          click1 = false;
+          isSet1=true;
+          //println("wand 1 " + hue(wc1));
+        }
+        if(closestColor == wcp1Correl)
+        {
+          x1 = centroidX;
+          y1 = centroidY;
+          click1 = true;
+          isSet1=true;
+          //println("clicked 1 " + hue(wcp1));
+        }
+        if(closestColor == wc2Correl)
+        {
+          x2 = centroidX;
+          y2 = centroidY;
+          click2 = false;
+          isSet2=true;
+          //println("wand 2 " + hue(wc2));
+        }
+        if(closestColor == wcp2Correl)
+        {
+          x2 = centroidX;
+          y2 = centroidY;
+          click2 = true;
+          isSet2=true;
+          //println("clicked 2 " + hue(wcp2));
+        }
       }
     }
     popStyle();
-    return;
   }
   
   PVector getPos1()
   {
     if(!isSet1)
     {
-      vector.set(-100 , -100 , 0);//round(px1 * wr) , round(py1 * hr) , 0);
+      vector.set(-100 , 100 , 0);//round(px1 * wr) , round(py1 * hr) , 0);
      
       return vector;
     }
     else
     {
+      println(x1 +"+"+ y1);
      vector.set(round(x1 * wr) , round(y1 * hr) , 0);
    
       return vector;
@@ -190,7 +210,7 @@ class Glob implements Runnable
   {
     if(!isSet2)
     {
-      vector2.set(-100 , -100 , 0);//round(px2 * wr) , round(py2 * hr) , 0
+      vector2.set(-100 , 100 , 0);//round(px2 * wr) , round(py2 * hr) , 0
      
       return vector2;
     }
@@ -301,7 +321,7 @@ class Glob implements Runnable
         println("Wand 2 Click: "+ hue(wcp2)+"," + saturation(wcp2)+"," + brightness(wcp2));
       }
       
-      else if(key=='e')
+      else if(key=='q')
       {
         ui.calibrationSuccess();
       }

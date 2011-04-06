@@ -46,7 +46,7 @@ class UI
       cursorX = int(wand1.x);
       cursorY = int(wand1.y);
       cursor2X = int(wand2.x);
-      cursor2X = int(wand2.y);
+      cursor2Y = int(wand2.y);
       pushStyle();
       noFill();
       strokeWeight(4);

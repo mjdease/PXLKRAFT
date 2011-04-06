@@ -171,8 +171,8 @@ class Emitter
           case 'c':
             concretePos.set(loc.x, loc.y, 0);
             int numParticles = floor(PVector.dist(concretePos, concretePPos)/9);
-            println(PVector.dist(concretePos, concretePPos));
-            println(numParticles);
+            //println(PVector.dist(concretePos, concretePPos));
+            //println(numParticles);
             drawConcrete(numParticles);
             break;
           case 'i':
@@ -223,7 +223,7 @@ class Emitter
         x = lerp(concretePPos.x, concretePos.x, (1.0/numParticles)*i);
         y = lerp(concretePPos.y, concretePos.y, (1.0/numParticles)*i);
         initParticle(temp, x, y);
-        println("drew at " + x +"+"+ y);
+        //println("drew at " + x +"+"+ y);
         concreteCount++;
       }
     }
@@ -235,6 +235,7 @@ class Emitter
     r = random(sprayWidth);
     
     temp.loc.set(loc.x, loc.y, 0);
+    correctOffScreen(temp);
     temp.birthTime = millis();
     temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
     p.add(temp);
@@ -246,6 +247,7 @@ class Emitter
     r = random(sprayWidth);
     
     temp.loc.set(x, y, 0);
+    correctOffScreen(temp);
     temp.birthTime = millis();
     temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
     p.add(temp);
@@ -264,6 +266,7 @@ class Emitter
     temp = new Seed(random(4, 6), color(random(75,95), random(220,240), random(10,30), 255), -1, 0.98, 's');
     }
     temp.loc = location;
+    correctOffScreen(temp);
     temp.birthTime = millis();
     temp.vel = new PVector(0,0);
     temp.isPlanted = true;
@@ -278,6 +281,25 @@ class Emitter
     temp.vel = new PVector(0,0);
     p.add(temp);
     engine.allObjs.add(temp);
+  }
+  void correctOffScreen(Particle part)
+  {
+    if(engine.boundsSet[0] && part.loc.x > width - part.radius)
+    {
+      part.loc.x = width - part.radius;
+    }
+    else if(engine.boundsSet[1] && part.loc.x < part.radius)
+    {
+      part.loc.x = part.radius;
+    }
+    if(engine.boundsSet[2] && part.loc.y > height - part.radius)
+    {
+      part.loc.y = height - part.radius;
+    }
+    else if(engine.boundsSet[3] && part.loc.y < part.radius)
+    {
+      part.loc.y = part.radius;
+    }
   }
   
   void emit()

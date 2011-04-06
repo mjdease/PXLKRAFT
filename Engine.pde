@@ -90,7 +90,7 @@ class Engine
       }
       if(frameCount%30 == 0)
       {
-        println(frameRate);
+        //println(frameRate);
         updateAllObjs();
       }
       //println(allObjs.size());

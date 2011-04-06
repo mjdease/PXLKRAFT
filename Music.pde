@@ -26,7 +26,7 @@ class Music
     dir2 = new PVector(0,0);
     rhythm = 0;
     melody = 0;
-    int delayAmt = 10;
+    int delayAmt = 50;
 
     groove[0] = minim.loadFile("data/sound/Rhythm_Track_1.mp3", 1024);
     groove[1] = minim.loadFile("data/sound/Rhythm_Track_2.mp3", 1024);

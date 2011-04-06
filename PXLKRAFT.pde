@@ -86,7 +86,7 @@ void setup()
   rectMode(CENTER);
 
   minim = new Minim(this);
-  music = new Music();
+  //music = new Music();
 
   //tracking thread
   glob = new Glob(width, height);
@@ -238,8 +238,8 @@ void readMouse()
     {
       emitters[0].turnOff();
     }
-    music.movedMouse(wand1, wand2);
-    music.run(wand1);
+    //music.movedMouse(wand1, wand2);
+    //music.run(wand1);
     break; 
   case 'c':
     background(200);
@@ -302,8 +302,8 @@ void readWands()
 
     force2.set(wandP2.x - wand2.x, wandP2.y - wand2.y, 0);
     
-    music.movedMouse(wand1, wand2);
-    music.run(wand1);
+    //music.movedMouse(wand1, wand2);
+    //music.run(wand1);
     
     break;
   case 'c':
@@ -514,7 +514,7 @@ void setHSB(int h, float s, float b, int wand)
 void stop()
 {
   // always close Minim audio classes when you are done with them
-  music.groove[music.rhythm].close();
+  //music.groove[music.rhythm].close();
 
   // always stop Minim before exiting.
   minim.stop();

@@ -176,8 +176,8 @@ class Button {
       //text(type,width/2,height/2);
       if(menuSoundBuffer == 0)
       {
-        music.playMenuSound();
-        menuSoundBuffer = 10;
+        //music.playMenuSound();
+        //menuSoundBuffer = 10;
       }
       if(type == "play")
       { 
@@ -378,7 +378,7 @@ class Button {
       }
       
     }
-    else if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height)
+    else if((ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height) || (ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height))
     {
       if(type == "play")
       {
