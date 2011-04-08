@@ -33,7 +33,7 @@ class Music
     dist2 = new PVector(0,0);
     dir1 = new PVector(0,0);
     dir2 = new PVector(0,0);
-    rhythm = 0;
+    rhythm = int(random(0,4));
     melody = 0;
     int delayAmt = 50;
     melodyBuffer = 10;
