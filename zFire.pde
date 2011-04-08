@@ -63,7 +63,7 @@ class Fire extends Particle
           otherParticle.isMelting = true;
           otherParticle.vel.set(0,0,0);
         }
-        if(otherParticle.boilBuffer>40)
+        if(otherParticle.boilBuffer>50)
           otherParticle.isBoiling = true;
         break;
       case 'o': //collided with a oil particle
@@ -77,7 +77,7 @@ class Fire extends Particle
         break;
       case 's': //collided with a seed particle
         otherParticle.fireBuffer++;
-        if(otherParticle.fireBuffer > 20 && !otherParticle.toKill)
+        if(otherParticle.fireBuffer > 10 && !otherParticle.toKill)
         {
           otherParticle.toKill = true;
           engine.addForce(this.loc.x*invWidth,this.loc.y*invHeight,0,-0.01, -1);
@@ -89,6 +89,16 @@ class Fire extends Particle
           break;
       case 'c': //collided with a concrete particle
         bounce(otherParticle);
+        break;
+      case 'd':
+        bounce(otherParticle);
+        otherParticle.fireBuffer++;
+        if(otherParticle.fireBuffer > 10 && !otherParticle.toKill)
+        {
+          otherParticle.toKill = true;
+          engine.addForce(this.loc.x*invWidth,this.loc.y*invHeight,0,-0.01, -1);
+          engine.burstEmitters.add(new Emitter(this.loc, new PVector(0, -2), 20, 13, 'f', 1500, false));
+        }
         break;
       case 'i': //collided with a ice particle
         bounce(otherParticle);

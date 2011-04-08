@@ -58,6 +58,10 @@ class Eraser extends Particle
           if(isErasing)
             otherParticle.toKill = true;
           break;
+        case 'd': //collided with a concrete particle
+          if(isErasing)
+            otherParticle.toKill = true;
+          break;
         case 'i': //collided with a ice particle
           if(isErasing)
             otherParticle.toKill = true;

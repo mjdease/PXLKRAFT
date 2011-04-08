@@ -27,7 +27,7 @@ class Firework extends Particle
       vel.add(0,-14,0);
       loc.add(vel);
       igniteIndex++;
-      if(igniteIndex > 32)
+      if(igniteIndex > ignitePoint)
       {
         //i=1 forces in all diretions, but bad for dye
         for(int i=2; i<9; i++)
@@ -35,6 +35,7 @@ class Firework extends Particle
           //println(cos(i*PI/4)+"+"+sin(i*PI/4));
           engine.addForce(this.loc.x*invWidth,this.loc.y*invHeight,cos(i*PI/4)*5,sin(i*PI/4)*5,-1);
         }
+        music.playFwSound();
         engine.burstEmitters.add(new Emitter(new PVector(loc.x, loc.y), new PVector(0, 0), 40, 30, 'f', 1000, true));
         toKill = true;
       }
@@ -72,8 +73,11 @@ class Firework extends Particle
           //bounce(otherParticle);
           break;
         case 'c': //collided with a concrete particle
-          if(!this.isIgnited)
+          //if(!this.isIgnited)
             bounce(otherParticle);
+          break;
+        case 'd':
+          bounce(otherParticle);
           break;
         case 'i': //collided with a ice particle
           //bounce(otherParticle);

@@ -2,7 +2,11 @@ class Music
 {
   AudioPlayer[] groove = new AudioPlayer[4];
   AudioSample[][] groove2 = new AudioSample[2][24];
-
+  AudioPlayer fireSound;
+  AudioPlayer waterSound;
+  AudioPlayer oilSound;
+  AudioPlayer windSound;
+  AudioSample fireworksSound;
   
   //WaveformRenderer waveform;
   LowPassFS bpf;
@@ -10,10 +14,15 @@ class Music
   int rhythm;
   int melody;
   boolean noMelody = false;
+  boolean noRhythm = false;
   float distance;
   PVector pv1, pv2;
   PVector dist1, dist2;
   PVector dir1, dir2;
+  int melodyBuffer;
+  int lastPlay;
+  int fwBuffer;
+  int fwLastPlay;
 
   Music()
   {
@@ -27,11 +36,20 @@ class Music
     rhythm = 0;
     melody = 0;
     int delayAmt = 50;
+    melodyBuffer = 10;
+    lastPlay = 0;
+    fwLastPlay = 0;
+    fwBuffer = 5;
+    fireSound = minim.loadFile("data/sound/environment/fire.wav", 4096);
+    waterSound = minim.loadFile("data/sound/environment/water.wav", 4096);
+    oilSound = minim.loadFile("data/sound/environment/oil.wav", 4096);
+    windSound = minim.loadFile("data/sound/environment/wind.wav", 4096);
+    fireworksSound = minim.loadSample("data/sound/environment/firework.wav", 2048);
 
-    groove[0] = minim.loadFile("data/sound/Rhythm_Track_1.mp3", 1024);
-    groove[1] = minim.loadFile("data/sound/Rhythm_Track_2.mp3", 1024);
-    groove[2] = minim.loadFile("data/sound/Rhythm_Track_3.mp3", 1024);
-    groove[3] = minim.loadFile("data/sound/Rhythm_Track_4.mp3", 1024);
+    groove[0] = minim.loadFile("data/sound/Rhythm_Track_1.wav", 4096);
+    groove[1] = minim.loadFile("data/sound/Rhythm_Track_2.wav", 4096);
+    groove[2] = minim.loadFile("data/sound/Rhythm_Track_3.wav", 4096);
+    groove[3] = minim.loadFile("data/sound/Rhythm_Track_4.wav", 4096);
        
     groove2[0][0] = minim.loadSample("data/sound/melody 2/1.mp3", 1024); delay(delayAmt);
     groove2[0][1] = minim.loadSample("data/sound/melody 2/2.mp3", 1024); delay(delayAmt);
@@ -83,7 +101,17 @@ class Music
     groove2[1][22] = minim.loadSample("data/sound/melody 1/23.mp3", 1024); delay(delayAmt);
     groove2[1][23] = minim.loadSample("data/sound/melody 1/24.mp3", 1024); delay(delayAmt);
     
+    fireSound.setGain(-47);
+    waterSound.setGain(-47);
+    oilSound.setGain(-47);
+    windSound.setGain(-47);
+    fireworksSound.setGain(-5);
+    
     groove[rhythm].loop();
+    fireSound.loop();
+    waterSound.loop();
+    oilSound.loop();
+    windSound.loop();
     
     //waveform = new WaveformRenderer();
     //groove.addListener(waveform);
@@ -94,12 +122,18 @@ class Music
   void run(PVector wand1)
   {
     groove[rhythm].setGain(6);
-     for (int i=0; i<= 23; i++)
+    for(int h=0; h<2;h++)
     {
-      groove2[0][i].setGain(-3);
+      for (int i=0; i<= 23; i++)
+      {
+        groove2[h][i].setGain(-3);
+      }
     }
-    
-    
+    fireSound.setGain(map(fireCount, 0, fire_max-700, -30, -1));
+    waterSound.setGain(map(waterCount, 0, water_max-300, -30, -1));
+    oilSound.setGain(map(oilCount, 0, oil_max-200, -40, -10));
+    windSound.setGain(map(int(engine.fluidSolver.getAvgSpeed()*1000000000), 0, 100000, -30, -2));
+    println(int(engine.fluidSolver.getAvgSpeed()*1000000000));
     if(noMelody)
       return;
     //println(wandP1+"+"+wand1);
@@ -195,7 +229,14 @@ class Music
       }
     }
   }
-
+  void playFwSound()
+  {
+    //if(frameCount > fwLastPlay + fwBuffer)
+    //{
+      fwLastPlay = frameCount;
+      fireworksSound.trigger();
+    //}
+  }
   void movedMouse(PVector wand1, PVector wand2)
   {
     float frequency = map(dist(wand1.x, wand1.y, wand2.x, wand2.y), 0, 1280, 200, 3600);
@@ -221,6 +262,10 @@ class Music
 
   void playGridNote(float xpos, float ypos)
   {
+    if(frameCount < lastPlay + melodyBuffer)
+      return;
+    else
+      lastPlay = frameCount;
     float widthgrid = map(xpos, 0, width, 0, 6);
     float heightgrid = map (ypos, 0, height, 0, 4);
 
@@ -408,6 +453,7 @@ class Music
   }
   void setRhythm(int uirhythm)
   {
+    noRhythm = false;
     groove[rhythm].pause();
     rhythm = uirhythm;
     groove[rhythm].loop();
@@ -415,6 +461,7 @@ class Music
   void noRhythm()
   {
     groove[rhythm].pause();
+    noRhythm = true;
   }
   
   void noMelody()

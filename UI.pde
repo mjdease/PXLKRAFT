@@ -49,8 +49,16 @@ class UI
       cursor2Y = int(wand2.y);
       pushStyle();
       noFill();
-      strokeWeight(4);
       rectMode(CENTER);
+      
+      strokeWeight(8);
+      stroke(color(0,0,0));
+      if(emitters[0].type != 'e')
+        rect(wand1.x, wand1.y, 20,20);
+      if(emitters[1].type != 'e')
+        rect(wand2.x, wand2.y, 20,20);
+      
+      strokeWeight(4);
       stroke(dye1);
       if(emitters[0].type != 'e')
         rect(wand1.x, wand1.y, 20,20);
@@ -59,6 +67,10 @@ class UI
         rect(wand2.x, wand2.y, 20,20);
       if(emitters[0].type == 'e')
       {
+        strokeWeight(8);
+        stroke(color(0,0,0));
+        rect(wand1.x, wand1.y, 20,20);
+        strokeWeight(4);
         if(emitters[0].isOn)
           stroke(dye1);
         else
@@ -69,6 +81,10 @@ class UI
       }
       if(emitters[1].type == 'e')
       {
+        strokeWeight(8);
+        stroke(color(0,0,0));
+        rect(wand1.x, wand1.y, 20,20);
+        strokeWeight(4);
         if(emitters[1].isOn)
           stroke(dye2);
         else

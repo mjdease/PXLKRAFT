@@ -37,7 +37,7 @@ class Glob implements Runnable
   
   // threshold
   int threshold;
-  int thresh = 200;
+  int thresh = 150;
   
   int calibratedR, calibratedG, calibratedB;
   int closestColor;
@@ -115,7 +115,7 @@ class Glob implements Runnable
     //println("running");
     archive();
     m.update();
-    m.trackNotColor(rB,gB,bB,128);
+    m.trackNotColor(rB,gB,bB,100);
     
     int[][] a;
     int[] b;
@@ -135,7 +135,8 @@ class Glob implements Runnable
       centroidY = b[1]+b[3]/2;
       //point(centroidX,centroidY);
       
-      c = m.average(b[0],b[1],b[0] + b[2],b[1] + b[3]);
+      //c = m.average(b[0],b[1],b[0] + b[2],b[1] + b[3]);
+      c = m.average(centroidX-2,centroidY-2,centroidX+2,centroidY+2);
       
       calibratedR = int(red(c));
       calibratedG = int(green(c));
@@ -148,7 +149,7 @@ class Glob implements Runnable
       closestColor = min(min(wc1Correl, wcp1Correl), min(wc2Correl, wcp2Correl));
       if(frameCount%30==0)
       {
-        //println(closestColor +"+"+ wc1Correl +"+"+ wcp1Correl +"+"+ wc2Correl +"+"+ wcp2Correl);
+        println(closestColor +"+"+ wc1Correl +"+"+ wcp1Correl +"+"+ wc2Correl +"+"+ wcp2Correl);
       }
       if(closestColor < thresh)
       {
@@ -199,7 +200,7 @@ class Glob implements Runnable
     }
     else
     {
-      println(x1 +"+"+ y1);
+      //println(x1 +"+"+ y1);
      vector.set(round(x1 * wr) , round(y1 * hr) , 0);
    
       return vector;
@@ -298,13 +299,13 @@ class Glob implements Runnable
     {
       if (mouseButton == LEFT)
       {
-        wc1 = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);
+        wc1 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
         println("Wand 1: "+ hue(wc1)+"," + saturation(wc1)+"," + brightness(wc1));
       }
       
       else if(mouseButton == RIGHT)
       {
-        wcp1 = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);
+        wcp1 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
         println("Wand 1 Click: "+ hue(wcp1)+"," + saturation(wcp1)+"," + brightness(wcp1));
       }
     }
@@ -312,12 +313,12 @@ class Glob implements Runnable
     {
       if(key == 'z')
       {
-        wc2 = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);
+        wc2 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
         println("Wand 2: "+ hue(wc2)+"," + saturation(wc2)+"," + brightness(wc2));
       }
       else if(key == 'x')
       {
-        wcp2 = m.average(mouseX-3,mouseY-3,mouseX+3,mouseY+3);
+        wcp2 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
         println("Wand 2 Click: "+ hue(wcp2)+"," + saturation(wcp2)+"," + brightness(wcp2));
       }
       

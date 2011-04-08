@@ -32,6 +32,7 @@ class Water extends Particle
     }
     if(isSteam)
     {
+      col = color(0, 200, 255, colA);
       vel.normalize();
       vel.add(0,-4,0);
       loc.add(vel);
@@ -67,13 +68,13 @@ class Water extends Particle
       isBoiling = false;
       boilBuffer = 0;
       boilIndex = 0;
-      col = color(0, 255, 255, 128);
+      col = color(0, 200, 255, 100);
       lifeSpan = lifeTime + 30000;
     }
   }
   void createFade(float val)
   {
-    colA-=3;
+    colA-=2;
     col = color(colR, colG, colB, colA);
     if(colA < 10)
       toKill = true;
@@ -94,7 +95,7 @@ class Water extends Particle
       case 'w': //collided with a water particle
         if(otherParticle.isFrozen && !otherParticle.isMelting && !this.isFrozen)
         {
-          this.freezeBuffer+=3;
+          this.freezeBuffer+=1;
           if(this.freezeBuffer>20)
           {
             this.isFrozen = true;
@@ -110,7 +111,7 @@ class Water extends Particle
           bounce(otherParticle);
         if(!otherParticle.isFrozen && !this.isFrozen)
         {
-          this.freezeBuffer--;
+          //this.freezeBuffer--;
         }
         break;
       case 'o': //collided with a oil particle
@@ -133,6 +134,9 @@ class Water extends Particle
         //bounce(otherParticle);
         break;
       case 'c': //collided with a concrete particle
+        bounce(otherParticle);
+        break;
+      case 'd':
         bounce(otherParticle);
         break;
       case 'i': //collided with a ice particle

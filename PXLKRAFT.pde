@@ -28,11 +28,12 @@ final static int arrow_max = 200;
 
 final static int water_max = 800;
 final static int oil_max = 400;
-final static int seed_max = 30;
+final static int seed_max = 40;
 final static int fire_max = 1000;
 final static int concrete_max = 600;
 final static int ice_max = 100;
 final static int firework_max = 200;
+final static int wood_max = 600;
 int particleCount = 0;
 int arrowCount = 0;
 int waterCount = 0;
@@ -42,6 +43,7 @@ int fireCount = 0;
 int concreteCount = 0;
 int iceCount = 0;
 int fireworkCount = 0;
+int woodCount = 0;
 
 int particleOpacity = 200;
 color[] firePalette;
@@ -86,7 +88,7 @@ void setup()
   rectMode(CENTER);
 
   minim = new Minim(this);
-  //music = new Music();
+  music = new Music();
 
   //tracking thread
   glob = new Glob(width, height);
@@ -166,6 +168,17 @@ void setup()
 }
 void reset()
 {
+  particleCount = 0;
+  arrowCount = 0;
+  waterCount = 0;
+  oilCount = 0;
+  seedCount = 0;
+  fireCount = 0;
+  concreteCount = 0;
+  iceCount = 0;
+  fireworkCount = 0;
+  woodCount = 0;
+  
   setHSB(233, 1,1,1);
   setHSB(0, 1,1,2);
   setHSB(58, 1,1,3);
@@ -238,8 +251,20 @@ void readMouse()
     {
       emitters[0].turnOff();
     }
-    //music.movedMouse(wand1, wand2);
-    //music.run(wand1);
+    if(emitters[0].isMaxed() && emitters[0].isOn)
+    {
+      pushStyle();
+      colorMode(RGB, 255);
+      textAlign(CENTER);
+      textSize(30);
+      fill(0,0,0);
+      text("Maxed", wand1.x+3, wand1.y + 35 +3);
+      fill(255,255,255);
+      text("Maxed", wand1.x, wand1.y + 35);
+      popStyle();
+    }
+    music.movedMouse(wand1, wand2);
+    music.run(wand1);
     break; 
   case 'c':
     background(200);
@@ -297,13 +322,37 @@ void readWands()
     {
       emitters[1].turnOff();
     }
+    if(emitters[0].isMaxed() && emitters[0].isOn)
+    {
+      pushStyle();
+      colorMode(RGB, 255);
+      textAlign(CENTER);
+      textSize(30);
+      fill(0,0,0);
+      text("Maxed", wand1.x+3, wand1.y + 35 +3);
+      fill(255,255,255);
+      text("Maxed", wand1.x, wand1.y + 35);
+      popStyle();
+    }
+    if(emitters[1].isMaxed() && emitters[1].isOn)
+    {
+      pushStyle();
+      colorMode(RGB, 255);
+      textAlign(CENTER);
+      textSize(30);
+      fill(0,0,0);
+      text("Maxed", wand2.x+3, wand2.y + 35 +3);
+      fill(255,255,255);
+      text("Maxed", wand2.x, wand2.y + 35);
+      popStyle();
+    }
 
     force1.set(wandP1.x - wand1.x, wandP1.y - wand1.y, 0);
 
     force2.set(wandP2.x - wand2.x, wandP2.y - wand2.y, 0);
     
-    //music.movedMouse(wand1, wand2);
-    //music.run(wand1);
+    music.movedMouse(wand1, wand2);
+    music.run(wand1);
     
     break;
   case 'c':
@@ -424,7 +473,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setLifeSpan(-1);
     emitters[wand].setBirthRate(.8);
     emitters[wand].setBirthForce(new PVector(0,5));
-    setHSB(290,1,1,wand+1);
+    setHSB(24,0.73,0.58,wand+1);
     break;
   case 's':
     if(emitters[wand].type == 'e')
@@ -460,13 +509,24 @@ void changeParticle(char type, int wand)
     emitters[wand].setBirthForce(new PVector(0,0));
     setHSB(233,0,0.68,wand+1);
     break;
+  case 'd':
+    if(emitters[wand].type == 'e')
+    {
+      emitters[wand].killEraser();
+    }
+    emitters[wand].setType('d');
+    emitters[wand].setLifeSpan(-1);
+    emitters[wand].setBirthRate(1);
+    emitters[wand].setBirthForce(new PVector(0,0));
+    setHSB(25,91,0.50,wand+1);
+    break;
   case 'i':
     if(emitters[wand].type == 'e')
     {
       emitters[wand].killEraser();
     }
     emitters[wand].setType('i');
-    emitters[wand].setLifeSpan(1200);
+    emitters[wand].setLifeSpan(2400);
     emitters[wand].calcAndSetRate(ice_max);
     emitters[wand].setBirthForce(new PVector(0,0));
     setHSB(178,1,1,wand+1);
@@ -480,7 +540,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setLifeSpan(-1);
     emitters[wand].setBirthRate(0.5);
     emitters[wand].setBirthForce(new PVector(0,5));
-    setHSB(37,1,0.58,wand+1);
+    setHSB(290,1,1,wand+1);
     break;
   case 'e':
     emitters[wand].setType('e');
@@ -514,7 +574,15 @@ void setHSB(int h, float s, float b, int wand)
 void stop()
 {
   // always close Minim audio classes when you are done with them
-  //music.groove[music.rhythm].close();
+  music.groove[music.rhythm].close();
+  int i,j;
+  for(i = 0; i<music.groove2.length; i++)
+  {
+    for(j = 0; j<music.groove2[i].length; j++)
+    {
+      music.groove2[i][j].close();
+    }
+  }
 
   // always stop Minim before exiting.
   minim.stop();

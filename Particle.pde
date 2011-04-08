@@ -37,6 +37,7 @@ class Particle extends Sprite implements Locatable
   int plantBuffer = 0;
   int plantIndex = 0;
   int plantHeight = int(random(100, 250));
+  int ignitePoint = int(random(20,30));
   float rotation = 0;
   
 
@@ -167,11 +168,13 @@ class Particle extends Sprite implements Locatable
       collisionNormal.normalize();
       collisionNormal.mult(this.radius + otherParticle.radius);
     //if(this.type != 'c' && otherParticle.type != 'c')
-    if(otherParticle.type == 'c' || otherParticle.isFrozen || otherParticle.isPlanted)
+    if(otherParticle.type == 'c' || otherParticle.type == 'd' || otherParticle.isFrozen || otherParticle.isPlanted)
     {
       if(
         (otherParticle.type == 'c' && this.isFrozen) ||
         (otherParticle.type == 'c' && this.isPlanted) ||
+        (otherParticle.type == 'd' && this.isFrozen) ||
+        (otherParticle.type == 'd' && this.isPlanted) ||
         (otherParticle.isFrozen && this.isPlanted)
         )
       {
@@ -180,6 +183,8 @@ class Particle extends Sprite implements Locatable
       else if(
         (this.type == 'c' && otherParticle.isFrozen) ||
         (this.type == 'c' && otherParticle.isPlanted) ||
+        (this.type == 'd' && otherParticle.isFrozen) ||
+        (this.type == 'd' && otherParticle.isPlanted) ||
         (this.isFrozen && otherParticle.isPlanted)
         )
       {

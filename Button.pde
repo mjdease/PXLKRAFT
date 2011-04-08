@@ -18,6 +18,7 @@ class Button {
   PImage waterO;
   PImage fireO;
   PImage seedO;
+  PImage woodO;
   PImage noMelO;
   PImage noRhyO;
 
@@ -48,6 +49,7 @@ class Button {
     waterO = loadImage("waterO.gif");
     fireO = loadImage("fireO.gif");
     seedO = loadImage("seedO.gif");
+    woodO = loadImage("woodO.gif");
     noMelO = loadImage("noMelO.gif");
     noRhyO = loadImage("noRhyO.gif");
 
@@ -128,6 +130,10 @@ class Button {
     {
       b = loadImage("seed.gif");
     }
+    else if (inType == "wood")
+    {
+      b = loadImage("wood.gif");
+    }
     else if (inType == "clear")
     {
       b = loadImage("clear.gif");
@@ -143,18 +149,30 @@ class Button {
   }
 
   void animate() {
-    rect(0,0,width,Y);
     Y += 6;
-    if( Y >= 0)
+    if( Y >= 0 && type!="exit" && type!="clear")
       Y = 0;
-      rect(0,0,width,Y);
+    else if(Y >=40)
+    {
+      Y=40;
+    }
   }
 
   void animateOut() {
-    rect(0,0,width,Y);
     Y -= 6;
-    if( Y <= -80 )
-      Y = -80 ;
+    if((type=="exit" || type=="clear") && Y<-50)
+    {
+      Y=-50;
+    }
+    else if( Y <= -90 )
+    {
+      Y = -90 ;
+      pushStyle();
+      colorMode(RGB,255);
+      fill(100,100,100,200);
+      rect(0,0,1024,10);
+      popStyle();
+    }
       
   }
 
@@ -162,7 +180,7 @@ class Button {
     image(b, X, Y);
     if(menuSoundBuffer >0)
       menuSoundBuffer--;
-    if(ui.inGame == true && (wand1.y < 63 || wand2.y < 63))
+    if(ui.inGame == true && (wand1.y < 102 || wand2.y < 102))
     //if(ui.inGame == true && mouseY < 102)
     {
       animate();
@@ -170,20 +188,55 @@ class Button {
     else if(ui.inGame == true) {
       animateOut();
     }
+    //selected icons:
+    if(type == "rhy1" && music.rhythm == 0 && !music.noRhythm)
+    {
+      image(rhy1Over, X, Y);
+    }
+    else if(type == "rhy2" && music.rhythm == 1 && !music.noRhythm)
+    {
+      image(rhy2Over, X, Y);
+    }
+    else if(type == "rhy3"&& music.rhythm == 2 && !music.noRhythm)
+    {
+      image(rhy3Over, X, Y);
+    }
+    else if(type == "rhy4"&& music.rhythm == 3 && !music.noRhythm)
+    {
+      image(rhy4Over, X, Y);
+    }
+    else if(type == "mel1"&& music.melody == 0 && !music.noMelody)
+    {
+      image(mel1Over, X, Y);
+    }
+    else if(type == "mel2"&& music.melody == 1 && !music.noMelody)
+    {
+      image(mel2Over, X, Y);
+    }
+    else if(type == "noMel" && music.noMelody)
+    {
+      image(noMelO,X,Y);
+    }
+    else if(type == "noRhy" && music.noRhythm)
+    {
+      image(noRhyO,X,Y);
+    }
+    
+    
     //menu buttons by only the first wand
-    if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height && (glob.wand1Pressed() || mousePressed))
+    if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height+30 && (glob.wand1Pressed() || mousePressed))
     {
       //text(type,width/2,height/2);
       if(menuSoundBuffer == 0)
       {
-        //music.playMenuSound();
-        //menuSoundBuffer = 10;
+        music.playMenuSound();
+        menuSoundBuffer = 10;
       }
       if(type == "play")
       { 
         setHSB(233, 1,1,1);
         ui.inGame = true;        
-        for(int k = 0; k < 10; k++)
+        for(int k = 0; k < 11; k++)
         {
           ui.Main.buttonArray[k] = ui.Main.gameArray[k];
         }
@@ -192,7 +245,7 @@ class Button {
       else if (type == "music")
       {
         ui.inMusic = true;
-        for(int k = 0; k < 10; k++)
+        for(int k = 0; k < 11; k++)
         {
           if(k > ui.Main.musicArray.length - 1)
           {
@@ -207,7 +260,7 @@ class Button {
       else if (type == "back")
       {
         ui.inMusic = false;
-        for (int k = 0; k < 10; k++)
+        for (int k = 0; k < 11; k++)
         {
           if( k > ui.Main.mainArray.length - 1)
           {
@@ -223,7 +276,7 @@ class Button {
       {
         ui.inGame = false;
         animateOut();
-        for (int k = 0; k < 10; k++)
+        for (int k = 0; k < 11; k++)
         {
           if( k > ui.Main.mainArray.length - 1)
           {
@@ -239,7 +292,7 @@ class Button {
       else if(type == "calib")
       {
         ui.inCalib = true;
-        for(int k = 0; k < 10; k++)
+        for(int k = 0; k < 11; k++)
         {
           if(k > ui.Main.calibArray.length - 1)
           {
@@ -283,6 +336,10 @@ class Button {
       {
         changeParticle('s', 0);
       }
+      else if(type == "wood")
+      {
+        changeParticle('d', 0);
+      }
       else if(type == "rhy1")
       {
         music.setRhythm(0);
@@ -321,7 +378,7 @@ class Button {
       }
     }
     //ingame ui buttons by either wand
-    else if(ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height && glob.wand2Pressed())
+    else if(ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height+30 && glob.wand2Pressed())
     {
       if(type == "fire")
       {
@@ -355,6 +412,10 @@ class Button {
       {
         changeParticle('s', 1);
       }
+      else if(type == "wood")
+      {
+        changeParticle('d', 1);
+      }
       else if(type == "clear")
       {
         reset();
@@ -378,8 +439,11 @@ class Button {
       }
       
     }
-    else if((ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height) || (ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height))
+    else if((ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height+30) || (ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height+30))
     {
+      pushStyle();
+      textSize(20);
+      textAlign(CENTER);
       if(type == "play")
       {
         image(playOver, X, Y);
@@ -423,34 +487,47 @@ class Button {
       else if(type == "erase")
       {
         image(eraseO,X,Y);
+        text("Eraser", X + b.width/2, 110);
       }
       else if(type == "stone")
       {
         image(stoneO,X,Y);
+        text("Stone", X + b.width/2, 110);
       }
       else if(type == "ice")
       {
         image(iceO,X,Y);
+        text("Snow", X + b.width/2, 110);
       }
       else if(type == "works")
       {
         image(worksO,X,Y);
+        text("Fireworks", X + b.width/2, 110);
       }
       else if(type == "oil")
       {
         image(oilO,X,Y);
+        text("Oil", X + b.width/2, 110);
       }
       else if(type == "water")
       {
         image(waterO,X,Y);
+        text("Water", X + b.width/2, 110);
       }
       else if(type == "fire")
       {
         image(fireO,X,Y);
+        text("Fire", X + b.width/2, 110);
       }
       else if(type == "seed")
       {
         image(seedO,X,Y);
+        text("Seeds", X + b.width/2, 110);
+      }
+      else if(type == "wood")
+      {
+        image(woodO,X,Y);
+        text("Wood", X + b.width/2, 110);
       }
       else if(type == "noMel")
       {
@@ -460,13 +537,14 @@ class Button {
       {
         image(noRhyO,X,Y);
       }
+      popStyle();
     }
   }
   boolean isOverButton()
   {
-    if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height)
+    if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height+30)
       return true;
-    else if(ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height)
+    else if(ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height+30)
       return true;
     else
       return false;

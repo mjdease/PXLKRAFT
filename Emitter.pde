@@ -34,7 +34,10 @@ class Emitter
   boolean isOn = false;
   PVector concretePos = new PVector(-10,-10);
   PVector concretePPos = new PVector(-100, -100);
+  PVector woodPos = new PVector(-10,-10);
+  PVector woodPPos = new PVector(-100, -100);
   boolean firstEmit = true;
+  boolean firstWoodEmit = true;
   boolean isFirework = false;
 
   //default constructor
@@ -145,7 +148,7 @@ class Emitter
             waterCount++;
             break;
           case 'o':
-            temp = new Oil(random(7, 10), color(random(190,210), random(65,80), random(220,230), particleOpacity), lifeSpan, 0.98, type);
+            temp = new Oil(random(7, 10), color(random(140,160), random(75,95), random(35,45), particleOpacity), lifeSpan, 0.98, type);
             initParticle(temp);
             oilCount++;
             break;
@@ -175,13 +178,18 @@ class Emitter
             //println(numParticles);
             drawConcrete(numParticles);
             break;
+          case 'd':
+            woodPos.set(loc.x, loc.y, 0);
+            int numWoodParticles = floor(PVector.dist(woodPos, woodPPos)/9);
+            drawWood(numWoodParticles);
+            break;
           case 'i':
             temp = new Ice(random(3, 7), color(random(120,130), random(225,235), random(230,240), particleOpacity), lifeSpan, 0.98, type);
             initParticle(temp);
             iceCount++;
             break;
           case 'k':
-            temp = new Firework(random(3, 5), color(random(170, 190), random(110,125), random(20,40), particleOpacity), lifeSpan, 0.98, type);
+            temp = new Firework(random(3, 5), color(random(190,210), random(65,80), random(220,230), particleOpacity), lifeSpan, 0.98, type);
             initParticle(temp);
             fireworkCount++;
             break;
@@ -225,6 +233,42 @@ class Emitter
         initParticle(temp, x, y);
         //println("drew at " + x +"+"+ y);
         concreteCount++;
+      }
+    }
+  }
+  void drawWood(int numParticles)
+  {
+    if(numParticles == 1 || firstWoodEmit)
+    {
+      
+      temp = new Wood(15, color(128,60,11, 255), lifeSpan, 0.98, type);
+      initParticle(temp);
+      woodCount++;
+      if(firstWoodEmit)
+        firstWoodEmit = false;
+      woodPPos.set(woodPos);
+      return;
+    }
+    float x = 0;
+    float y = 0;
+    for(int i = 1; i<=numParticles; i++)
+    {
+      temp = new Wood(15, color(128,60,11, 255), lifeSpan, 0.98, type);
+      if(i==numParticles)
+      {
+        temp = new Wood(15, color(128,60,11, 255), lifeSpan, 0.98, type);
+        initParticle(temp);
+        woodCount++;
+        woodPPos.set(woodPos);
+        continue;
+      }
+      else
+      {
+        x = lerp(woodPPos.x, woodPos.x, (1.0/numParticles)*i);
+        y = lerp(woodPPos.y, woodPos.y, (1.0/numParticles)*i);
+        initParticle(temp, x, y);
+        //println("drew at " + x +"+"+ y);
+        woodCount++;
       }
     }
   }
@@ -341,6 +385,9 @@ class Emitter
           case 'c':
             concreteCount--;
             break;
+          case 'd':
+            woodCount--;
+            break;
           case 'i':
             iceCount--;
             break;
@@ -411,6 +458,11 @@ class Emitter
           return false;
         else
           return true;
+      case 'd':
+        if(woodCount < wood_max)
+          return false;
+        else
+          return true;
       case 'i':
         if(iceCount < ice_max)
           return false;
@@ -477,6 +529,7 @@ class Emitter
   {
     this.isOn = false;
     firstEmit = true;
+    firstWoodEmit = true;
     if(type == 'e')
     {
       Particle part = (Particle) p.get(0);

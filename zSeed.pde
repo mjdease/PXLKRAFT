@@ -83,6 +83,9 @@ class Seed extends Particle
         case 'c': //collided with a concrete particle
           bounce(otherParticle);
           break;
+        case 'd':
+          bounce(otherParticle);
+          break;
         case 'i': //collided with a ice particle
           bounce(otherParticle);
           break;
