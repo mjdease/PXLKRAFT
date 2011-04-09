@@ -36,7 +36,7 @@ class Music
     rhythm = int(random(0,4));
     melody = 0;
     int delayAmt = 50;
-    melodyBuffer = 10;
+    melodyBuffer = 15;
     lastPlay = 0;
     fwLastPlay = 0;
     fwBuffer = 5;
@@ -126,14 +126,14 @@ class Music
     {
       for (int i=0; i<= 23; i++)
       {
-        groove2[h][i].setGain(-3);
+        groove2[h][i].setGain(-8);
       }
     }
-    fireSound.setGain(map(fireCount, 0, fire_max-700, -30, -1));
-    waterSound.setGain(map(waterCount, 0, water_max-300, -30, -1));
-    oilSound.setGain(map(oilCount, 0, oil_max-200, -40, -10));
-    windSound.setGain(map(int(engine.fluidSolver.getAvgSpeed()*1000000000), 0, 100000, -30, -2));
-    println(int(engine.fluidSolver.getAvgSpeed()*1000000000));
+    fireSound.setGain(map(fireCount, 0, fire_max-700, -30, -4));
+    waterSound.setGain(map(waterCount-freezeCount, 0, water_max-300, -30, -4));
+    oilSound.setGain(map(oilCount, 0, oil_max-200, -40, -12));
+    windSound.setGain(map(int(engine.fluidSolver.getAvgSpeed()*1000000000), 0, 100000, -30, -7));
+    //println(int(engine.fluidSolver.getAvgSpeed()*1000000000));
     if(noMelody)
       return;
     //println(wandP1+"+"+wand1);
@@ -239,8 +239,10 @@ class Music
   }
   void movedMouse(PVector wand1, PVector wand2)
   {
-    float frequency = map(dist(wand1.x, wand1.y, wand2.x, wand2.y), 0, 1280, 200, 3600);
+    //println(dist(wand1.x, wand1.y, wand2.x, wand2.y));
+    float frequency = map(dist(wand1.x, wand1.y, wand2.x, wand2.y), 0, 1280, 800, 3600);
     bpf.setFreq(frequency);
+    
   }
 
   void keyPressed()
@@ -456,6 +458,8 @@ class Music
     noRhythm = false;
     groove[rhythm].pause();
     rhythm = uirhythm;
+    bpf = new LowPassFS(2000, groove[rhythm].sampleRate());
+    groove[rhythm].addEffect(bpf);
     groove[rhythm].loop();
   }
   void noRhythm()

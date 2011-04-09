@@ -44,6 +44,9 @@ int concreteCount = 0;
 int iceCount = 0;
 int fireworkCount = 0;
 int woodCount = 0;
+int freezeCount = 0;
+
+int gameFrame = 0;
 
 int particleOpacity = 200;
 color[] firePalette;
@@ -143,7 +146,7 @@ void setup()
   //instantiate Environments
   //Environment(float gravity, float friction, PVector wind, float resistance, float turbulence)
   //standard
-  environments[0] = new Environment(0.2, 0.785, new PVector(0,0), 0.995, 0.01);
+  environments[0] = new Environment(0.26, 0.785, new PVector(0,0), 0.995, 0.01);
   //upside down
   //environments[1] = new Environment(-0.15, 0.5, new PVector(0,0), 0.995, 0.05);
   //no gravity
@@ -178,6 +181,7 @@ void reset()
   iceCount = 0;
   fireworkCount = 0;
   woodCount = 0;
+  freezeCount = 0;
   
   setHSB(233, 1,1,1);
   setHSB(0, 1,1,2);
@@ -251,7 +255,7 @@ void readMouse()
     {
       emitters[0].turnOff();
     }
-    if(emitters[0].isMaxed() && emitters[0].isOn)
+    if(emitters[0].isMaxed() && emitters[0].isOn && emitters[0].type != 'f' && emitters[0].type != 'e')
     {
       pushStyle();
       colorMode(RGB, 255);
@@ -291,13 +295,13 @@ void readWands()
   switch(page)
   {
   case 'v':
-    if(wand1.x == -100)
+    if(glob.wand1IsOff)
     {
       emitters[0].turnOff();
     }
     else
       wand1Fluids();
-    if(wand2.x == -100)
+    if(glob.wand2IsOff)
     {
       emitters[1].turnOff();
     }
@@ -305,7 +309,7 @@ void readWands()
       wand2Fluids();
     if(glob.isDown1() && !emitters[0].isOn)
     {
-      if(wand1.x != -100)
+      if(!glob.wand1IsOff)
         emitters[0].turnOn();
     }
     if(!glob.isDown1() && emitters[0].isOn)
@@ -315,14 +319,14 @@ void readWands()
 
     if(glob.isDown2() && !emitters[1].isOn)
     {
-      if(wand2.x != -100)
+      if(!glob.wand2IsOff)
         emitters[1].turnOn();
     }
     if(!glob.isDown2() && emitters[1].isOn)
     {
       emitters[1].turnOff();
     }
-    if(emitters[0].isMaxed() && emitters[0].isOn)
+    if(emitters[0].isMaxed() && emitters[0].isOn && emitters[0].type != 'f' && emitters[0].type != 'e')
     {
       pushStyle();
       colorMode(RGB, 255);
@@ -334,7 +338,7 @@ void readWands()
       text("Maxed", wand1.x, wand1.y + 35);
       popStyle();
     }
-    if(emitters[1].isMaxed() && emitters[1].isOn)
+    if(emitters[1].isMaxed() && emitters[1].isOn && emitters[1].type != 'f' && emitters[1].type != 'e')
     {
       pushStyle();
       colorMode(RGB, 255);
@@ -484,7 +488,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setLifeSpan(-1);
     emitters[wand].setBirthRate(0.15);
     emitters[wand].setBirthForce(new PVector(0,5));
-    setHSB(50,1,1,wand+1);
+    setHSB(120,1,1,wand+1);
     break;
   case 'f':
     if(emitters[wand].type == 'e')

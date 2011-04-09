@@ -42,12 +42,17 @@ class Ice extends Particle
           {
             otherParticle.freezeBuffer+=2;
           }
-          if(otherParticle.freezeBuffer>10)
+          if(otherParticle.freezeBuffer>15)
           {
             println(otherParticle.freezeBuffer);
             otherParticle.isFrozen = true;
+            freezeCount++;
             otherParticle.freezeBuffer = 0;
-            otherParticle.col = color(red(this.col), green(this.col), blue(this.col), 255);
+            //otherParticle.col = color(red(this.col), green(this.col), blue(this.col), 255);
+            pushStyle();
+            colorMode(RGB, 255);
+            otherParticle.col = color(125, 230, 235, 255);
+            popStyle();
           }
           break;
         case 'o': //collided with a oil particle

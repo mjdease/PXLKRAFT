@@ -93,7 +93,7 @@ class Fire extends Particle
       case 'd':
         bounce(otherParticle);
         otherParticle.fireBuffer++;
-        if(otherParticle.fireBuffer > 10 && !otherParticle.toKill)
+        if(otherParticle.fireBuffer > 5 && !otherParticle.toKill)
         {
           otherParticle.toKill = true;
           engine.addForce(this.loc.x*invWidth,this.loc.y*invHeight,0,-0.01, -1);

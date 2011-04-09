@@ -17,6 +17,8 @@ class Glob implements Runnable
   int py1 = -1; //previous position
   boolean click1 , pclick1; // whether its clicked
   boolean isSet1;
+  boolean wand1IsOff = false;
+  boolean wand2IsOff = false;
   //PVector v1;  
   // wand 2 variables
   color wc2, wcp2;
@@ -37,7 +39,7 @@ class Glob implements Runnable
   
   // threshold
   int threshold;
-  int thresh = 150;
+  int thresh = 200;
   
   int calibratedR, calibratedG, calibratedB;
   int closestColor;
@@ -194,15 +196,15 @@ class Glob implements Runnable
   {
     if(!isSet1)
     {
-      vector.set(-100 , 100 , 0);//round(px1 * wr) , round(py1 * hr) , 0);
-     
+      //vector.set(-100 , 100 , 0);//round(px1 * wr) , round(py1 * hr) , 0);
+      wand1IsOff = true;
       return vector;
     }
     else
     {
       //println(x1 +"+"+ y1);
-     vector.set(round(x1 * wr) , round(y1 * hr) , 0);
-   
+      vector.set(round(x1 * wr) , round(y1 * hr) , 0);
+      wand1IsOff = false;
       return vector;
     }
   }
@@ -211,14 +213,14 @@ class Glob implements Runnable
   {
     if(!isSet2)
     {
-      vector2.set(-100 , 100 , 0);//round(px2 * wr) , round(py2 * hr) , 0
-     
+      //vector2.set(-100 , 100 , 0);//round(px2 * wr) , round(py2 * hr) , 0
+      wand2IsOff = true;
       return vector2;
     }
     else
     {
       vector2.set(round(x2 * wr) , round(y2 * hr) , 0);
-     
+      wand2IsOff = false;
       return vector2;
     }
   }

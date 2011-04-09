@@ -69,29 +69,29 @@ class UI
       {
         strokeWeight(8);
         stroke(color(0,0,0));
-        rect(wand1.x, wand1.y, 20,20);
+        rect(wand1.x, wand1.y, 30,30);
         strokeWeight(4);
         if(emitters[0].isOn)
           stroke(dye1);
         else
           stroke(0,0,255);
-        rect(wand1.x, wand1.y, 20,20);
-        line(wand1.x - 10,wand1.y - 10,wand1.x + 10,wand1.y + 10);
-        line(wand1.x - 10,wand1.y + 10,wand1.x + 10,wand1.y - 10);
+        rect(wand1.x, wand1.y, 30,30);
+        line(wand1.x - 15,wand1.y - 15,wand1.x + 15,wand1.y + 15);
+        line(wand1.x - 15,wand1.y + 15,wand1.x + 15,wand1.y - 15);
       }
       if(emitters[1].type == 'e')
       {
         strokeWeight(8);
         stroke(color(0,0,0));
-        rect(wand1.x, wand1.y, 20,20);
+        rect(wand2.x, wand2.y, 30,30);
         strokeWeight(4);
         if(emitters[1].isOn)
           stroke(dye2);
         else
           stroke(0,0,255);
-        rect(wand2.x, wand2.y, 20,20);
-        line(wand2.x - 10,wand2.y - 10,wand2.x + 10,wand2.y + 10);
-        line(wand2.x - 10,wand2.y + 10,wand2.x + 10,wand2.y - 10);
+        rect(wand2.x, wand2.y, 30,30);
+        line(wand2.x - 15,wand2.y - 15,wand2.x + 15,wand2.y + 15);
+        line(wand2.x - 15,wand2.y + 15,wand2.x + 15,wand2.y - 15);
       }
       popStyle();
     }

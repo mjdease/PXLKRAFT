@@ -319,7 +319,7 @@ class Emitter
   }
   void createErasor(PVector location)
   {
-    temp = new Eraser(20, -1, 'e');
+    temp = new Eraser(30, -1, 'e');
     temp.loc = location;
     temp.birthTime = millis();
     temp.vel = new PVector(0,0);

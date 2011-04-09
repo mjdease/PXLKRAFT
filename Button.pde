@@ -180,13 +180,15 @@ class Button {
     image(b, X, Y);
     if(menuSoundBuffer >0)
       menuSoundBuffer--;
-    if(ui.inGame == true && (wand1.y < 102 || wand2.y < 102))
-    //if(ui.inGame == true && mouseY < 102)
+    println(gameFrame +"+"+ frameCount);
+    if(ui.inGame == true)
     {
-      animate();
-    }
-    else if(ui.inGame == true) {
-      animateOut();
+      if(wand1.y < 102 || wand2.y < 102 || gameFrame + 200 > frameCount)
+      {
+        animate();
+      }
+      else
+        animateOut();
     }
     //selected icons:
     if(type == "rhy1" && music.rhythm == 0 && !music.noRhythm)
@@ -235,7 +237,8 @@ class Button {
       if(type == "play")
       { 
         setHSB(233, 1,1,1);
-        ui.inGame = true;        
+        ui.inGame = true;  
+        gameFrame = frameCount;      
         for(int k = 0; k < 11; k++)
         {
           ui.Main.buttonArray[k] = ui.Main.gameArray[k];

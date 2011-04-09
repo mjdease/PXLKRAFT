@@ -51,6 +51,7 @@ class Water extends Particle
     {
       isFrozen = false;
       isMelting = false;
+      freezeCount--;
       meltBuffer = 0;
       meltIndex = 0;
       col = color(0, 0, 255);
@@ -96,12 +97,17 @@ class Water extends Particle
         if(otherParticle.isFrozen && !otherParticle.isMelting && !this.isFrozen)
         {
           this.freezeBuffer+=1;
-          if(this.freezeBuffer>20)
+          if(this.freezeBuffer>30)
           {
             this.isFrozen = true;
+            freezeCount++;
             this.freezeBuffer = 0;
-            this.col = color(red(otherParticle.col), green(otherParticle.col), blue(otherParticle.col), 255);
+            pushStyle();
+            colorMode(RGB, 255);
+            this.col = color(125, 230, 235, 255);
+            popStyle();
           }
+          bounce(otherParticle);
           break;
         }
         else if(this.isFrozen && otherParticle.isFrozen)
