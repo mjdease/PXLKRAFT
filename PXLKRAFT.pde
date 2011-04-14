@@ -1,3 +1,4 @@
+import processing.video.*;
 import org.gicentre.utils.geom.*;
 import msafluid.*;
 import processing.opengl.*;
@@ -22,6 +23,8 @@ PVector force2 = new PVector(0,0);
 
 Minim minim;
 Music music;
+
+Movie wandVid;
 
 final static int particle_max = 200;
 final static int arrow_max = 200;
@@ -53,7 +56,8 @@ color[] firePalette;
 color[] flowerColor;
 
 boolean wandIsInput = false;
-char page = 'u'; //v=visualization, c=calibration, m=music, u=mainmenu
+char page = 'u'; //v=visualization, c=calibration, m=music, u=mainmenu, i=instruction;
+int subPage = 1; //1=pxlkraft instructions, 2=wand instructions
 
 int emitterCount = 2;
 Emitter[] emitters = new Emitter[emitterCount];
@@ -93,6 +97,7 @@ void setup()
   minim = new Minim(this);
   music = new Music();
 
+  //wandVid = new Movie(this, "video/wands.mov");
   //tracking thread
   glob = new Glob(width, height);
   wrapper = new Thread(glob);
@@ -218,7 +223,7 @@ void draw()
   {
     readWands();
   }
-  if(page == 'c')
+  if(page == 'c' || page == 'i')
     cursor();
   else
     noCursor();
@@ -237,7 +242,6 @@ void draw()
   ui.run();
   //println(frameRate);
 }
-
 void readMouse()
 {
   wandP1.set(wand1);
@@ -271,7 +275,11 @@ void readMouse()
     music.run(wand1);
     break; 
   case 'c':
-    background(200);
+    pushStyle();
+    colorMode(RGB, 255);
+    background(70,255);
+    ui.calibrateInstructions();
+    popStyle();
     glob.calibrate();
     break;
   case 'm':
@@ -279,6 +287,16 @@ void readMouse()
     break;
   case 'u':
     wand1Fluids();
+    break;
+  case 'i':
+    if(subPage == 1)
+    {
+      ui.gameInstructions();
+    }
+    else if (subPage ==2)
+    {
+      ui.wandInstructions();
+    }
     break;
   default:
     break;
@@ -368,6 +386,16 @@ void readWands()
     break;
   case 'u':
     wand1Fluids();
+    break;
+  case 'i':
+    if(subPage == 1)
+    {
+      ui.gameInstructions();
+    }
+    else if (subPage ==2)
+    {
+      ui.wandInstructions();
+    }
     break;
   default:
     break;
@@ -577,6 +605,7 @@ void setHSB(int h, float s, float b, int wand)
 }
 void stop()
 {
+  println("stop");
   // always close Minim audio classes when you are done with them
   music.groove[music.rhythm].close();
   int i,j;

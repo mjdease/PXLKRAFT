@@ -58,7 +58,7 @@ class Engine
   void run()
   {
     colorMode(RGB, 1);
-    if(drawFluid) {
+    if(page != 'c' && page != 'i') {
       for(int i=0; i<fluidSolver.getNumCells(); i++) {
         int d = 3;
         imgFluid.pixels[i] = color(fluidSolver.r[i] * d, fluidSolver.g[i] * d, fluidSolver.b[i] * d, .3);

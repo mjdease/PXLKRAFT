@@ -7,7 +7,15 @@ class Button {
   PImage musicOver;
   PImage backOver;
   PImage calibOver;
+  PImage doneOver;
+  PImage insOver;
   PImage exitPic;
+  
+  PImage ins1Over;
+  PImage ins2Over;
+  PImage exitO;
+  PImage wand1O;
+  PImage wand2O;
   
   //In game rollovers
   PImage eraseO;
@@ -39,6 +47,14 @@ class Button {
     musicOver = loadImage("musicOver.gif");
     backOver = loadImage("backOver.gif");
     calibOver = loadImage("calibOver.gif");
+    doneOver = loadImage("doneOver.gif");
+    insOver = loadImage("insOver.gif");
+    
+    ins1Over = loadImage("insGameO.png");
+    ins2Over = loadImage("insMechO.png");
+    exitO = loadImage("exitO.gif");
+    wand1O = loadImage("wand1O.gif");
+    wand2O = loadImage("wand2O.gif");
     
     //ingame rollovers
     eraseO = loadImage("eraseO.gif");
@@ -66,9 +82,49 @@ class Button {
     {
       b = loadImage("back.gif");
     }
+    else if(inType == "backIns")
+    {
+      b = loadImage("back.gif");
+    }
+    else if(inType == "backCalib")
+    {
+      b = loadImage("back.gif");
+    }
+    else if(inType == "doneCalib")
+    {
+      b = loadImage("done.gif");
+    }
     else if(inType == "calib")
     {
       b = loadImage("calib.gif");
+    }
+    else if(inType == "ins")
+    {
+      b = loadImage("ins.gif");
+    }
+    else if(inType == "wand1")
+    {
+      b = loadImage("wand1.gif");
+    }
+    else if(inType == "wand2")
+    {
+      b = loadImage("wand2.gif");
+    }
+    else if(inType == "ins1")
+    {
+      b = loadImage("insGame.png");
+    }
+    else if(inType == "ins2")
+    {
+      b = loadImage("insMech.png");
+    }
+    else if(inType == "insPrev")
+    {
+      b = loadImage("insPrev.png");
+    }
+    else if(inType == "insNext")
+    {
+      b = loadImage("insNext.png");
     }
     else if(inType == "mel1")
     {
@@ -95,6 +151,10 @@ class Button {
       b = loadImage("rhy4.gif");
     }
     else if (inType == "exit")
+    {
+      b = loadImage("exit.gif");
+    }
+    else if (inType == "mainExit")
     {
       b = loadImage("exit.gif");
     }
@@ -180,7 +240,7 @@ class Button {
     image(b, X, Y);
     if(menuSoundBuffer >0)
       menuSoundBuffer--;
-    println(gameFrame +"+"+ frameCount);
+    //println(gameFrame +"+"+ frameCount);
     if(ui.inGame == true)
     {
       if(wand1.y < 102 || wand2.y < 102 || gameFrame + 200 > frameCount)
@@ -223,6 +283,22 @@ class Button {
     {
       image(noRhyO,X,Y);
     }
+    else if(type == "wand1" && glob.nowCalibrating == 1)
+    {
+      image(wand1O,X,Y);
+    }
+    else if(type == "wand2" && glob.nowCalibrating == 2)
+    {
+      image(wand2O,X,Y);
+    }
+    else if(type == "ins1" && subPage == 1)
+    {
+      image(ins1Over,X,Y);
+    }
+    else if(type == "ins2" && subPage == 2)
+    {
+      image(ins2Over,X,Y);
+    }
     
     
     //menu buttons by only the first wand
@@ -260,9 +336,41 @@ class Button {
         }
         page = 'm';
       }
+      else if (type == "ins")
+      {
+        ui.inIns = true;
+        for(int k = 0; k < 11; k++)
+        {
+          if(k > ui.Main.insArray.length - 1)
+          {
+            ui.Main.buttonArray[k] = null;
+          }
+          else {
+            ui.Main.buttonArray[k] = ui.Main.insArray[k];
+          }
+        }
+        page = 'i';
+      }
       else if (type == "back")
       {
         ui.inMusic = false;
+        for (int k = 0; k < 11; k++)
+        {
+          if( k > ui.Main.mainArray.length - 1)
+          {
+            ui.Main.buttonArray[k] = null;
+          }
+          else {
+            ui.Main.buttonArray[k] = ui.Main.mainArray[k];
+          }
+        }
+        page = 'u';
+      }
+      else if (type == "backIns")
+      {
+        ui.inIns = false;
+        ui.insPage = 0;
+        //wandVid.stop();
         for (int k = 0; k < 11; k++)
         {
           if( k > ui.Main.mainArray.length - 1)
@@ -292,6 +400,21 @@ class Button {
         reset();
         page = 'u';
       }
+      else if(type == "backCalib")
+      {
+        ui.inCalib = false;
+        for (int k = 0; k < 9; k++)
+        {
+          if( k > ui.Main.mainArray.length - 1)
+          {
+            ui.Main.buttonArray[k] = null;
+          }
+          else {
+            ui.Main.buttonArray[k] = ui.Main.mainArray[k];
+          }
+        }
+        page = 'u';
+      }
       else if(type == "calib")
       {
         ui.inCalib = true;
@@ -307,6 +430,46 @@ class Button {
         }
         page = 'c';
       } 
+      else if(type == "doneCalib")
+      {
+        ui.calibrationSuccess();
+      } 
+      else if(type == "mainExit")
+      {
+        stop();
+      } 
+      else if(type == "wand1")
+      {
+        glob.nowCalibrating = 1;
+      }
+      else if(type == "wand2")
+      {
+        glob.nowCalibrating = 2;
+      }
+      else if(type == "ins1")
+      {
+        subPage = 1;
+        //wandVid.stop();
+      } 
+      else if(type == "ins2")
+      {
+        subPage = 2;
+        //wandVid.play();
+      } 
+      else if(type == "insPrev")
+      {
+        ui.insPage--;
+        delay(250);
+        if(ui.insPage<0)
+          ui.insPage = 0;
+      }
+      else if(type == "insNext")
+      {
+        ui.insPage++;
+        delay(250);
+        if(ui.insPage>5)
+          ui.insPage = 0;
+      }
       else if (type == "erase")
       {
         changeParticle('e', 0);
@@ -455,13 +618,29 @@ class Button {
       {
         image(musicOver, X, Y);
       }
-      else if(type == "back")
+      else if(type == "back" || type == "backIns" || type == "backCalib")
       {
         image(backOver, X, Y);
       }
       else if(type == "calib")
       {
         image(calibOver, X, Y);
+      }
+      else if(type == "doneCalib")
+      {
+        image(doneOver, X, Y);
+      }
+      else if(type == "ins")
+      {
+        image(insOver, X, Y);
+      }
+      else if(type == "ins1")
+      {
+        image(ins1Over, X, Y);
+      }
+      else if(type == "ins2")
+      {
+        image(ins2Over, X, Y);
       }
       else if(type == "rhy1")
       {
@@ -486,6 +665,18 @@ class Button {
       else if(type == "mel2")
       {
         image(mel2Over, X, Y);
+      }
+      else if(type == "mainExit")
+      {
+        image(exitO, X, Y);
+      }
+      else if(type == "wand1")
+      {
+        image(wand1O, X, Y);
+      }
+      else if(type == "wand2")
+      {
+        image(wand2O, X, Y);
       }
       else if(type == "erase")
       {

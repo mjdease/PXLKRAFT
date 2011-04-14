@@ -39,6 +39,7 @@ class Emitter
   boolean firstEmit = true;
   boolean firstWoodEmit = true;
   boolean isFirework = false;
+  int nowCalibrating = 1;
 
   //default constructor
   Emitter()

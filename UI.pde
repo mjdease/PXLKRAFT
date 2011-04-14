@@ -14,6 +14,10 @@ class UI
   boolean inGame;
   boolean inMusic;
   boolean inCalib;
+  boolean inIns;
+  PImage[] insPages = new PImage[6];
+  PImage mechPage;
+  int insPage = 0;
 
   UI()
   {
@@ -22,10 +26,18 @@ class UI
     textFont(font,60);
     textSize(20);
     //noCursor();
-
+    insPages[0] = loadImage("page01.png");
+    insPages[1] = loadImage("page02.png");
+    insPages[2] = loadImage("page03.png");
+    insPages[3] = loadImage("page04.png");
+    insPages[4] = loadImage("page05.png");
+    insPages[5] = loadImage("page06.png");
+    mechPage = loadImage("mech.png");
+    
     inGame = false;
     inMusic = false;
     inCalib = false;
+    inIns = false;
     Main = new Page();
     Hue = 0;
   }
@@ -37,11 +49,11 @@ class UI
     
     Main.run();
     //turn off in 'v'
-    if(page != 'v')
+    if(page != 'v' && page != 'c' && page != 'i')
     {
       ease(10, 1, false);
     }
-    else
+    else if(page == 'v')
     {
       cursorX = int(wand1.x);
       cursorY = int(wand1.y);
@@ -95,9 +107,29 @@ class UI
       }
       popStyle();
     }
+    else if(page == 'i' && wandIsInput)
+    {
+      cursorX = int(wand1.x);
+      cursorY = int(wand1.y);
+      cursor2X = int(wand2.x);
+      cursor2Y = int(wand2.y);
+      pushStyle();
+      colorMode(RGB, 255);
+      rectMode(CENTER);
+      fill(255,255,255);
+      rect(cursorX, cursorY, 15,15);
+      popStyle();
+    }
+    else
+    {
+      cursorX = int(wand1.x);
+      cursorY = int(wand1.y);
+      cursor2X = int(wand2.x);
+      cursor2Y = int(wand2.y);
+    }
     //TITLES
     //Main titles
-    if(inGame == false && inCalib == false) {
+    if(inGame == false && inCalib == false && inIns == false) {
       fill(Hue,255,255,100);
       if(cursorX + 100 + margin > width - margin - tlength) {
         if(inMusic == false)
@@ -185,7 +217,7 @@ class UI
       }
     }
     //BOXES
-    if(inGame == false && inCalib == false)
+    if(inGame == false && inCalib == false && inIns == false)
     {
       Hue += 1;
       if(Hue >= 1000)
@@ -215,6 +247,51 @@ class UI
       }
     }
     page = 'u';
+  }
+  
+  void gameInstructions()
+  {
+    image(insPages[insPage],0,41);
+  }
+  
+  void wandInstructions()
+  {
+    //if(wandVid.available()) 
+    //{
+    //  wandVid.read();
+    //}
+    image(mechPage, 0, 41);
+    //image(wandVid, 0, 160);
+  }
+  void calibrateInstructions()
+  {
+    fill(225);
+    textSize(30);
+    text("Select wand to calibrate:", 380, 30);
+    
+    text("Notes:", 40, 280);
+    text("Colors (R,G,B):", 640, 280);
+    
+    textSize(20);
+    text("- Wand 1 should be Blue, and Orange when clicked", 40, 310);
+    text("- Wand 2 should be Red, and Green when clicked", 40, 340);
+    text("- Left click on the default color", 40, 370);
+    text("- Right click on the clicked color", 40, 400);
+    text("- Place the wand halfway between the center", 40, 430);
+    text("and corner of the image for best tracking", 52, 450);
+    rectMode(CORNER);
+    fill(color(red(glob.wc1),green(glob.wc1),blue(glob.wc1)));
+    rect(605, 310-20, 30,30);
+    text("Wand 1:                "+ red(glob.wc1)+"," + green(glob.wc1)+"," + blue(glob.wc1), 640, 310);
+    fill(color(red(glob.wcp1),green(glob.wcp1),blue(glob.wcp1)));
+    rect(605, 340-20, 30,30);
+    text("Wand 1 Clicked: "+ red(glob.wcp1)+"," + green(glob.wcp1)+"," + blue(glob.wcp1), 640, 340);
+    fill(color(red(glob.wc2),green(glob.wc2),blue(glob.wc2)));
+    rect(605, 370-20, 30,30);
+    text("Wand 2:                "+ red(glob.wc2)+"," + green(glob.wc2)+"," + blue(glob.wc2), 640, 370);
+    fill(color(red(glob.wcp2),green(glob.wcp2),blue(glob.wcp2)));
+    rect(605, 400-20, 30,30);
+    text("Wand 2 Clicked: "+ red(glob.wcp2)+"," + green(glob.wcp2)+"," + blue(glob.wcp2), 640, 400);
   }
 
 

@@ -57,6 +57,8 @@ class Glob implements Runnable
   int[] img;
   PImage pImg = createImage(320, 240, RGB);
   
+  int nowCalibrating = 1;
+  
   Glob (int wid , int hei)
   {
     running = false;
@@ -297,34 +299,45 @@ class Glob implements Runnable
     image(pImg, 0, 0);
     
     //println(int(red(c))+"," + int(green(c)) + "," + int(blue(c)) + ":" + mouseX +";"+mouseY);
+    
+    for(int i = 0; i<ui.Main.calibArray.length; i++)
+    {
+      if(ui.Main.calibArray[i].isOverButton())
+        return;
+    }
+  
     if(mousePressed)
     {
-      if (mouseButton == LEFT)
+      if(glob.nowCalibrating == 1)
       {
-        wc1 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
-        println("Wand 1: "+ hue(wc1)+"," + saturation(wc1)+"," + brightness(wc1));
+        if (mouseButton == LEFT)
+        {
+          wc1 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
+          println("Wand 1: "+ hue(wc1)+"," + saturation(wc1)+"," + brightness(wc1));
+        }
+        else if(mouseButton == RIGHT)
+        {
+          wcp1 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
+          println("Wand 1 Click: "+ hue(wcp1)+"," + saturation(wcp1)+"," + brightness(wcp1));
+        }
       }
-      
-      else if(mouseButton == RIGHT)
+      if(glob.nowCalibrating == 2)
       {
-        wcp1 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
-        println("Wand 1 Click: "+ hue(wcp1)+"," + saturation(wcp1)+"," + brightness(wcp1));
+        if(mouseButton == LEFT)
+        {
+          wc2 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
+          println("Wand 2: "+ hue(wc2)+"," + saturation(wc2)+"," + brightness(wc2));
+        }
+        else if(mouseButton == RIGHT)
+        {
+          wcp2 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
+          println("Wand 2 Click: "+ hue(wcp2)+"," + saturation(wcp2)+"," + brightness(wcp2));
+        }
       }
     }
     if(keyPressed)
     {
-      if(key == 'z')
-      {
-        wc2 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
-        println("Wand 2: "+ hue(wc2)+"," + saturation(wc2)+"," + brightness(wc2));
-      }
-      else if(key == 'x')
-      {
-        wcp2 = m.average(mouseX-2,mouseY-2,mouseX+2,mouseY+2);
-        println("Wand 2 Click: "+ hue(wcp2)+"," + saturation(wcp2)+"," + brightness(wcp2));
-      }
-      
-      else if(key=='q')
+      if(key=='q')
       {
         ui.calibrationSuccess();
       }
@@ -332,13 +345,13 @@ class Glob implements Runnable
       {
         println(m.version());
         println("ABOUT: SUNMOCK YANG, MATT DEASE, PAUL YOUNG, KYLE THORMPSON, GRAMBO FIRST BLOOD");
-        println("PRESS s FOR CAMERA SETTINGS");
+        println("PRESS p FOR CAMERA SETTINGS");
       }
       else if(key=='c')
       {
         println("Wand 1: " + hue(wc1)+"," + saturation(wc1)+"," + brightness(wc1) + "\nClicked 1: " +hue(wcp1)+"," + saturation(wcp1)+"," + brightness(wcp1) + "\nWand 2: " + hue(wc2)+"," + saturation(wc2)+"," + brightness(wc2) + "\nClicked 2: " + hue(wcp2)+"," + saturation(wcp2)+"," + brightness(wcp2));
       }
-      else if(key=='s')
+      else if(key=='p')
       {
         m.settings();
       }
