@@ -126,7 +126,7 @@ class Music
     {
       for (int i=0; i<= 23; i++)
       {
-        groove2[h][i].setGain(-8);
+        groove2[h][i].setGain(-6);
       }
     }
     fireSound.setGain(map(fireCount, 0, fire_max-700, -30, -4));

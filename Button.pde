@@ -1,4 +1,4 @@
-
+import codeanticode.gsvideo.*;
 class Button {
   String type;
   PImage b;
@@ -370,7 +370,10 @@ class Button {
       {
         ui.inIns = false;
         ui.insPage = 0;
-        //wandVid.stop();
+        subPage = 1;
+        delay(250);
+        wandVid.pause();
+        music.groove[music.rhythm].play();
         for (int k = 0; k < 11; k++)
         {
           if( k > ui.Main.mainArray.length - 1)
@@ -449,12 +452,17 @@ class Button {
       else if(type == "ins1")
       {
         subPage = 1;
-        //wandVid.stop();
+        delay(250);
+        wandVid.pause();
+        music.groove[music.rhythm].play();
       } 
       else if(type == "ins2")
       {
         subPage = 2;
-        //wandVid.play();
+        delay(250);
+        wandVid.goToBeginning();
+        wandVid.play();
+        music.groove[music.rhythm].pause();
       } 
       else if(type == "insPrev")
       {

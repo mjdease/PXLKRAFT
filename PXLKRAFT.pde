@@ -1,4 +1,4 @@
-import processing.video.*;
+import codeanticode.gsvideo.*;
 import org.gicentre.utils.geom.*;
 import msafluid.*;
 import processing.opengl.*;
@@ -24,7 +24,7 @@ PVector force2 = new PVector(0,0);
 Minim minim;
 Music music;
 
-Movie wandVid;
+GSMovie wandVid;
 
 final static int particle_max = 200;
 final static int arrow_max = 200;
@@ -97,7 +97,7 @@ void setup()
   minim = new Minim(this);
   music = new Music();
 
-  //wandVid = new Movie(this, "video/wands.mov");
+  wandVid = new GSMovie(this, "video/wands.mp4");
   //tracking thread
   glob = new Glob(width, height);
   wrapper = new Thread(glob);
@@ -212,6 +212,9 @@ void reset()
   
   engine.fluidSolver.reset();
 }
+void movieEvent(GSMovie wandVid) {
+  wandVid.read();
+}
 void draw()
 {
   rectMode(CENTER);
@@ -284,6 +287,7 @@ void readMouse()
     break;
   case 'm':
     wand1Fluids();
+    ui.musicOptions();
     break;
   case 'u':
     wand1Fluids();
@@ -383,6 +387,7 @@ void readWands()
     break;
   case 'm':
     wand1Fluids();
+    ui.musicOptions();
     break;
   case 'u':
     wand1Fluids();

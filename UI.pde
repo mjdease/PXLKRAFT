@@ -248,20 +248,27 @@ class UI
     }
     page = 'u';
   }
-  
+  void musicOptions()
+  {
+    pushStyle();
+    colorMode(RGB, 255);
+    fill(color(255,0,0,255));
+    textSize(32);
+    text("Melody Notes:", 100, 240);
+    text("Rhythm Tracks:", 100, 480);
+    popStyle();
+  }
   void gameInstructions()
   {
+    background(0);
     image(insPages[insPage],0,41);
   }
   
   void wandInstructions()
   {
-    //if(wandVid.available()) 
-    //{
-    //  wandVid.read();
-    //}
+    background(0);
     image(mechPage, 0, 41);
-    //image(wandVid, 0, 160);
+    image(wandVid, 0, 151);
   }
   void calibrateInstructions()
   {

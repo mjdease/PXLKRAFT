@@ -23,8 +23,8 @@ class Page{
   musicArray[4] = new Button("rhy3",width/2 - 170, height/2 + 75 + 20);
   musicArray[5] = new Button("rhy4",width/2 + 20 , height/2 + 75 + 20);
   musicArray[6] = new Button("back",width - 200, height - 200);
-  musicArray[7] = new Button("noMel",width/2 + 200, height/2 - 120);
-  musicArray[8] = new Button("noRhy",width/2 + 200, height/2 + 20);
+  musicArray[7] = new Button("noMel",width/2 + 200, height/2 - 210);
+  musicArray[8] = new Button("noRhy",width/2 + 200, height/2 + 25);
   
   buttonArray[0] = mainArray[0];
   buttonArray[1] = mainArray[1];
