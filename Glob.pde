@@ -147,8 +147,8 @@ class Glob implements Runnable
       calibratedB = int(blue(c));
       
       wc1Correl = int(abs(calibratedR - red(wc1)) + abs(calibratedG - green(wc1)) + abs(calibratedB - blue(wc1)));
-      wcp1Correl = int(abs(calibratedR - red(wcp1)) + abs(calibratedG - green(wcp1)) + abs(calibratedB - blue(wcp1)));
-      wc2Correl = int(abs(calibratedR - red(wc2)) + abs(calibratedG - green(wc2)) + abs(calibratedB - blue(wc2)));
+      wcp1Correl = int(abs(calibratedR - red(wcp1)) + abs(calibratedG - green(wcp1))); //+ abs(calibratedB - blue(wcp1)));
+      wc2Correl = int(abs(calibratedR - red(wc2)) + abs(calibratedG - green(wc2))); //+ abs(calibratedB - blue(wc2)));
       wcp2Correl = int(abs(calibratedR - red(wcp2)) + abs(calibratedG - green(wcp2)) + abs(calibratedB - blue(wcp2)));
       closestColor = min(min(wc1Correl, wcp1Correl), min(wc2Correl, wcp2Correl));
       if(frameCount%30==0)
@@ -298,11 +298,23 @@ class Glob implements Runnable
     pImg.updatePixels();
     image(pImg, 0, 0);
     
+    //And I helped -Paul
+    pushStyle();
+    
+    noFill();
+    colorMode(RGB , 255);
+    stroke(255 , 0 , 0);
+    strokeWeight(2);
+    
+    rect(70 , 180 , 30 , 30);
+    
+    popStyle();
+    
     //println(int(red(c))+"," + int(green(c)) + "," + int(blue(c)) + ":" + mouseX +";"+mouseY);
     
     for(int i = 0; i<ui.Main.calibArray.length; i++)
     {
-      if(ui.Main.calibArray[i].isOverButton())
+      if(ui.Main.calibArray[i].isOverButton(0))
         return;
     }
   

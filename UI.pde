@@ -116,8 +116,10 @@ class UI
       pushStyle();
       colorMode(RGB, 255);
       rectMode(CENTER);
-      fill(255,255,255);
-      rect(cursorX, cursorY, 15,15);
+      strokeWeight(4);
+      stroke(255);
+      noFill();
+      rect(wand1.x, wand1.y, 20,20);
       popStyle();
     }
     else
@@ -273,6 +275,11 @@ class UI
   void calibrateInstructions()
   {
     fill(225);
+    stroke(255);
+    strokeWeight(2);
+    line(0,241,321,241);
+    line(321,0,321,241);
+    noStroke();
     textSize(30);
     text("Select wand to calibrate:", 380, 30);
     
@@ -284,8 +291,8 @@ class UI
     text("- Wand 2 should be Red, and Green when clicked", 40, 340);
     text("- Left click on the default color", 40, 370);
     text("- Right click on the clicked color", 40, 400);
-    text("- Place the wand halfway between the center", 40, 430);
-    text("and corner of the image for best tracking", 52, 450);
+    text("- Place the wands in the square when calibrating", 40, 430);
+    text("  for best tracking", 52, 450);
     rectMode(CORNER);
     fill(color(red(glob.wc1),green(glob.wc1),blue(glob.wc1)));
     rect(605, 310-20, 30,30);

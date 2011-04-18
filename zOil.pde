@@ -45,6 +45,10 @@ class Oil extends Particle
             this.loc.y = otherParticle.loc.y;
             otherParticle.loc.y = temp;
           }
+          else if(otherParticle.isFrozen)
+          {
+            bounce(otherParticle);
+          }
           break;
         case 'o': //collided with a oil particle
           bounce(otherParticle);

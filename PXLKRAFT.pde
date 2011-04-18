@@ -125,8 +125,8 @@ void setup()
   ui = new UI();
 
   //instantiate emitters
-  emitters[0] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'w', 0.2);
-  emitters[1] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'f', 0.2);
+  emitters[0] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'w', 0.2, 0);
+  emitters[1] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'f', 0.2, 1);
   setHSB(233, 1,1,1);
   setHSB(0, 1,1,2);
   setHSB(58, 1,1,3);
@@ -218,7 +218,7 @@ void movieEvent(GSMovie wandVid) {
 void draw()
 {
   rectMode(CENTER);
-  if(!wandIsInput) //|| page != 'v'
+  if(!wandIsInput || page == 'c') //|| page != 'v'
   {
     readMouse();
   }
@@ -226,7 +226,7 @@ void draw()
   {
     readWands();
   }
-  if(page == 'c' || page == 'i')
+  if(page == 'c' || (page == 'i' && !wandIsInput))
     cursor();
   else
     noCursor();
@@ -280,7 +280,7 @@ void readMouse()
   case 'c':
     pushStyle();
     colorMode(RGB, 255);
-    background(70,255);
+    background(0,255);
     ui.calibrateInstructions();
     popStyle();
     glob.calibrate();
@@ -382,8 +382,6 @@ void readWands()
     
     break;
   case 'c':
-    background(200);
-    glob.calibrate();
     break;
   case 'm':
     wand1Fluids();

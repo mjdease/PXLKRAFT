@@ -40,6 +40,7 @@ class Emitter
   boolean firstWoodEmit = true;
   boolean isFirework = false;
   int nowCalibrating = 1;
+  int wandNum;
 
   //default constructor
   Emitter()
@@ -58,7 +59,7 @@ class Emitter
     this.sprayWidth = sprayWidth;
   }
   //infinite life particles
-  Emitter(PVector loc, float sketchFrameRate, PVector birthForce, float sprayWidth, char type, float birthRate)
+  Emitter(PVector loc, float sketchFrameRate, PVector birthForce, float sprayWidth, char type, float birthRate, int wandNum)
   {
     this.loc = loc;
     this.sketchFrameRate = sketchFrameRate;
@@ -68,6 +69,7 @@ class Emitter
     this.birthForce = birthForce;
     this.birthPath.add(birthForce);
     this.sprayWidth = sprayWidth;
+    this.wandNum = wandNum;
   }
   //constructor for single emission with birthRate param (explosions etc)
   Emitter(PVector loc, PVector birthForce, float particleNum, float sprayWidth, char type, int lifeSpan, boolean fWorks)
@@ -95,7 +97,7 @@ class Emitter
     {
       for(int i = 0; i<ui.Main.gameArray.length; i++)
       {
-        if(ui.Main.gameArray[i].isOverButton())
+        if(ui.Main.gameArray[i].isOverButton(wandNum))
           return;
       }
       birthRemainder = birthRate + birthRemainder;
@@ -242,7 +244,7 @@ class Emitter
     if(numParticles == 1 || firstWoodEmit)
     {
       
-      temp = new Wood(15, color(128,60,11, 255), lifeSpan, 0.98, type);
+      temp = new Wood(15, color(139, 84, 62, 255), lifeSpan, 0.98, type);
       initParticle(temp);
       woodCount++;
       if(firstWoodEmit)
@@ -254,10 +256,10 @@ class Emitter
     float y = 0;
     for(int i = 1; i<=numParticles; i++)
     {
-      temp = new Wood(15, color(128,60,11, 255), lifeSpan, 0.98, type);
+      temp = new Wood(15, color(139, 84, 62, 255), lifeSpan, 0.98, type);
       if(i==numParticles)
       {
-        temp = new Wood(15, color(128,60,11, 255), lifeSpan, 0.98, type);
+        temp = new Wood(15, color(139, 84, 62, 255), lifeSpan, 0.98, type);
         initParticle(temp);
         woodCount++;
         woodPPos.set(woodPos);

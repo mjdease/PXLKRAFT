@@ -57,7 +57,7 @@ class Fire extends Particle
         {
           otherParticle.boilBuffer++;
         }
-        if(otherParticle.meltBuffer>10)
+        if(otherParticle.meltBuffer>5)
         {
           meltBuffer = 0;
           otherParticle.isMelting = true;

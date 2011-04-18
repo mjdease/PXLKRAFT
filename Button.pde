@@ -29,6 +29,8 @@ class Button {
   PImage woodO;
   PImage noMelO;
   PImage noRhyO;
+  PImage insNextO;
+  PImage insPrevO;
 
   int X;
   int Y;
@@ -52,6 +54,8 @@ class Button {
     
     ins1Over = loadImage("insGameO.png");
     ins2Over = loadImage("insMechO.png");
+    insNextO = loadImage("insNextO.png");
+    insPrevO = loadImage("insPrevO.png");
     exitO = loadImage("exitO.gif");
     wand1O = loadImage("wand1O.gif");
     wand2O = loadImage("wand2O.gif");
@@ -302,7 +306,7 @@ class Button {
     
     
     //menu buttons by only the first wand
-    if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height+30 && (glob.wand1Pressed() || mousePressed))
+    if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height+30 && ((glob.wand1Pressed() && page != 'c') || mousePressed))
     {
       //text(type,width/2,height/2);
       if(menuSoundBuffer == 0)
@@ -373,7 +377,7 @@ class Button {
         subPage = 1;
         delay(250);
         wandVid.pause();
-        music.groove[music.rhythm].play();
+        music.groove[music.rhythm].loop();
         for (int k = 0; k < 11; k++)
         {
           if( k > ui.Main.mainArray.length - 1)
@@ -454,7 +458,7 @@ class Button {
         subPage = 1;
         delay(250);
         wandVid.pause();
-        music.groove[music.rhythm].play();
+        music.groove[music.rhythm].loop();
       } 
       else if(type == "ins2")
       {
@@ -598,7 +602,7 @@ class Button {
       {
         ui.inGame = false;
         animateOut();
-        for (int k = 0; k < 10; k++)
+        for (int k = 0; k < 11; k++)
         {
           if( k > ui.Main.mainArray.length - 1)
           {
@@ -646,6 +650,14 @@ class Button {
       {
         image(ins1Over, X, Y);
       }
+      else if(type == "insPrev")
+      {
+        image(insPrevO, X, Y);
+      }
+      else if(type == "insNext")
+      {
+        image(insNextO, X, Y);
+      }
       else if(type == "ins2")
       {
         image(ins2Over, X, Y);
@@ -689,47 +701,83 @@ class Button {
       else if(type == "erase")
       {
         image(eraseO,X,Y);
+        pushStyle();
+        colorMode(RGB,255);
+        fill(255,255);
         text("Eraser", X + b.width/2, 110);
+        popStyle();
       }
       else if(type == "stone")
       {
         image(stoneO,X,Y);
+        pushStyle();
+        colorMode(RGB,255);
+        fill(255,255);
         text("Stone", X + b.width/2, 110);
+        popStyle();
       }
       else if(type == "ice")
       {
         image(iceO,X,Y);
+        pushStyle();
+        colorMode(RGB,255);
+        fill(255,255);
         text("Snow", X + b.width/2, 110);
+        popStyle();
       }
       else if(type == "works")
       {
         image(worksO,X,Y);
+        pushStyle();
+        colorMode(RGB,255);
+        fill(255,255);
         text("Fireworks", X + b.width/2, 110);
+        popStyle();
       }
       else if(type == "oil")
       {
         image(oilO,X,Y);
+        pushStyle();
+        colorMode(RGB,255);
+        fill(255,255);
         text("Oil", X + b.width/2, 110);
+        popStyle();
       }
       else if(type == "water")
       {
         image(waterO,X,Y);
+        pushStyle();
+        colorMode(RGB,255);
+        fill(255,255);
         text("Water", X + b.width/2, 110);
+        popStyle();
       }
       else if(type == "fire")
       {
         image(fireO,X,Y);
+        pushStyle();
+        colorMode(RGB,255);
+        fill(255,255);
         text("Fire", X + b.width/2, 110);
+        popStyle();
       }
       else if(type == "seed")
       {
         image(seedO,X,Y);
+        pushStyle();
+        colorMode(RGB,255);
+        fill(255,255);
         text("Seeds", X + b.width/2, 110);
+        popStyle();
       }
       else if(type == "wood")
       {
         image(woodO,X,Y);
+        pushStyle();
+        colorMode(RGB,255);
+        fill(255,255);
         text("Wood", X + b.width/2, 110);
+        popStyle();
       }
       else if(type == "noMel")
       {
@@ -742,12 +790,22 @@ class Button {
       popStyle();
     }
   }
-  boolean isOverButton()
+  boolean isOverButton(int wand)
   {
-    if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height+30)
-      return true;
-    else if(ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height+30)
-      return true;
+    if(wand ==0)
+    {
+      if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height+30)
+        return true;
+      else
+        return false;
+    }
+    else if(wand ==1)
+    {
+      if(ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height+30)
+        return true;
+      else
+        return false;
+    }
     else
       return false;
   }

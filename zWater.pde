@@ -97,7 +97,7 @@ class Water extends Particle
         if(otherParticle.isFrozen && !otherParticle.isMelting && !this.isFrozen)
         {
           this.freezeBuffer+=1;
-          if(this.freezeBuffer>30)
+          if(this.freezeBuffer>40)
           {
             this.isFrozen = true;
             freezeCount++;
@@ -121,7 +121,8 @@ class Water extends Particle
         }
         break;
       case 'o': //collided with a oil particle
-        bounce(otherParticle);
+        if(!this.isFrozen)
+          bounce(otherParticle);
         break;
       case 's': //collided with a seed particle
         if(!otherParticle.isPlanted && !this.isFrozen)
