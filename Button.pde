@@ -425,6 +425,7 @@ class Button {
       else if(type == "calib")
       {
         ui.inCalib = true;
+        delay(250);
         for(int k = 0; k < 11; k++)
         {
           if(k > ui.Main.calibArray.length - 1)
@@ -473,7 +474,7 @@ class Button {
         ui.insPage--;
         delay(250);
         if(ui.insPage<0)
-          ui.insPage = 0;
+          ui.insPage = 5;
       }
       else if(type == "insNext")
       {
@@ -617,88 +618,91 @@ class Button {
       }
       
     }
-    else if((ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height+30) || (ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height+30))
+    else if(cursor1Over() || cursor2Over())
     {
       pushStyle();
       textSize(20);
       textAlign(CENTER);
-      if(type == "play")
+      if(cursor1Over())
       {
-        image(playOver, X, Y);
+        if(type == "play")
+        {
+          image(playOver, X, Y);
+        }
+        else if(type == "music")
+        {
+          image(musicOver, X, Y);
+        }
+        else if(type == "back" || type == "backIns" || type == "backCalib")
+        {
+          image(backOver, X, Y);
+        }
+        else if(type == "calib")
+        {
+          image(calibOver, X, Y);
+        }
+        else if(type == "doneCalib")
+        {
+          image(doneOver, X, Y);
+        }
+        else if(type == "ins")
+        {
+          image(insOver, X, Y);
+        }
+        else if(type == "ins1")
+        {
+          image(ins1Over, X, Y);
+        }
+        else if(type == "insPrev")
+        {
+          image(insPrevO, X, Y);
+        }
+        else if(type == "insNext")
+        {
+          image(insNextO, X, Y);
+        }
+        else if(type == "ins2")
+        {
+          image(ins2Over, X, Y);
+        }
+        else if(type == "rhy1")
+        {
+          image(rhy1Over, X, Y);
+        }
+        else if(type == "rhy2")
+        {
+          image(rhy2Over, X, Y);
+        }
+        else if(type == "rhy3")
+        {
+          image(rhy3Over, X, Y);
+        }
+        else if(type == "rhy4")
+        {
+          image(rhy4Over, X, Y);
+        }
+        else if(type == "mel1")
+        {
+          image(mel1Over, X, Y);
+        }
+        else if(type == "mel2")
+        {
+          image(mel2Over, X, Y);
+        }
+        else if(type == "mainExit")
+        {
+          image(exitO, X, Y);
+        }
+        else if(type == "wand1")
+        {
+          image(wand1O, X, Y);
+        }
+        else if(type == "wand2")
+        {
+          image(wand2O, X, Y);
+        }
       }
-      else if(type == "music")
-      {
-        image(musicOver, X, Y);
-      }
-      else if(type == "back" || type == "backIns" || type == "backCalib")
-      {
-        image(backOver, X, Y);
-      }
-      else if(type == "calib")
-      {
-        image(calibOver, X, Y);
-      }
-      else if(type == "doneCalib")
-      {
-        image(doneOver, X, Y);
-      }
-      else if(type == "ins")
-      {
-        image(insOver, X, Y);
-      }
-      else if(type == "ins1")
-      {
-        image(ins1Over, X, Y);
-      }
-      else if(type == "insPrev")
-      {
-        image(insPrevO, X, Y);
-      }
-      else if(type == "insNext")
-      {
-        image(insNextO, X, Y);
-      }
-      else if(type == "ins2")
-      {
-        image(ins2Over, X, Y);
-      }
-      else if(type == "rhy1")
-      {
-        image(rhy1Over, X, Y);
-      }
-      else if(type == "rhy2")
-      {
-        image(rhy2Over, X, Y);
-      }
-      else if(type == "rhy3")
-      {
-        image(rhy3Over, X, Y);
-      }
-      else if(type == "rhy4")
-      {
-        image(rhy4Over, X, Y);
-      }
-      else if(type == "mel1")
-      {
-        image(mel1Over, X, Y);
-      }
-      else if(type == "mel2")
-      {
-        image(mel2Over, X, Y);
-      }
-      else if(type == "mainExit")
-      {
-        image(exitO, X, Y);
-      }
-      else if(type == "wand1")
-      {
-        image(wand1O, X, Y);
-      }
-      else if(type == "wand2")
-      {
-        image(wand2O, X, Y);
-      }
-      else if(type == "erase")
+      if(type == "erase")
       {
         image(eraseO,X,Y);
         pushStyle();
@@ -716,7 +720,7 @@ class Button {
         text("Stone", X + b.width/2, 110);
         popStyle();
       }
-      else if(type == "ice")
+      if(type == "ice")
       {
         image(iceO,X,Y);
         pushStyle();
@@ -789,6 +793,20 @@ class Button {
       }
       popStyle();
     }
+  }
+  boolean cursor1Over()
+  {
+    if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height+30)
+      return true;
+    else
+      return false;
+  }
+  boolean cursor2Over()
+  {
+    if(ui.cursor2X > X && ui.cursor2X < X + b.width && ui.cursor2Y > Y && ui.cursor2Y < Y + b.height+30)
+      return true;
+    else
+      return false;
   }
   boolean isOverButton(int wand)
   {
