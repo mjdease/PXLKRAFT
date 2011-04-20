@@ -32,7 +32,10 @@ class Water extends Particle
     }
     if(isSteam)
     {
+      pushStyle();
+      colorMode(RGB, 255);
       col = color(0, 200, 255, colA);
+      popStyle();
       vel.normalize();
       vel.add(0,-4,0);
       loc.add(vel);
