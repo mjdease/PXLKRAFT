@@ -377,7 +377,8 @@ class Button {
         subPage = 1;
         delay(250);
         wandVid.pause();
-        music.groove[music.rhythm].loop();
+        if(!music.noRhythm)
+          music.groove[music.rhythm].loop();
         for (int k = 0; k < 11; k++)
         {
           if( k > ui.Main.mainArray.length - 1)
@@ -459,7 +460,8 @@ class Button {
         subPage = 1;
         delay(250);
         wandVid.pause();
-        music.groove[music.rhythm].loop();
+        if(!music.noRhythm)
+          music.groove[music.rhythm].loop();
       } 
       else if(type == "ins2")
       {
