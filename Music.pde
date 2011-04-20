@@ -7,7 +7,7 @@ class Music
   AudioPlayer oilSound;
   AudioPlayer windSound;
   AudioSample fireworksSound;
-  
+
   //WaveformRenderer waveform;
   LowPassFS bpf;
   int wfwidth;
@@ -40,88 +40,135 @@ class Music
     lastPlay = 0;
     fwLastPlay = 0;
     fwBuffer = 5;
+    //load environment sounds
     fireSound = minim.loadFile("data/sound/environment/fire.wav", 4096);
     waterSound = minim.loadFile("data/sound/environment/water.wav", 4096);
     oilSound = minim.loadFile("data/sound/environment/oil.wav", 4096);
     windSound = minim.loadFile("data/sound/environment/wind.wav", 4096);
     fireworksSound = minim.loadSample("data/sound/environment/firework.wav", 2048);
-
+    //load rhythm tracks
     groove[0] = minim.loadFile("data/sound/Rhythm_Track_1.wav", 4096);
     groove[1] = minim.loadFile("data/sound/Rhythm_Track_2.wav", 4096);
     groove[2] = minim.loadFile("data/sound/Rhythm_Track_3.wav", 4096);
     groove[3] = minim.loadFile("data/sound/Rhythm_Track_4.wav", 4096);
-       
-    groove2[0][0] = minim.loadSample("data/sound/melody 2/1.mp3", 1024); delay(delayAmt);
-    groove2[0][1] = minim.loadSample("data/sound/melody 2/2.mp3", 1024); delay(delayAmt);
-    groove2[0][2] = minim.loadSample("data/sound/melody 2/3.mp3", 1024); delay(delayAmt);
-    groove2[0][3] = minim.loadSample("data/sound/melody 2/4.mp3", 1024); delay(delayAmt);
-    groove2[0][4] = minim.loadSample("data/sound/melody 2/5.mp3", 1024); delay(delayAmt);
-    groove2[0][5] = minim.loadSample("data/sound/melody 2/6.mp3", 1024); delay(delayAmt);
-    groove2[0][6] = minim.loadSample("data/sound/melody 2/7.mp3", 1024); delay(delayAmt);
-    groove2[0][7] = minim.loadSample("data/sound/melody 2/8.mp3", 1024); delay(delayAmt);
-    groove2[0][8] = minim.loadSample("data/sound/melody 2/9.mp3", 1024); delay(delayAmt);
-    groove2[0][9] = minim.loadSample("data/sound/melody 2/10.mp3", 1024); delay(delayAmt);
-    groove2[0][10] = minim.loadSample("data/sound/melody 2/11.mp3", 1024); delay(delayAmt);
-    groove2[0][11] = minim.loadSample("data/sound/melody 2/12.mp3", 1024); delay(delayAmt);
-    groove2[0][12] = minim.loadSample("data/sound/melody 2/13.mp3", 1024); delay(delayAmt);
-    groove2[0][13] = minim.loadSample("data/sound/melody 2/14.mp3", 1024); delay(delayAmt);
-    groove2[0][14] = minim.loadSample("data/sound/melody 2/15.mp3", 1024); delay(delayAmt);
-    groove2[0][15] = minim.loadSample("data/sound/melody 2/16.mp3", 1024); delay(delayAmt);
-    groove2[0][16] = minim.loadSample("data/sound/melody 2/17.mp3", 1024); delay(delayAmt);
-    groove2[0][17] = minim.loadSample("data/sound/melody 2/18.mp3", 1024); delay(delayAmt);
-    groove2[0][18] = minim.loadSample("data/sound/melody 2/19.mp3", 1024); delay(delayAmt);
-    groove2[0][19] = minim.loadSample("data/sound/melody 2/20.mp3", 1024); delay(delayAmt);
-    groove2[0][20] = minim.loadSample("data/sound/melody 2/21.mp3", 1024); delay(delayAmt);
-    groove2[0][21] = minim.loadSample("data/sound/melody 2/22.mp3", 1024); delay(delayAmt);
-    groove2[0][22] = minim.loadSample("data/sound/melody 2/23.mp3", 1024); delay(delayAmt);
-    groove2[0][23] = minim.loadSample("data/sound/melody 2/24.mp3", 1024); delay(delayAmt);
-    
-    groove2[1][0] = minim.loadSample("data/sound/melody 1/1.mp3", 1024); delay(delayAmt);
-    groove2[1][1] = minim.loadSample("data/sound/melody 1/2.mp3", 1024); delay(delayAmt);
-    groove2[1][2] = minim.loadSample("data/sound/melody 1/3.mp3", 1024); delay(delayAmt);
-    groove2[1][3] = minim.loadSample("data/sound/melody 1/4.mp3", 1024); delay(delayAmt);
-    groove2[1][4] = minim.loadSample("data/sound/melody 1/5.mp3", 1024); delay(delayAmt);
-    groove2[1][5] = minim.loadSample("data/sound/melody 1/6.mp3", 1024); delay(delayAmt);
-    groove2[1][6] = minim.loadSample("data/sound/melody 1/7.mp3", 1024); delay(delayAmt);
-    groove2[1][7] = minim.loadSample("data/sound/melody 1/8.mp3", 1024); delay(delayAmt);
-    groove2[1][8] = minim.loadSample("data/sound/melody 1/9.mp3", 1024); delay(delayAmt);
-    groove2[1][9] = minim.loadSample("data/sound/melody 1/10.mp3", 1024); delay(delayAmt);
-    groove2[1][10] = minim.loadSample("data/sound/melody 1/11.mp3", 1024); delay(delayAmt);
-    groove2[1][11] = minim.loadSample("data/sound/melody 1/12.mp3", 1024); delay(delayAmt);
-    groove2[1][12] = minim.loadSample("data/sound/melody 1/13.mp3", 1024); delay(delayAmt);
-    groove2[1][13] = minim.loadSample("data/sound/melody 1/14.mp3", 1024); delay(delayAmt);
-    groove2[1][14] = minim.loadSample("data/sound/melody 1/15.mp3", 1024); delay(delayAmt);
-    groove2[1][15] = minim.loadSample("data/sound/melody 1/16.mp3", 1024); delay(delayAmt);
-    groove2[1][16] = minim.loadSample("data/sound/melody 1/17.mp3", 1024); delay(delayAmt);
-    groove2[1][17] = minim.loadSample("data/sound/melody 1/18.mp3", 1024); delay(delayAmt);
-    groove2[1][18] = minim.loadSample("data/sound/melody 1/19.mp3", 1024); delay(delayAmt);
-    groove2[1][19] = minim.loadSample("data/sound/melody 1/20.mp3", 1024); delay(delayAmt);
-    groove2[1][20] = minim.loadSample("data/sound/melody 1/21.mp3", 1024); delay(delayAmt);
-    groove2[1][21] = minim.loadSample("data/sound/melody 1/22.mp3", 1024); delay(delayAmt);
-    groove2[1][22] = minim.loadSample("data/sound/melody 1/23.mp3", 1024); delay(delayAmt);
-    groove2[1][23] = minim.loadSample("data/sound/melody 1/24.mp3", 1024); delay(delayAmt);
-    
+    //load melody notes, delay reduces the underrun warnings   
+    groove2[0][0] = minim.loadSample("data/sound/melody 2/1.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][1] = minim.loadSample("data/sound/melody 2/2.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][2] = minim.loadSample("data/sound/melody 2/3.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][3] = minim.loadSample("data/sound/melody 2/4.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][4] = minim.loadSample("data/sound/melody 2/5.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][5] = minim.loadSample("data/sound/melody 2/6.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][6] = minim.loadSample("data/sound/melody 2/7.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][7] = minim.loadSample("data/sound/melody 2/8.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][8] = minim.loadSample("data/sound/melody 2/9.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][9] = minim.loadSample("data/sound/melody 2/10.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][10] = minim.loadSample("data/sound/melody 2/11.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][11] = minim.loadSample("data/sound/melody 2/12.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][12] = minim.loadSample("data/sound/melody 2/13.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][13] = minim.loadSample("data/sound/melody 2/14.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][14] = minim.loadSample("data/sound/melody 2/15.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][15] = minim.loadSample("data/sound/melody 2/16.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][16] = minim.loadSample("data/sound/melody 2/17.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][17] = minim.loadSample("data/sound/melody 2/18.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][18] = minim.loadSample("data/sound/melody 2/19.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][19] = minim.loadSample("data/sound/melody 2/20.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][20] = minim.loadSample("data/sound/melody 2/21.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][21] = minim.loadSample("data/sound/melody 2/22.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][22] = minim.loadSample("data/sound/melody 2/23.mp3", 1024); 
+    delay(delayAmt);
+    groove2[0][23] = minim.loadSample("data/sound/melody 2/24.mp3", 1024); 
+    delay(delayAmt);
+
+    groove2[1][0] = minim.loadSample("data/sound/melody 1/1.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][1] = minim.loadSample("data/sound/melody 1/2.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][2] = minim.loadSample("data/sound/melody 1/3.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][3] = minim.loadSample("data/sound/melody 1/4.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][4] = minim.loadSample("data/sound/melody 1/5.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][5] = minim.loadSample("data/sound/melody 1/6.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][6] = minim.loadSample("data/sound/melody 1/7.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][7] = minim.loadSample("data/sound/melody 1/8.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][8] = minim.loadSample("data/sound/melody 1/9.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][9] = minim.loadSample("data/sound/melody 1/10.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][10] = minim.loadSample("data/sound/melody 1/11.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][11] = minim.loadSample("data/sound/melody 1/12.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][12] = minim.loadSample("data/sound/melody 1/13.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][13] = minim.loadSample("data/sound/melody 1/14.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][14] = minim.loadSample("data/sound/melody 1/15.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][15] = minim.loadSample("data/sound/melody 1/16.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][16] = minim.loadSample("data/sound/melody 1/17.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][17] = minim.loadSample("data/sound/melody 1/18.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][18] = minim.loadSample("data/sound/melody 1/19.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][19] = minim.loadSample("data/sound/melody 1/20.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][20] = minim.loadSample("data/sound/melody 1/21.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][21] = minim.loadSample("data/sound/melody 1/22.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][22] = minim.loadSample("data/sound/melody 1/23.mp3", 1024); 
+    delay(delayAmt);
+    groove2[1][23] = minim.loadSample("data/sound/melody 1/24.mp3", 1024); 
+    delay(delayAmt);
+
+    //set environment sounds to be quiet (dev system does gain -80 thru 6)
     fireSound.setGain(-47);
     waterSound.setGain(-47);
     oilSound.setGain(-47);
     windSound.setGain(-47);
     fireworksSound.setGain(-5);
-    
+
+    //loop all the sounds
     groove[rhythm].loop();
     fireSound.loop();
     waterSound.loop();
     oilSound.loop();
     windSound.loop();
-    
+
     //waveform = new WaveformRenderer();
     //groove.addListener(waveform);
     bpf = new LowPassFS(2000, groove[rhythm].sampleRate());
 
-    groove[rhythm].addEffect(bpf);
-  }
-  void run(PVector wand1)
-  {
-    groove[rhythm].setGain(6);
+    //set volume for the melody notes
     for(int h=0; h<2;h++)
     {
       for (int i=0; i<= 23; i++)
@@ -129,6 +176,14 @@ class Music
         groove2[h][i].setGain(-6);
       }
     }
+
+    groove[rhythm].addEffect(bpf);
+  }
+  void run(PVector wand1)
+  {
+    groove[rhythm].setGain(6);
+
+    //map environment volume to # of particles
     fireSound.setGain(map(fireCount, 0, fire_max-700, -30, -4));
     waterSound.setGain(map(waterCount-freezeCount, 0, water_max-300, -30, -4));
     oilSound.setGain(map(oilCount, 0, oil_max-200, -40, -12));
@@ -137,6 +192,8 @@ class Music
     if(noMelody)
       return;
     //println(wandP1+"+"+wand1);
+    
+    //detect a change in direction gesture and play a note if true
     if(frameCount % 2 == 0)
     { 
       //println("1");
@@ -229,20 +286,21 @@ class Music
       }
     }
   }
+  //plays sound for fireworks
   void playFwSound()
   {
     //if(frameCount > fwLastPlay + fwBuffer)
     //{
-      fwLastPlay = frameCount;
-      fireworksSound.trigger();
+    fwLastPlay = frameCount;
+    fireworksSound.trigger();
     //}
   }
+  //frequency of rhythm track mapped to cursor distance
   void movedMouse(PVector wand1, PVector wand2)
   {
     //println(dist(wand1.x, wand1.y, wand2.x, wand2.y));
     float frequency = map(dist(wand1.x, wand1.y, wand2.x, wand2.y), 0, 1280, 800, 3600);
     bpf.setFreq(frequency);
-    
   }
 
   void keyPressed()
@@ -261,7 +319,7 @@ class Music
       bpf.setFreq(wfwidth);
     }
   }
-
+  //play gird note determined by the location of direction change in the run function
   void playGridNote(float xpos, float ypos)
   {
     if(frameCount < lastPlay + melodyBuffer)
@@ -440,19 +498,17 @@ class Music
     }
   }
 
-
-
-
   void playMenuSound()
   {
     playGridNote(1000, 200);
   }
-  
+  //change melody note
   void setMelody(int uimelody)
   {
     noMelody = false;
-    melody = uimelody; 
+    melody = uimelody;
   }
+  //change the rhythm track
   void setRhythm(int uirhythm)
   {
     noRhythm = false;
@@ -467,7 +523,7 @@ class Music
     groove[rhythm].pause();
     noRhythm = true;
   }
-  
+
   void noMelody()
   {
     noMelody = true;

@@ -14,7 +14,8 @@ class Particle extends Sprite implements Locatable
   boolean toKill = false;
   char type = 'p';
   
-  //water vars
+  //particle-specific variables, couldn't put them in sub classes because when I need to access 
+  //these variables the code only knows it's of type 'Particle' not the specific type
   boolean isFrozen = false;
   boolean isFreezing = false;
   boolean isMelting = false;
@@ -118,7 +119,7 @@ class Particle extends Sprite implements Locatable
   {
     this.vel = vel;
   }
-
+  //throw the dead flag, and place it off screen until its reference is deleted
   void kill()
   {
     this.isDead = true;
@@ -128,6 +129,7 @@ class Particle extends Sprite implements Locatable
   {
     return loc;
   }
+  //check if the particle actually hit the other particle (possible it didn't becuase the hashgrid returns all particles in a specified radius)
   void checkHit(Particle otherParticle)
   {
     if(isHit(otherParticle))
@@ -135,6 +137,7 @@ class Particle extends Sprite implements Locatable
       bounce(otherParticle);
     }
   }
+  //returns true if the particles are actually colliding
   boolean isHit(Particle otherParticle)
   {
     if (otherParticle != this)
@@ -147,6 +150,7 @@ class Particle extends Sprite implements Locatable
     }
     return false;
   }
+  //collision resolution
   void bounce(Particle otherParticle)
   {
     float newX = loc.x;
@@ -167,9 +171,10 @@ class Particle extends Sprite implements Locatable
       PVector collisionNormal = new PVector(-dx,-dy);
       collisionNormal.normalize();
       collisionNormal.mult(this.radius + otherParticle.radius);
-    //if(this.type != 'c' && otherParticle.type != 'c')
+    //if colliding with concrete, wood, frozen water, or a plant, do different edge correction (so these 'static' particles never move)
     if(otherParticle.type == 'c' || otherParticle.type == 'd' || otherParticle.isFrozen || otherParticle.isPlanted)
     {
+      //these if's set priority example if a this is a frozen particle colliding with concrete, then the frozen particle moves, concrete never moves
       if(
         (otherParticle.type == 'c' && this.isFrozen) ||
         (otherParticle.type == 'c' && this.isPlanted) ||
@@ -196,12 +201,14 @@ class Particle extends Sprite implements Locatable
         this.loc.set(PVector.add(otherParticle.loc, collisionNormal));
       }
     }
+    //otherwise do normal edge correction
     else
     {
       collisionNormal.mult(-1);
       otherParticle.loc.set(PVector.add(this.loc, collisionNormal));
     }
     
+    //calculate resultant velocitioes
     float v1 = sqrt(vel.x*vel.x+vel.y*vel.y);
     float v2 = sqrt(otherParticle.vel.x*otherParticle.vel.x+otherParticle.vel.y*otherParticle.vel.y);
     

@@ -34,6 +34,7 @@ class Engine
   {
     this.emitters = emitters;
     this.environment = environment;
+    //set fluid properties
     fluidSolver = new MSAFluidSolver2D(128, 96);
     fluidSolver.enableRGB(true).setFadeSpeed(0.002).setDeltaT(0.8).setVisc(0.00004).setSolverIterations(7);
 
@@ -58,6 +59,7 @@ class Engine
   void run()
   {
     colorMode(RGB, 1);
+    //draw the fluids
     if(page != 'c' && page != 'i') {
       for(int i=0; i<fluidSolver.getNumCells(); i++) {
         int d = 3;
@@ -66,19 +68,24 @@ class Engine
       imgFluid.updatePixels();//  fastblur(imgFluid, 2);
       image(imgFluid, 0, 0, width, height);
     }
+    //update fluids
     fluidSolver.update();
     if(page == 'v')
     {
       if(emitters != null && emitters.length >0)
       {
+        //check particle collisions
         checkCollisions();
         for(int i=0; i<emitters.length; i++)
         {
+          //create new particles
           emitters[i].create();
+          //move/kill existing particles
           emitters[i].emit();
         }
         for (int i = burstEmitters.size() - 1 ; i >= 0; i--)
         {
+          //create/turn off/emit burst emitters
           Emitter burst = (Emitter) burstEmitters.get(i);
           burst.create();
           if(burst.isOn)
@@ -99,6 +106,7 @@ class Engine
   }
   void updateAllObjs()
   {
+    //removes objects from the hashgird (called every 30 frames)
     Iterator it = allObjs.iterator();
     while(it.hasNext())
     {
@@ -154,6 +162,7 @@ class Engine
         }
       }
     }
+    //loop through the hash grid, call the particle-particle collision function for the objects that are within RADIUS
     for (Iterator i=allObjs.iterator(); i.hasNext();)
     {
       Particle part = (Particle) i.next();
@@ -168,6 +177,7 @@ class Engine
       }
     }
   }
+  //add force to the fluid
   void addForce(float x, float y, float dx, float dy, int wand) 
   {
     float speed = dx * dx  + dy * dy;
@@ -200,7 +210,7 @@ class Engine
       fluidSolver.vOld[index] += dy * velocityMult;
     }
   }
-  
+  //set methods
   void setColliderCollision(boolean isColliderCollision)
   {
     this.isColliderCollision = isColliderCollision;

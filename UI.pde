@@ -26,6 +26,7 @@ class UI
     textFont(font,60);
     textSize(20);
     //noCursor();
+    //laod instruction page images
     insPages[0] = loadImage("page01.png");
     insPages[1] = loadImage("page02.png");
     insPages[2] = loadImage("page03.png");
@@ -51,6 +52,7 @@ class UI
     //turn off in 'v'
     if(page != 'v' && page != 'c' && page != 'i')
     {
+      //ease the cursor position if not in visualization, calibration, or instructions
       ease(10, 1, false);
     }
     else if(page == 'v')
@@ -62,7 +64,7 @@ class UI
       pushStyle();
       noFill();
       rectMode(CENTER);
-      
+      //draw colored cursors on top of black cursor
       strokeWeight(8);
       stroke(color(0,0,0));
       if(emitters[0].type != 'e')
@@ -77,6 +79,7 @@ class UI
       stroke(dye2);
       if(emitters[1].type != 'e')
         rect(wand2.x, wand2.y, 20,20);
+      // the current particle is the eraser, draw a x in the middle of the cursor too
       if(emitters[0].type == 'e')
       {
         strokeWeight(8);
@@ -109,6 +112,7 @@ class UI
     }
     else if(page == 'i' && wandIsInput)
     {
+      //draw a white cursor on the instruction page
       cursorX = int(wand1.x);
       cursorY = int(wand1.y);
       cursor2X = int(wand2.x);
@@ -250,6 +254,7 @@ class UI
     }
     page = 'u';
   }
+  //next 4 functions just draw content on their respective pages
   void musicOptions()
   {
     pushStyle();

@@ -1,5 +1,8 @@
 class Arrow extends Particle
 {
+  //IGNORE THIS WHOLE CLASS
+  //WE NEVER USE IT ANYWHERE
+
   int tailFinCount = 4;
   float len = 20.0;
   

@@ -1,4 +1,4 @@
-//base class for particles and colliders
+//base class for particles
 class Sprite
 {
   //instance properties

@@ -10,6 +10,7 @@ class Page{
   Button[] insArray = new Button[5];
 
   Page(){ 
+  //define buttons and locations per page
   mainArray[0] = new Button("music",width/2 - 75, height/2 - 51);
   mainArray[1] = new Button("play",width/4 - 75 , height/4 - 51);
   mainArray[2] = new Button("calib",(width - (width/4)) - 75, (height - (height/4)) - 51);
@@ -57,6 +58,7 @@ class Page{
   }
   
   void run(){
+    //if on the video page don't show the last two buttons
     if(ui.inIns == true && subPage == 2)
     {
       for(int i = 0; i < 3; i++)
@@ -68,6 +70,7 @@ class Page{
         }
       }
     }
+    //otherwise loop through all the active buttons
     else
     {
       for(int i = buttonArray.length-1; i >= 0; i--){

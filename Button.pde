@@ -1,5 +1,8 @@
 import codeanticode.gsvideo.*;
 class Button {
+  
+  //** sorry for the terrible code :( (but it works :D)**//
+  
   String type;
   PImage b;
   //Main menu images
@@ -212,6 +215,7 @@ class Button {
     }
   }
 
+//animate in the game menu
   void animate() {
     Y += 6;
     if( Y >= 0 && type!="exit" && type!="clear")
@@ -222,6 +226,7 @@ class Button {
     }
   }
 
+//animate out the ui menu
   void animateOut() {
     Y -= 6;
     if((type=="exit" || type=="clear") && Y<-50)
@@ -231,6 +236,7 @@ class Button {
     else if( Y <= -90 )
     {
       Y = -90 ;
+      //draw grey rectangle when UI is off screen
       pushStyle();
       colorMode(RGB,255);
       fill(100,100,100,200);
@@ -242,11 +248,13 @@ class Button {
 
   void run(int i) {
     image(b, X, Y);
+    //prevents ui sound from playing continuously when the mouse/wand is pressed
     if(menuSoundBuffer >0)
       menuSoundBuffer--;
     //println(gameFrame +"+"+ frameCount);
     if(ui.inGame == true)
     {
+      //animate the game ui in if 
       if(wand1.y < 102 || wand2.y < 102 || gameFrame + 200 > frameCount)
       {
         animate();
@@ -254,7 +262,7 @@ class Button {
       else
         animateOut();
     }
-    //selected icons:
+    //selected icons (hover effects):
     if(type == "rhy1" && music.rhythm == 0 && !music.noRhythm)
     {
       image(rhy1Over, X, Y);
@@ -305,7 +313,7 @@ class Button {
     }
     
     
-    //menu buttons by only the first wand
+    //menu buttons by only the first wand/mouse, triggered by a press
     if(ui.cursorX > X && ui.cursorX < X + b.width && ui.cursorY > Y && ui.cursorY < Y + b.height+30 && ((glob.wand1Pressed() && page != 'c') || mousePressed))
     {
       //text(type,width/2,height/2);
@@ -314,6 +322,7 @@ class Button {
         music.playMenuSound();
         menuSoundBuffer = 10;
       }
+      //ui play button pressed
       if(type == "play")
       { 
         setHSB(233, 1,1,1);
@@ -325,6 +334,7 @@ class Button {
         }
         page = 'v';
       }
+      //ui music button pressed
       else if (type == "music")
       {
         ui.inMusic = true;
@@ -340,6 +350,7 @@ class Button {
         }
         page = 'm';
       }
+      //ui instructions button pressed
       else if (type == "ins")
       {
         ui.inIns = true;
@@ -355,6 +366,7 @@ class Button {
         }
         page = 'i';
       }
+      //music back button pressed
       else if (type == "back")
       {
         ui.inMusic = false;
@@ -370,6 +382,7 @@ class Button {
         }
         page = 'u';
       }
+      //instruction back button pressed
       else if (type == "backIns")
       {
         ui.inIns = false;
@@ -391,6 +404,7 @@ class Button {
         }
         page = 'u';
       }
+      //in-game exit button pressed
       else if(type == "exit")
       {
         ui.inGame = false;
@@ -408,6 +422,7 @@ class Button {
         reset();
         page = 'u';
       }
+      //calibration back button pressed
       else if(type == "backCalib")
       {
         ui.inCalib = false;
@@ -423,6 +438,7 @@ class Button {
         }
         page = 'u';
       }
+      //ui calibration button pressed
       else if(type == "calib")
       {
         ui.inCalib = true;
@@ -439,22 +455,27 @@ class Button {
         }
         page = 'c';
       } 
+      //calibration done button pressed
       else if(type == "doneCalib")
       {
         ui.calibrationSuccess();
       } 
+      //ui exit button pressed
       else if(type == "mainExit")
       {
         stop();
       } 
+      //calibration wand1 button pressed
       else if(type == "wand1")
       {
         glob.nowCalibrating = 1;
       }
+      //calibration wand2 button pressed
       else if(type == "wand2")
       {
         glob.nowCalibrating = 2;
       }
+      //instructions gameplay button pressed
       else if(type == "ins1")
       {
         subPage = 1;
@@ -463,6 +484,7 @@ class Button {
         if(!music.noRhythm)
           music.groove[music.rhythm].loop();
       } 
+      //instructions game mechanics button pressed
       else if(type == "ins2")
       {
         subPage = 2;
@@ -471,6 +493,7 @@ class Button {
         wandVid.play();
         music.groove[music.rhythm].pause();
       } 
+      // previous instruction page pressed
       else if(type == "insPrev")
       {
         ui.insPage--;
@@ -478,6 +501,7 @@ class Button {
         if(ui.insPage<0)
           ui.insPage = 5;
       }
+      // next instruction page pressed
       else if(type == "insNext")
       {
         ui.insPage++;
@@ -485,6 +509,7 @@ class Button {
         if(ui.insPage>5)
           ui.insPage = 0;
       }
+      //particle types selected:
       else if (type == "erase")
       {
         changeParticle('e', 0);
@@ -521,6 +546,7 @@ class Button {
       {
         changeParticle('d', 0);
       }
+      //music options selected:
       else if(type == "rhy1")
       {
         music.setRhythm(0);
@@ -620,6 +646,7 @@ class Button {
       }
       
     }
+    //rollover effects
     else if(cursor1Over() || cursor2Over())
     {
       pushStyle();
@@ -810,6 +837,7 @@ class Button {
     else
       return false;
   }
+  //used to prevent emission if you're selecting a new particle type
   boolean isOverButton(int wand)
   {
     if(wand ==0)

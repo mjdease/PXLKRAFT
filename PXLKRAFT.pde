@@ -1,3 +1,11 @@
+/**
+ -----------------PXLKRAFT-------------------
+ ------IMD2900 Interactive Video System------
+ --------------------By:---------------------
+ -Matt Dease--Kyle Thompson--Graeme Rombough-
+ ---------Paul Young--Sunmock Yang-----------
+ */
+//import libraries
 import codeanticode.gsvideo.*;
 import org.gicentre.utils.geom.*;
 import msafluid.*;
@@ -6,14 +14,7 @@ import ddf.minim.*;
 import ddf.minim.effects.*;
 import gifAnimation.*;
 
-/**
- -----------------PXLKRAFT-------------------
- ------IMD2900 Interactive Video System------
- --------------------By:---------------------
- -Matt Dease--Kyle Thompson--Graeme Rombough-
- ---------Paul Young--Sunmock Yang-----------
- */
-
+// wand location vectors
 PVector wand1 = new PVector(0,0);
 PVector wandP1 = new PVector(0,0);
 PVector force1 = new PVector(0,0);
@@ -21,14 +22,17 @@ PVector wand2 = new PVector(0,0);
 PVector wandP2 = new PVector(0,0);
 PVector force2 = new PVector(0,0);
 
+//sound objects
 Minim minim;
 Music music;
 
+//video object
 GSMovie wandVid;
 
+//set max num of particles (note 'arrow' particles are 
+//never used, we just didn't have time to clean up the code :(
 final static int particle_max = 200;
 final static int arrow_max = 200;
-
 final static int water_max = 800;
 final static int oil_max = 400;
 final static int seed_max = 40;
@@ -55,10 +59,12 @@ int particleOpacity = 200;
 color[] firePalette;
 color[] flowerColor;
 
+//set page to the main menu, and wand input to be false (true once calibration is done)
 boolean wandIsInput = false;
 char page = 'u'; //v=visualization, c=calibration, m=music, u=mainmenu, i=instruction;
 int subPage = 1; //1=pxlkraft instructions, 2=wand instructions
 
+//emitter, environment, engine objects
 int emitterCount = 2;
 Emitter[] emitters = new Emitter[emitterCount];
 int environmentCount = 1;
@@ -72,7 +78,7 @@ color dye1, dye2, dye3;
 color cursor1Col, cursor2Col;
 
 UI ui;
-//Music button rollovers, they are in UI class because there is an error if they are put in the button class
+//Music button rollovers, they are in the main tab because there is an error if they are put in the button class
 Gif rhy1Over;
 Gif rhy2Over;
 Gif rhy3Over;
@@ -84,10 +90,13 @@ Gif mel2Over;
 Glob glob;
 Thread wrapper;
 
+//explicitly define our framerate because processing's
+//frameRate variable takes a few seconds to 'ramp up'
 float constantFPS = 30.0;
 
 void setup()
 {
+  //use OpenGL as our renderer
   size(1024, 768, OPENGL);
   colorMode(RGB);
   background(0);
@@ -127,6 +136,7 @@ void setup()
   //instantiate emitters
   emitters[0] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'w', 0.2, 0);
   emitters[1] = new Emitter(new PVector(0,5), constantFPS, new PVector(0,0), 3, 'f', 0.2, 1);
+  //set wand colors
   setHSB(233, 1,1,1);
   setHSB(0, 1,1,2);
   setHSB(58, 1,1,3);
@@ -141,6 +151,7 @@ void setup()
   }
   colorMode(RGB);
   //end code from http://processing.org/learning/topics/firecube.html
+  //colro array of possible colors for flowers
   flowerColor = new color[5];
   flowerColor[0] = color(255,255,255);
   flowerColor[1] = color(218,11,48);
@@ -170,10 +181,12 @@ void setup()
   };
   engine.setBoundaryCollision(true, bounds);
   
+  //creates the eraser 'particle' in the emitter (invisible)
   emitters[0].createErasor(wand1);
   emitters[1].createErasor(wand2);
 
 }
+// reset all variables to their default state
 void reset()
 {
   particleCount = 0;
@@ -230,6 +243,7 @@ void draw()
     cursor();
   else
     noCursor();
+  //forceX vectors add initial force to the particles when emitted
   force1.normalize();
   force1.mult(-3);
   force1.add(emitters[0].birthForce);
@@ -237,23 +251,28 @@ void draw()
   emitters[0].setLoc(wand1);
 
   force2.normalize();
-  force2.mult(3);
+  force2.mult(-3);
   force2.add(emitters[1].birthForce);
   emitters[1].setBirthPath(force2);
   emitters[1].setLoc(wand2);
+  //run the particle engine
   engine.run();
+  //run the UI
   ui.run();
   //println(frameRate);
 }
 void readMouse()
 {
+  //set wand1 to mouseX/Y
   wandP1.set(wand1);
   wand1.set(mouseX, mouseY, 0);
+  //do different things based on which page you're on
   switch(page)
   {
   case 'v':
     force1.set(pmouseX-mouseX, pmouseY-mouseY, 0);
     wand1Fluids();
+    // turn the emitter on/off based on current state of emitter and state of mouse
     if(mousePressed && !emitters[0].isOn)
     {
         emitters[0].turnOn();
@@ -262,6 +281,7 @@ void readMouse()
     {
       emitters[0].turnOff();
     }
+    //diplay a maxed message if the current particle is maxed
     if(emitters[0].isMaxed() && emitters[0].isOn && emitters[0].type != 'f' && emitters[0].type != 'e')
     {
       pushStyle();
@@ -274,10 +294,11 @@ void readMouse()
       text("Maxed", wand1.x, wand1.y + 35);
       popStyle();
     }
+    //run music methods
     music.movedMouse(wand1, wand2);
     music.run(wand1);
     break; 
-  case 'c':
+  case 'c': // calibration
     pushStyle();
     colorMode(RGB, 255);
     background(0,255);
@@ -285,14 +306,14 @@ void readMouse()
     popStyle();
     glob.calibrate();
     break;
-  case 'm':
+  case 'm': //music
     wand1Fluids();
     ui.musicOptions();
     break;
   case 'u':
     wand1Fluids();
     break;
-  case 'i':
+  case 'i': //instructions
     if(subPage == 1)
     {
       ui.gameInstructions();
@@ -309,14 +330,17 @@ void readMouse()
 
 void readWands()
 {
+  // get tracking data
   glob.track();
+  //set wands pos to the returned tracking data
   wandP1.set(wand1);
   wand1.set(glob.getPos1());
   wandP2.set(wand2);
   wand2.set(glob.getPos2());
   switch(page)
   {
-  case 'v':
+  case 'v': //visualization
+    // turn the emitters on/off based on current state of emitter and state of mouse
     if(glob.wand1IsOff)
     {
       emitters[0].turnOff();
@@ -350,6 +374,7 @@ void readWands()
     }
     if(emitters[0].isMaxed() && emitters[0].isOn && emitters[0].type != 'f' && emitters[0].type != 'e')
     {
+      //diplay a maxed message if the current particle is maxed
       pushStyle();
       colorMode(RGB, 255);
       textAlign(CENTER);
@@ -362,6 +387,7 @@ void readWands()
     }
     if(emitters[1].isMaxed() && emitters[1].isOn && emitters[1].type != 'f' && emitters[1].type != 'e')
     {
+      //diplay a maxed message if the current particle is maxed
       pushStyle();
       colorMode(RGB, 255);
       textAlign(CENTER);
@@ -408,6 +434,7 @@ void wand1Fluids()
 {
   if((wand1.x != wandP1.x || wand1.y != wandP1.y) && wand1.x != -100)
   {
+    //add dye and force to the fluid solver
     cursorNormX = wand1.x * invWidth;
     cursorNormY = wand1.y * invHeight;
     cursorVelX = (wand1.x - wandP1.x) * invWidth;
@@ -420,6 +447,7 @@ void wand2Fluids()
 {
   if((wand2.x != wandP2.x || wand2.y != wandP2.y) && wand2.x != -100)
   {
+    //add dye and force to the fluid solver
     cursorNormX = wand2.x * invWidth;
     cursorNormY = wand2.y * invHeight;
     cursorVelX = (wand2.x - wandP2.x) * invWidth;
@@ -430,6 +458,7 @@ void wand2Fluids()
 
 void keyPressed() 
 {
+  //move emitter 2 with keyboard
   if (key == CODED) {
     if(!wandIsInput)
     {
@@ -453,6 +482,7 @@ void keyPressed()
     {
       switch(key)
       {
+        //turn emitter 1 on/off with '1'
       case '1':
         if(!emitters[0].isOn)
         {
@@ -464,6 +494,7 @@ void keyPressed()
         }
         break;
       case '2':
+      //turn emitter 2 on/off with '2'
         if(!emitters[1].isOn)
         {
           emitters[1].turnOn();
@@ -488,7 +519,7 @@ void changeParticle(char type, int wand)
   {
     //things you can set for particles:
     //PVector birthPath, float sprayWidth, char type, int maxParticles, int lifeSpan (-1 = infinite), int envIndex, float birthRate
-  case 'w':
+  case 'w': //water
     if(emitters[wand].type == 'e')
     {
       emitters[wand].killEraser();
@@ -499,7 +530,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setBirthForce(new PVector(0,5));
     setHSB(233,1,1,wand+1);
     break;
-  case 'o':
+  case 'o'://oil
     if(emitters[wand].type == 'e')
     {
       emitters[wand].killEraser();
@@ -510,7 +541,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setBirthForce(new PVector(0,5));
     setHSB(24,0.73,0.58,wand+1);
     break;
-  case 's':
+  case 's'://seeds
     if(emitters[wand].type == 'e')
     {
       emitters[wand].killEraser();
@@ -521,7 +552,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setBirthForce(new PVector(0,5));
     setHSB(120,1,1,wand+1);
     break;
-  case 'f':
+  case 'f'://fire
     if(emitters[wand].type == 'e')
     {
       emitters[wand].killEraser();
@@ -533,7 +564,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setSprayWidth(5);
     setHSB(20,1,1,wand+1);
     break;
-  case 'c':
+  case 'c'://concrete
     if(emitters[wand].type == 'e')
     {
       emitters[wand].killEraser();
@@ -544,7 +575,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setBirthForce(new PVector(0,0));
     setHSB(233,0,0.68,wand+1);
     break;
-  case 'd':
+  case 'd'://wood
     if(emitters[wand].type == 'e')
     {
       emitters[wand].killEraser();
@@ -555,7 +586,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setBirthForce(new PVector(0,0));
     setHSB(25,91,0.50,wand+1);
     break;
-  case 'i':
+  case 'i'://ice
     if(emitters[wand].type == 'e')
     {
       emitters[wand].killEraser();
@@ -566,7 +597,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setBirthForce(new PVector(0,0));
     setHSB(178,1,1,wand+1);
     break;
-  case 'k':
+  case 'k'://kireworks
     if(emitters[wand].type == 'e')
     {
       emitters[wand].killEraser();
@@ -577,7 +608,7 @@ void changeParticle(char type, int wand)
     emitters[wand].setBirthForce(new PVector(0,5));
     setHSB(290,1,1,wand+1);
     break;
-  case 'e':
+  case 'e'://eraser
     emitters[wand].setType('e');
     emitters[wand].setLifeSpan(-1);
     emitters[wand].setBirthRate(0);
@@ -591,6 +622,7 @@ void changeParticle(char type, int wand)
 }
 void setHSB(int h, float s, float b, int wand)
 {
+  //set dye colors that are added to the fluid, also used for cursor color
   colorMode(HSB, 360, 1, 1);
   if(wand==1)
   {
@@ -625,6 +657,7 @@ void stop()
   String OS = System.getProperty("os.name");
   super.stop();
   
+  // hack to kill the java task
   try {
     if (OS.startsWith("Windows")) {
       String pidstr = java.lang.management.ManagementFactory.getRuntimeMXBean().getName();

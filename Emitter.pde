@@ -95,6 +95,7 @@ class Emitter
     //println(frameRate + " - " + birthRate + " - " + birthNum + " - " + birthRemainder + " - " + p.size());
     if(isOn && !isMaxed())
     {
+      //if over a ui icon, dont create new particles
       for(int i = 0; i<ui.Main.gameArray.length; i++)
       {
         if(ui.Main.gameArray[i].isOverButton(wandNum))
@@ -107,6 +108,7 @@ class Emitter
       colorMode(RGB,255);
       int colIndex = 0;
       color colFW = color(0);
+      // if the emitter is emitting a fireworks burst, choose randomly from 5 colors
       if(isFirework)
       {
         colIndex = int(random(0,5));
@@ -131,6 +133,7 @@ class Emitter
             break;
         }
       }
+      //create a new particle based on the emitter's type
       for(int i = 0; i < birthNum; i++)
       {
         switch(type)
@@ -203,6 +206,10 @@ class Emitter
       }
     }
   }
+  //linear interpolation is used to draw concrete such that there are no gaps no matter how
+  //fast the cursor is moving by adding in extra contcrete particles in what would be gaps
+  //the number of particles needed to be drawn is passed into the function and the positions
+  //are dynamically determined.
   void drawConcrete(int numParticles)
   {
     if(numParticles == 1 || firstEmit)
@@ -239,6 +246,7 @@ class Emitter
       }
     }
   }
+  //same principle as the concrete function
   void drawWood(int numParticles)
   {
     if(numParticles == 1 || firstWoodEmit)
@@ -275,19 +283,23 @@ class Emitter
       }
     }
   }
-  
+  //intializes new particles
   void initParticle(Particle particle)
   {
     theta = random(TWO_PI);
     r = random(sprayWidth);
     
     temp.loc.set(loc.x, loc.y, 0);
+    //correct the position before it gets added to the hashGrid if the location is outside the screen
     correctOffScreen(temp);
     temp.birthTime = millis();
     temp.vel = new PVector(birthPath.x + cos(theta)*r, birthPath.y + sin(theta)*r);
+    //add to emitted paricles arraylist
     p.add(temp);
+    //add to hashgrid
     engine.allObjs.add(temp);
   }
+  //same as above but with passed location coordinates (used for drawing plants)
   void initParticle(Particle particle, float x, float y)
   {
     theta = random(TWO_PI);
@@ -300,6 +312,7 @@ class Emitter
     p.add(temp);
     engine.allObjs.add(temp);
   }
+  //draws a plant particle at a given location
   void createPlant(PVector location, boolean flower)
   {
     if(flower)
@@ -320,6 +333,7 @@ class Emitter
     p.add(temp);
     engine.allObjs.add(temp);
   }
+  //craetes the eraser particle, one per emitter
   void createErasor(PVector location)
   {
     temp = new Eraser(30, -1, 'e');
@@ -329,6 +343,7 @@ class Emitter
     p.add(temp);
     engine.allObjs.add(temp);
   }
+  //moves the particle location onto the screen, fixed a bug with adding prticles outside of the hashgrid
   void correctOffScreen(Particle part)
   {
     if(engine.boundsSet[0] && part.loc.x > width - part.radius)
@@ -352,6 +367,8 @@ class Emitter
   void emit()
   {
     colorMode(RGB,255);
+    //loop through all the particles and either kill them or update their position
+    //if killing, update the particle counts
     for (int i = p.size() - 1 ; i >= 0; i--)
     {
       Particle part = (Particle) p.get(i);
@@ -404,6 +421,7 @@ class Emitter
       }
       else
       {
+        //apply wind to velocity
         int fluidIndex = engine.fluidSolver.getIndexForNormalizedPosition(part.loc.x * invWidth, part.loc.y * invHeight);
         part.vel.x += engine.fluidSolver.u[fluidIndex] * (width/20);
         part.vel.y += engine.fluidSolver.v[fluidIndex] * (height/20);
@@ -421,6 +439,7 @@ class Emitter
       //println(part.loc);
     }
   }
+  //returns true if the current emitter type's particles are maxed
   boolean isMaxed()
   {
     boolean answer;
